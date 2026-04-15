@@ -24,7 +24,7 @@ Create `backend/.env`:
 ```env
 WILDCARD_BASE_DOMAIN=echosphere.systems
 PORT=3067
-MONGODB_URI=mongodb://localhost:27017
+MONGODB_URI=mongodb://wc_root:replace-with-a-strong-password@localhost:27019/?authSource=admin
 MONGODB_DATABASE=wildcard_catcher
 BOOTSTRAP_ADMIN_USERNAME=main-admin
 BOOTSTRAP_ADMIN_PASSWORD=replace-with-a-strong-password
@@ -39,6 +39,8 @@ Notes:
 
 - `BOOTSTRAP_ADMIN_USERNAME` and `BOOTSTRAP_ADMIN_PASSWORD` are required on first startup so the initial admin exists.
 - If an admin user already exists in MongoDB, bootstrap credentials may be omitted.
+- When using Docker Compose, MongoDB listens on `127.0.0.1:27019` on the host, the backend connects to `mongo:27019` inside the Docker network, and the root credentials come from `.env`.
+- If you connect from the host machine, use `localhost:27019` with the same credentials.
 - `SESSION_COOKIE_SECURE` should be `true` when the admin UI is served over HTTPS.
 - `TRUST_X_FORWARDED_HOST` should be `true` only behind a trusted proxy or tunnel.
 

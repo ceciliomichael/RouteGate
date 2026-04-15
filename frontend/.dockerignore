@@ -1,0 +1,8 @@
+.env
+.env.local
+.git
+.next
+.turbo
+coverage
+node_modules
+out

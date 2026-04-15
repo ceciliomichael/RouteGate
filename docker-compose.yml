@@ -1,0 +1,68 @@
+#
+# Copy `.env.example` to `.env` before starting the stack.
+# MongoDB is published only on localhost on the host machine.
+#
+services:
+  mongo:
+    image: mongo:7.0
+    restart: unless-stopped
+    command: ["mongod", "--port", "27019", "--bind_ip_all"]
+    env_file:
+      - .env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-wc_root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-replace-with-a-strong-password}
+    ports:
+      - "127.0.0.1:${MONGODB_HOST_PORT:-27019}:27019"
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mongosh",
+          "--port",
+          "27019",
+          "--quiet",
+          "--eval",
+          "db.adminCommand({ ping: 1 })",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  backend:
+    build:
+      context: ./backend
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      PORT: ${PORT:-3067}
+      MONGODB_URI: ${MONGODB_URI:-mongodb://${MONGO_INITDB_ROOT_USERNAME:-wc_root}:${MONGO_INITDB_ROOT_PASSWORD:-replace-with-a-strong-password}@mongo:27019/?authSource=admin}
+      MONGODB_DATABASE: ${MONGODB_DATABASE:-wildcard_catcher}
+    ports:
+      - "127.0.0.1:${BACKEND_HOST_PORT:-3067}:3067"
+
+  frontend:
+    build:
+      context: ./frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    env_file:
+      - .env
+    environment:
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+      BACKEND_API_BASE: ${BACKEND_API_BASE:-http://backend:3067}
+      NEXT_PUBLIC_API_BASE: ${NEXT_PUBLIC_API_BASE:-http://backend:3067}
+    ports:
+      - "127.0.0.1:${FRONTEND_HOST_PORT:-3000}:3000"
+
+volumes:
+  mongo-data:

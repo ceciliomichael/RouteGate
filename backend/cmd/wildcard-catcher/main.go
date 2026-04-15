@@ -5,6 +5,7 @@ import (
 	"errors"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"time"
@@ -81,7 +82,7 @@ func main() {
 
 	log.Printf("wildcard-catcher backend listening on %s", cfg.ListenAddress())
 	log.Printf("base domain: %s", cfg.BaseDomain)
-	log.Printf("mongodb: %s/%s", cfg.MongoURI, cfg.MongoDatabase)
+	log.Printf("mongodb: %s", sanitizeMongoURI(cfg.MongoURI, cfg.MongoDatabase))
 	log.Printf("trust x-forwarded-host: %t", cfg.TrustForwardedHost)
 
 	if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
@@ -101,4 +102,13 @@ func loadEnv() {
 	}
 
 	_ = envfile.Load(candidates...)
+}
+
+func sanitizeMongoURI(rawURI string, database string) string {
+	parsed, err := url.Parse(rawURI)
+	if err != nil || parsed.Host == "" {
+		return database
+	}
+
+	return parsed.Host + "/" + database
 }
