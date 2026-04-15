@@ -15,6 +15,7 @@ import (
 	"wildcard-catcher/internal/envfile"
 	"wildcard-catcher/internal/identity"
 	"wildcard-catcher/internal/proxy"
+	"wildcard-catcher/internal/server"
 	"wildcard-catcher/internal/registry"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -66,14 +67,11 @@ func main() {
 
 	proxyHandler := proxy.NewHandler(cfg, routeStore, log.Default())
 	apiHandler := api.NewHandler(routeStore, identityStore, log.Default(), cfg)
+	dispatcher := server.NewDispatcher(apiHandler, proxyHandler)
 
-	mux := http.NewServeMux()
-	mux.Handle("/api/", apiHandler)
-	mux.Handle("/", proxyHandler)
-
-	server := &http.Server{
+	httpServer := &http.Server{
 		Addr:              cfg.ListenAddress(),
-		Handler:           mux,
+		Handler:           dispatcher,
 		ReadHeaderTimeout: 5 * time.Second,
 		ReadTimeout:       15 * time.Second,
 		WriteTimeout:      60 * time.Second,
@@ -85,7 +83,7 @@ func main() {
 	log.Printf("mongodb: %s", sanitizeMongoURI(cfg.MongoURI, cfg.MongoDatabase))
 	log.Printf("trust x-forwarded-host: %t", cfg.TrustForwardedHost)
 
-	if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+	if err := httpServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		log.Fatalf("server stopped: %v", err)
 	}
 }

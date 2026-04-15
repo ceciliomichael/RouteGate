@@ -36,21 +36,27 @@ func NewHandler(cfg config.Config, store routeLookupStore, logger *log.Logger) *
 }
 
 func (h *Handler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
+	handled, _ := h.TryServe(writer, request)
+	if !handled {
+		http.NotFound(writer, request)
+	}
+}
+
+func (h *Handler) TryServe(writer http.ResponseWriter, request *http.Request) (bool, error) {
 	host := normalizeHost(extractHost(request, h.cfg.TrustForwardedHost))
 	if host == "" {
 		http.Error(writer, "host header required", http.StatusBadRequest)
-		return
+		return true, nil
 	}
 
 	subdomain, ok := extractSubdomain(host, h.cfg.BaseDomain)
 	if !ok {
-		http.NotFound(writer, request)
-		return
+		return false, nil
 	}
 
 	if !isSecureRequest(request) {
 		redirectToHTTPS(writer, request, host)
-		return
+		return true, nil
 	}
 
 	setStrictTransportSecurity(writer)
@@ -60,23 +66,42 @@ func (h *Handler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	if err != nil {
 		h.logger.Printf("registry lookup failed for host=%s subdomain=%s: %v", host, subdomain, err)
 		http.Error(writer, "registry error", http.StatusInternalServerError)
-		return
+		return true, err
 	}
 
 	if !found {
-		http.NotFound(writer, request)
-		return
+		return false, nil
 	}
 
 	proxy, err := h.proxyFor(route.Destination)
 	if err != nil {
 		h.logger.Printf("proxy setup failed for destination=%s: %v", route.Destination, err)
 		http.Error(writer, "proxy configuration error", http.StatusInternalServerError)
-		return
+		return true, err
 	}
 
 	h.logger.Printf("%s %s host=%s subdomain=%s -> %s", request.Method, request.URL.Path, host, subdomain, route.Destination)
 	proxy.ServeHTTP(writer, request)
+	return true, nil
+}
+
+func (h *Handler) HasRoute(request *http.Request) (bool, error) {
+	host := normalizeHost(extractHost(request, h.cfg.TrustForwardedHost))
+	if host == "" {
+		return false, nil
+	}
+
+	subdomain, ok := extractSubdomain(host, h.cfg.BaseDomain)
+	if !ok {
+		return false, nil
+	}
+
+	_, found, err := h.store.Lookup(subdomain)
+	if err != nil {
+		return false, err
+	}
+
+	return found, nil
 }
 
 func (h *Handler) proxyFor(destination string) (*httputil.ReverseProxy, error) {
