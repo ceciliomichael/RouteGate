@@ -46,7 +46,7 @@ services:
       MONGODB_URI: ${MONGODB_URI:-mongodb://${MONGO_INITDB_ROOT_USERNAME:-wc_root}:${MONGO_INITDB_ROOT_PASSWORD:-replace-with-a-strong-password}@mongo:27019/?authSource=admin}
       MONGODB_DATABASE: ${MONGODB_DATABASE:-wildcard_catcher}
     ports:
-      - "127.0.0.1:${BACKEND_HOST_PORT:-3067}:3067"
+      - "${BACKEND_HOST_PORT:-3067}:3067"
 
   frontend:
     build:
@@ -57,12 +57,12 @@ services:
     env_file:
       - .env
     environment:
-      PORT: 3000
+      PORT: ${FRONTEND_PORT:-3000}
       HOSTNAME: 0.0.0.0
       BACKEND_API_BASE: ${BACKEND_API_BASE:-http://backend:3067}
       NEXT_PUBLIC_API_BASE: ${NEXT_PUBLIC_API_BASE:-http://backend:3067}
     ports:
-      - "127.0.0.1:${FRONTEND_HOST_PORT:-3000}:3000"
+      - "${FRONTEND_PORT:-3000}:${FRONTEND_PORT:-3000}"
 
 volumes:
   mongo-data:
