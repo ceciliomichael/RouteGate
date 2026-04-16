@@ -372,6 +372,66 @@ func TestHandlerAutomaticallyRoutesFrontendSubdomain(t *testing.T) {
 	}
 }
 
+func TestHandlerPrefersReservedFrontendRouteOverStoredRoute(t *testing.T) {
+	t.Parallel()
+
+	frontendUpstream := newCaptureServer(t, "frontend")
+
+	handler := NewHandler(
+		config.Config{
+			BaseDomain:               "echosphere.systems",
+			FrontendRouteSubdomain:   "router",
+			FrontendRouteDestination: frontendUpstream.URL,
+		},
+		stubRouteStore{routes: map[string]registry.Route{
+			"router": {
+				ID:          "route-1",
+				Subdomain:   "router",
+				Destination: "http://127.0.0.1:65535",
+				Enabled:     true,
+			},
+		}},
+		log.New(io.Discard, "", 0),
+	)
+
+	proxyServer := httptest.NewServer(handler)
+	t.Cleanup(proxyServer.Close)
+
+	request, err := http.NewRequest(http.MethodGet, proxyServer.URL+"/", nil)
+	if err != nil {
+		t.Fatalf("new request: %v", err)
+	}
+	request.Host = "backend:3067"
+	request.Header.Set("X-Forwarded-Host", "router.echosphere.systems")
+	request.Header.Set("X-Forwarded-Proto", "https")
+
+	response, err := proxyServer.Client().Do(request)
+	if err != nil {
+		t.Fatalf("do request: %v", err)
+	}
+	defer response.Body.Close()
+
+	body, err := io.ReadAll(response.Body)
+	if err != nil {
+		t.Fatalf("read body: %v", err)
+	}
+
+	if response.StatusCode != http.StatusOK {
+		t.Fatalf("unexpected status: %d", response.StatusCode)
+	}
+	if string(body) != "frontend" {
+		t.Fatalf("unexpected body: %s", string(body))
+	}
+
+	captured, err := frontendUpstream.waitForRequest()
+	if err != nil {
+		t.Fatalf("frontend upstream request: %v", err)
+	}
+	if captured.Path != "/" {
+		t.Fatalf("unexpected frontend upstream path: %s", captured.Path)
+	}
+}
+
 type capturingServer struct {
 	*httptest.Server
 	requestCh chan capturedRequest

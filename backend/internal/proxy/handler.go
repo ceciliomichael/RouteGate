@@ -61,17 +61,25 @@ func (h *Handler) TryServe(writer http.ResponseWriter, request *http.Request) (b
 	setStrictTransportSecurity(writer)
 	request.Host = host
 
+	if fallbackRoute, fallbackFound := h.defaultFrontendRoute(subdomain); fallbackFound {
+		route := fallbackRoute
+		proxy, err := h.proxyFor(route.Destination, route.InsecureSkipTLSVerify)
+		if err != nil {
+			h.logger.Printf("proxy setup failed for destination=%s: %v", route.Destination, err)
+			http.Error(writer, "proxy configuration error", http.StatusInternalServerError)
+			return true, err
+		}
+
+		h.logger.Printf("%s %s host=%s subdomain=%s -> %s", request.Method, request.URL.Path, host, subdomain, route.Destination)
+		proxy.ServeHTTP(writer, request)
+		return true, nil
+	}
+
 	route, found, err := h.store.Lookup(subdomain)
 	if err != nil {
 		h.logger.Printf("registry lookup failed for host=%s subdomain=%s: %v", host, subdomain, err)
 		http.Error(writer, "registry error", http.StatusInternalServerError)
 		return true, err
-	}
-	if !found {
-		if fallbackRoute, fallbackFound := h.defaultFrontendRoute(subdomain); fallbackFound {
-			route = fallbackRoute
-			found = true
-		}
 	}
 
 	if !found {
