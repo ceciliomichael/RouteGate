@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
-import { buildBackendApiUrl } from "./backendApiBase";
+import {
+  buildBackendApiUrlFromBase,
+  getBackendApiBaseCandidates,
+} from "./backendApiBase";
 
 const FORWARDED_HEADERS = [
   "accept",
@@ -52,24 +55,35 @@ export async function forwardToBackendApi(
   try {
     const params = await paramsPromise;
     const currentUrl = new URL(request.url);
-    const upstreamUrl = buildBackendApiUrl(
-      [...baseSegments, ...(params.path ?? [])],
-      currentUrl.search,
-    );
     const method = request.method.toUpperCase();
     const headers = copyRequestHeaders(request);
+    const body =
+      method !== "GET" && method !== "HEAD" ? await request.text() : undefined;
+    const pathSegments = [...baseSegments, ...(params.path ?? [])];
+    const upstreamUrls = getBackendApiBaseCandidates().map((baseUrl) =>
+      buildBackendApiUrlFromBase(baseUrl, pathSegments, currentUrl.search),
+    );
     const init: RequestInit = {
       method,
       headers,
       cache: "no-store",
+      body,
     };
 
-    if (method !== "GET" && method !== "HEAD") {
-      init.body = await request.text();
+    let lastError: unknown = null;
+    for (const upstreamUrl of upstreamUrls) {
+      try {
+        const upstreamResponse = await fetch(upstreamUrl, init);
+        return toClientResponse(upstreamResponse);
+      } catch (error) {
+        lastError = error;
+      }
     }
 
-    const upstreamResponse = await fetch(upstreamUrl, init);
-    return toClientResponse(upstreamResponse);
+    if (lastError) {
+      throw lastError;
+    }
+    throw new Error("Backend unavailable");
   } catch (error) {
     const message =
       error instanceof Error && error.message === "Invalid backend API base URL"

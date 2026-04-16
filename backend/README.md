@@ -1,12 +1,21 @@
-# Wildcard Catcher Backend (Go)
+# Wildcard Catcher Backend
 
-Wildcard subdomain router with:
+The backend is the control plane and wildcard proxy for Wildcard Catcher.
 
-- MongoDB-backed routes
-- Account-based login with session cookies
-- Admin user management
-- Owner-scoped route CRUD
-- Reverse proxy routing for enabled wildcard records
+It provides:
+
+- MongoDB-backed route storage
+- account login with session cookies
+- admin and owner-scoped route management
+- reverse proxying for enabled wildcard subdomains
+
+## Why it matters
+
+This project is designed for wildcard tunnel workflows, especially Cloudflare Tunnel.
+
+Instead of creating one tunnel entry per subdomain, the backend lets you point a single wildcard domain at the catcher and then map each subdomain to its own destination.
+
+That is useful when you want to retunnel or change destinations without rebuilding tunnel config for every service.
 
 ## Run
 
@@ -15,7 +24,9 @@ cd backend
 go run ./cmd/wildcard-catcher
 ```
 
-Default port is `3067`.
+Default listen port:
+
+- `3067`
 
 ## Environment
 
@@ -37,12 +48,12 @@ TRUST_X_FORWARDED_HOST=true
 
 Notes:
 
-- `BOOTSTRAP_ADMIN_USERNAME` and `BOOTSTRAP_ADMIN_PASSWORD` are required on first startup so the initial admin exists.
-- If an admin user already exists in MongoDB, bootstrap credentials may be omitted.
-- When using Docker Compose, MongoDB listens on `127.0.0.1:27019` on the host, the backend connects to `mongo:27019` inside the Docker network, and the root credentials come from `.env`.
-- If you connect from the host machine, use `localhost:27019` with the same credentials.
-- `SESSION_COOKIE_SECURE` should be `true` when the admin UI is served over HTTPS.
-- `TRUST_X_FORWARDED_HOST` should be `true` only behind a trusted proxy or tunnel.
+- `BOOTSTRAP_ADMIN_USERNAME` and `BOOTSTRAP_ADMIN_PASSWORD` are required on first startup so the initial admin account can be created.
+- If MongoDB already contains an admin user, bootstrap credentials may be omitted.
+- `TRUST_X_FORWARDED_HOST` should be `true` only when the backend is behind a trusted proxy or tunnel.
+- `SESSION_COOKIE_SECURE` should be `true` when the app is served over HTTPS.
+- For local development, the backend usually talks to MongoDB on `localhost:27019`.
+- In Docker Compose, the backend connects to `mongo:27019` inside the Docker network.
 
 ## Data Model
 
@@ -80,7 +91,7 @@ Authenticated:
 - `PUT /api/routes/{id}`
 - `DELETE /api/routes/{id}`
 
-## Proxy Behavior
+## Proxy behavior
 
 Requests to `<subdomain>.<WILDCARD_BASE_DOMAIN>`:
 
@@ -91,7 +102,19 @@ Requests to `<subdomain>.<WILDCARD_BASE_DOMAIN>`:
 
 The proxy forwards `X-Forwarded-Host` and `X-Forwarded-Proto` to upstream apps.
 
-## Build
+## Tunnel workflow
+
+Typical setup:
+
+1. Run the backend locally.
+2. Expose the catcher once through your tunnel.
+3. Point the wildcard tunnel at the catcher.
+4. Add routes in the dashboard for each subdomain you want to serve.
+5. Point each destination to the local frontend, another local service, or a hosted app.
+
+That allows one wildcard tunnel to retarget many services without creating individual tunnel entries.
+
+## Build and test
 
 ```bash
 cd backend

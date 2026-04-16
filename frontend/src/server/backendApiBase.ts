@@ -1,4 +1,5 @@
 const FALLBACK_BACKEND_API_BASE = "http://localhost:3067";
+const DOCKER_SERVICE_HOSTNAME = "backend";
 
 function trimTrailingSlash(pathname: string): string {
   if (pathname === "/") {
@@ -19,6 +20,10 @@ function stripKnownApiSuffix(pathname: string): string {
 }
 
 export function getBackendApiBase(): string {
+  return getBackendApiBaseCandidates()[0];
+}
+
+export function getBackendApiBaseCandidates(): string[] {
   const configured =
     process.env.BACKEND_API_BASE?.trim() ||
     process.env.NEXT_PUBLIC_API_BASE?.trim() ||
@@ -29,15 +34,32 @@ export function getBackendApiBase(): string {
   } catch {
     throw new Error("Invalid backend API base URL");
   }
+
   const normalizedPath = stripKnownApiSuffix(parsed.pathname);
-  return `${parsed.origin}${normalizedPath}`;
+  const primary = `${parsed.origin}${normalizedPath}`;
+  const candidates = [primary];
+
+  if (parsed.hostname === DOCKER_SERVICE_HOSTNAME) {
+    const fallback = new URL(primary);
+    fallback.hostname = "localhost";
+    candidates.push(fallback.toString().replace(/\/+$/g, ""));
+  }
+
+  return Array.from(new Set(candidates));
 }
 
 export function buildBackendApiUrl(
   pathSegments: string[],
   search: string,
 ): string {
-  const base = getBackendApiBase();
+  return buildBackendApiUrlFromBase(getBackendApiBase(), pathSegments, search);
+}
+
+export function buildBackendApiUrlFromBase(
+  base: string,
+  pathSegments: string[],
+  search: string,
+): string {
   const suffix =
     pathSegments.length > 0
       ? `/${pathSegments.map((part) => encodeURIComponent(part)).join("/")}`
