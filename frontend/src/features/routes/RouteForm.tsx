@@ -7,12 +7,14 @@ import {
   useState,
 } from "react";
 import { Switch } from "../../components/Switch";
+import { getBlockedDestinationHost } from "./destinationPolicy";
 import { isReservedRouteSubdomain, RESERVED_ROUTE_SUBDOMAIN } from "./reserved";
 import type { Route, RoutePayload } from "./types";
 
 interface RouteFormProps {
   initial?: Route | null;
   existingSubdomains: string[];
+  isAdmin: boolean;
   onSubmit: (payload: RoutePayload) => Promise<void>;
   onClose: () => void;
   isLoading: boolean;
@@ -35,6 +37,7 @@ function isDnsSafe(value: string): boolean {
 export function RouteForm({
   initial,
   existingSubdomains,
+  isAdmin,
   onSubmit,
   onClose,
   isLoading,
@@ -75,12 +78,18 @@ export function RouteForm({
             : null
     : null;
 
+  const blockedDestinationHost = isAdmin
+    ? null
+    : getBlockedDestinationHost(destination.trim());
+
   const destError = touchedDest
     ? !destination.trim()
       ? "Destination is required."
       : !isValidUrl(destination.trim())
         ? "Must be a valid http:// or https:// URL, or a host:port like localhost:3068."
-        : null
+        : blockedDestinationHost
+          ? `The destination host "${blockedDestinationHost}" is reserved for admin users.`
+          : null
     : null;
 
   const isValid =
@@ -89,7 +98,8 @@ export function RouteForm({
     !isReservedRouteSubdomain(subdomain) &&
     (isEditing ||
       !existingSubdomains.includes(subdomain.trim().toLowerCase())) &&
-    isValidUrl(destination.trim());
+    isValidUrl(destination.trim()) &&
+    (isAdmin || !blockedDestinationHost);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -257,6 +267,12 @@ export function RouteForm({
               disabled={isLoading}
             />
             {destError && <p className="field-error">{destError}</p>}
+            {!isAdmin && !destError ? (
+              <p className="field-help">
+                Non-admin routes cannot target localhost, the router host IP, or
+                other reserved local endpoints.
+              </p>
+            ) : null}
           </div>
 
           <div

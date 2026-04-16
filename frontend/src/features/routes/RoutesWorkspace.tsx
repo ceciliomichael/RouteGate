@@ -272,6 +272,7 @@ export function RoutesWorkspace({ auth, showOwner }: RoutesWorkspaceProps) {
                     (editingRoute as Route).subdomain.toLowerCase(),
                 )
           }
+          isAdmin={auth.user?.role === "admin"}
           onSubmit={handleSaveRoute}
           onClose={() => setEditingRoute(null)}
           isLoading={isFormLoading}

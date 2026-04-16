@@ -52,6 +52,7 @@ Notes:
 - The frontend config already includes common tunnel domains used in development.
 - The route editor includes an option for upstream TLS verification, which is useful for self-signed services.
 - The `router` subdomain is reserved for the automatic frontend route and is hidden from the normal route list.
+- Standard users are blocked from saving routes to reserved local destinations like `localhost` and the router host IP; admins can use any destination except the reserved `router` subdomain.
 
 ## How the frontend works
 

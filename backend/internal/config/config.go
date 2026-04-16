@@ -10,18 +10,19 @@ import (
 )
 
 type Config struct {
-	Port                     int
-	BaseDomain               string
-	MongoURI                 string
-	MongoDatabase            string
-	FrontendRouteSubdomain   string
-	FrontendRouteDestination string
-	BootstrapAdminUsername   string
-	BootstrapAdminPassword   string
-	BootstrapAdminName       string
-	SessionCookieName        string
-	SessionHours             int
-	SessionCookieSecure      bool
+	Port                       int
+	BaseDomain                 string
+	MongoURI                   string
+	MongoDatabase              string
+	FrontendRouteSubdomain     string
+	FrontendRouteDestination   string
+	RestrictedDestinationHosts []string
+	BootstrapAdminUsername     string
+	BootstrapAdminPassword     string
+	BootstrapAdminName         string
+	SessionCookieName          string
+	SessionHours               int
+	SessionCookieSecure        bool
 }
 
 func (c Config) ListenAddress() string {
@@ -73,20 +74,25 @@ func Load() (Config, error) {
 	if err != nil {
 		return Config{}, fmt.Errorf("FRONTEND_ROUTE_DESTINATION: %w", err)
 	}
+	restrictedDestinationHosts := parseHostList(firstNonEmpty(
+		os.Getenv("NON_ADMIN_BLOCKED_DESTINATION_HOSTS"),
+		"localhost,127.0.0.1,::1,192.168.1.28",
+	))
 
 	return Config{
-		Port:                     port,
-		BaseDomain:               baseDomain,
-		MongoURI:                 mongoURI,
-		MongoDatabase:            strings.TrimSpace(firstNonEmpty(os.Getenv("MONGODB_DATABASE"), "wildcard_catcher")),
-		FrontendRouteSubdomain:   frontendRouteSubdomain,
-		FrontendRouteDestination: frontendRouteDestination,
-		BootstrapAdminUsername:   strings.TrimSpace(os.Getenv("BOOTSTRAP_ADMIN_USERNAME")),
-		BootstrapAdminPassword:   os.Getenv("BOOTSTRAP_ADMIN_PASSWORD"),
-		BootstrapAdminName:       strings.TrimSpace(firstNonEmpty(os.Getenv("BOOTSTRAP_ADMIN_NAME"), "Main Admin")),
-		SessionCookieName:        strings.TrimSpace(firstNonEmpty(os.Getenv("SESSION_COOKIE_NAME"), "wc_session")),
-		SessionHours:             sessionHours,
-		SessionCookieSecure:      parseBoolDefaultFalse(os.Getenv("SESSION_COOKIE_SECURE")),
+		Port:                       port,
+		BaseDomain:                 baseDomain,
+		MongoURI:                   mongoURI,
+		MongoDatabase:              strings.TrimSpace(firstNonEmpty(os.Getenv("MONGODB_DATABASE"), "wildcard_catcher")),
+		FrontendRouteSubdomain:     frontendRouteSubdomain,
+		FrontendRouteDestination:   frontendRouteDestination,
+		RestrictedDestinationHosts: restrictedDestinationHosts,
+		BootstrapAdminUsername:     strings.TrimSpace(os.Getenv("BOOTSTRAP_ADMIN_USERNAME")),
+		BootstrapAdminPassword:     os.Getenv("BOOTSTRAP_ADMIN_PASSWORD"),
+		BootstrapAdminName:         strings.TrimSpace(firstNonEmpty(os.Getenv("BOOTSTRAP_ADMIN_NAME"), "Main Admin")),
+		SessionCookieName:          strings.TrimSpace(firstNonEmpty(os.Getenv("SESSION_COOKIE_NAME"), "wc_session")),
+		SessionHours:               sessionHours,
+		SessionCookieSecure:        parseBoolDefaultFalse(os.Getenv("SESSION_COOKIE_SECURE")),
 	}, nil
 }
 
@@ -136,6 +142,24 @@ func firstNonEmpty(values ...string) string {
 func parseBoolDefaultFalse(raw string) bool {
 	value := strings.TrimSpace(strings.ToLower(raw))
 	return value == "1" || value == "true" || value == "yes" || value == "on"
+}
+
+func parseHostList(raw string) []string {
+	values := strings.Split(raw, ",")
+	result := make([]string, 0, len(values))
+
+	for _, value := range values {
+		normalized := normalizeDestinationHost(value)
+		if normalized != "" {
+			result = append(result, normalized)
+		}
+	}
+
+	return result
+}
+
+func normalizeDestinationHost(value string) string {
+	return strings.ToLower(strings.TrimSuffix(strings.TrimSpace(value), "."))
 }
 
 func normalizeDestination(raw string) (string, error) {

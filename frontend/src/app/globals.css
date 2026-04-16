@@ -254,6 +254,12 @@
     margin-top: 0.3rem;
   }
 
+  .field-help {
+    font-size: 0.75rem;
+    color: var(--color-ink-muted);
+    margin-top: 0.3rem;
+  }
+
   /* ── Custom Dropdown ────────────────────────── */
   .custom-dropdown {
     position: relative;

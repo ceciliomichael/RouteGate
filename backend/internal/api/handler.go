@@ -281,6 +281,10 @@ func (h *Handler) handleRoutesCollection(writer http.ResponseWriter, request *ht
 			h.writeError(writer, http.StatusConflict, "subdomain is reserved")
 			return
 		}
+		if err := h.validateDestinationForUser(user, payload.Destination); err != nil {
+			h.writeError(writer, http.StatusBadRequest, err.Error())
+			return
+		}
 
 		route, err := h.routes.Create(ctx, registry.OwnerInfo{
 			UserID:    user.ID,
@@ -330,6 +334,10 @@ func (h *Handler) handleRoutesItem(writer http.ResponseWriter, request *http.Req
 		}
 		if h.isReservedRouteSubdomain(payload.Subdomain) {
 			h.writeError(writer, http.StatusConflict, "subdomain is reserved")
+			return
+		}
+		if err := h.validateDestinationForUser(user, payload.Destination); err != nil {
+			h.writeError(writer, http.StatusBadRequest, err.Error())
 			return
 		}
 
@@ -458,4 +466,20 @@ func (h *Handler) isReservedRouteSubdomain(value string) bool {
 	}
 
 	return strings.EqualFold(strings.TrimSpace(value), reserved)
+}
+
+func (h *Handler) validateDestinationForUser(user identity.User, destination string) error {
+	if user.IsAdmin() || len(h.cfg.RestrictedDestinationHosts) == 0 {
+		return nil
+	}
+
+	host, blocked, err := registry.IsBlockedDestinationHost(destination, h.cfg.RestrictedDestinationHosts)
+	if err != nil {
+		return err
+	}
+	if !blocked {
+		return nil
+	}
+
+	return fmt.Errorf("destination host %q is reserved for admin users", host)
 }

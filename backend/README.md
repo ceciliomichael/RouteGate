@@ -46,6 +46,7 @@ SESSION_TTL_HOURS=168
 SESSION_COOKIE_SECURE=false
 FRONTEND_ROUTE_SUBDOMAIN=router
 FRONTEND_ROUTE_DESTINATION=http://frontend:3000
+NON_ADMIN_BLOCKED_DESTINATION_HOSTS=localhost,127.0.0.1,::1,192.168.1.28
 ```
 
 Notes:
@@ -54,6 +55,7 @@ Notes:
 - If MongoDB already contains an admin user, bootstrap credentials may be omitted.
 - `SESSION_COOKIE_SECURE` should be `true` when the app is served over HTTPS.
 - The backend reserves `FRONTEND_ROUTE_SUBDOMAIN` as an automatic route to the frontend service. By default it points `router` at `http://frontend:3000` inside Docker Compose.
+- Non-admin users are blocked from saving routes to the reserved local hosts listed in `NON_ADMIN_BLOCKED_DESTINATION_HOSTS`. Admin users can use any destination except the reserved frontend subdomain.
 - For local development, the backend usually talks to MongoDB on `localhost:27019`.
 - In Docker Compose, the backend connects to `mongo:27019` inside the Docker network.
 

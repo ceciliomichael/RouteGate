@@ -67,5 +67,6 @@ If you use Docker Compose, copy `.env.example` to `.env` and adjust the values f
 - The backend performs the actual wildcard proxying.
 - Routes can be pointed at `https://` upstreams and, when needed, can skip upstream TLS verification for self-signed services.
 - The backend reserves `router` for the frontend by default; you can override the subdomain or destination with `FRONTEND_ROUTE_SUBDOMAIN` and `FRONTEND_ROUTE_DESTINATION`.
+- Standard users cannot point routes at reserved local destinations like `localhost` or the router node IP; admins can use any destination except the reserved frontend subdomain.
 - The dashboard hides the reserved `router` route and rejects attempts to create or edit it manually.
 - For tunnel-based development, the frontend Next config includes dev-origin support for common tunnel hosts and a custom allowlist variable.
