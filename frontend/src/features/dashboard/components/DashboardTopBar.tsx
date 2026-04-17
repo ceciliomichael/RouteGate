@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { CustomDropdown } from "../../../components/CustomDropdown";
 import type { AuthUser } from "../../auth/types";
@@ -21,11 +22,18 @@ export function DashboardTopBar({
   actions,
   onLogout,
 }: DashboardTopBarProps) {
+  const router = useRouter();
+
   const profileOptions = [
     {
       value: "account",
       label: user.name,
       description: user.username || user.email || "Account",
+    },
+    {
+      value: "settings",
+      label: "Settings",
+      description: "Manage account and terminal configuration.",
     },
     {
       value: "signout",
@@ -169,6 +177,11 @@ export function DashboardTopBar({
             value="account"
             options={profileOptions}
             onChange={(value) => {
+              if (value === "settings") {
+                router.push("/settings");
+                return;
+              }
+
               if (value === "signout") {
                 void onLogout();
               }

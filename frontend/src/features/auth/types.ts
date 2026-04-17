@@ -4,6 +4,7 @@ export interface AuthUser {
   username: string;
   email: string;
   role: "admin" | "user";
+  isBootstrap: boolean;
   createdAt: string;
   updatedAt: string;
 }

@@ -178,10 +178,6 @@ func (h *Handler) handleUsersItem(writer http.ResponseWriter, request *http.Requ
 	if !ok {
 		return
 	}
-	if !user.IsAdmin() {
-		h.writeError(writer, http.StatusForbidden, "forbidden")
-		return
-	}
 
 	path := strings.TrimSpace(strings.TrimPrefix(request.URL.Path, "/api/users/"))
 	path = strings.Trim(path, "/")
@@ -199,6 +195,16 @@ func (h *Handler) handleUsersItem(writer http.ResponseWriter, request *http.Requ
 	targetID := strings.TrimSpace(segments[0])
 	if targetID == "" {
 		h.writeError(writer, http.StatusNotFound, "not found")
+		return
+	}
+
+	if targetID == "me" {
+		h.handleCurrentUserSettings(writer, request, user, segments)
+		return
+	}
+
+	if !user.IsAdmin() {
+		h.writeError(writer, http.StatusForbidden, "forbidden")
 		return
 	}
 
@@ -249,6 +255,96 @@ func (h *Handler) handleUsersItem(writer http.ResponseWriter, request *http.Requ
 	default:
 		h.writeMethodNotAllowed(writer, http.MethodDelete, http.MethodPost)
 	}
+}
+
+func (h *Handler) handleCurrentUserSettings(
+	writer http.ResponseWriter,
+	request *http.Request,
+	user identity.User,
+	segments []string,
+) {
+	ctx, cancel := context.WithTimeout(request.Context(), 5*time.Second)
+	defer cancel()
+
+	if len(segments) == 1 {
+		if request.Method != http.MethodPatch {
+			h.writeMethodNotAllowed(writer, http.MethodPatch)
+			return
+		}
+
+		var payload struct {
+			Name string `json:"name"`
+		}
+		if err := decodeBody(request, &payload); err != nil {
+			h.writeError(writer, http.StatusBadRequest, err.Error())
+			return
+		}
+
+		updated, err := h.identity.UpdateCurrentUserName(ctx, user.ID, payload.Name)
+		if err != nil {
+			switch {
+			case errors.Is(err, identity.ErrUserNotFound):
+				h.writeError(writer, http.StatusNotFound, err.Error())
+			case errors.Is(err, identity.ErrUserProtected):
+				h.writeError(writer, http.StatusForbidden, err.Error())
+			default:
+				h.writeError(writer, http.StatusBadRequest, err.Error())
+			}
+			return
+		}
+
+		h.writeJSON(writer, http.StatusOK, map[string]any{"user": updated})
+		return
+	}
+
+	if len(segments) == 2 && segments[1] == "password" {
+		if request.Method != http.MethodPost {
+			h.writeMethodNotAllowed(writer, http.MethodPost)
+			return
+		}
+
+		var payload struct {
+			CurrentPassword string `json:"currentPassword"`
+			NewPassword     string `json:"newPassword"`
+		}
+		if err := decodeBody(request, &payload); err != nil {
+			h.writeError(writer, http.StatusBadRequest, err.Error())
+			return
+		}
+
+		updated, err := h.identity.ChangeCurrentUserPassword(
+			ctx,
+			user.ID,
+			payload.CurrentPassword,
+			payload.NewPassword,
+		)
+		if err != nil {
+			switch {
+			case errors.Is(err, identity.ErrUserNotFound):
+				h.writeError(writer, http.StatusNotFound, err.Error())
+			case errors.Is(err, identity.ErrUserProtected):
+				h.writeError(writer, http.StatusForbidden, err.Error())
+			case errors.Is(err, identity.ErrInvalidPassword):
+				h.writeError(writer, http.StatusUnauthorized, "current password is incorrect")
+			default:
+				h.writeError(writer, http.StatusBadRequest, err.Error())
+			}
+			return
+		}
+
+		sessionToken, expiresAt, err := h.identity.CreateSession(ctx, updated.ID, h.cfg.SessionTTL())
+		if err != nil {
+			h.logger.Printf("create session failed after password change: %v", err)
+			h.writeError(writer, http.StatusInternalServerError, "failed to start session")
+			return
+		}
+
+		http.SetCookie(writer, h.buildSessionCookie(sessionToken, expiresAt))
+		h.writeJSON(writer, http.StatusOK, map[string]any{"user": updated})
+		return
+	}
+
+	h.writeError(writer, http.StatusNotFound, "not found")
 }
 
 func (h *Handler) handleRoutesCollection(writer http.ResponseWriter, request *http.Request) {

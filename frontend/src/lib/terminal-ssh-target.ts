@@ -1,3 +1,4 @@
+import crypto from "node:crypto";
 import net from "node:net";
 
 export interface TerminalSshTarget {
@@ -21,6 +22,9 @@ export interface TerminalSshTargetInput {
 }
 
 const terminalSshTargets = new Map<string, TerminalSshTarget>();
+const TERMINAL_TARGET_COOKIE_VERSION = 1;
+export const TERMINAL_SSH_TARGET_COOKIE_NAME = "wc_terminal_target";
+export const TERMINAL_SSH_TARGET_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 30;
 
 function parsePort(value: number | null | undefined): number | null {
   if (value === null || value === undefined) {
@@ -34,7 +38,10 @@ function parsePort(value: number | null | undefined): number | null {
   return value;
 }
 
-function normalizeHostFromInput(rawHost: string): { host: string; port: number | null } {
+function normalizeHostFromInput(rawHost: string): {
+  host: string;
+  port: number | null;
+} {
   const trimmedHost = rawHost.trim();
   if (trimmedHost.length === 0) {
     throw new Error("Host is required.");
@@ -71,9 +78,10 @@ function normalizeHost(host: string): string {
     throw new Error("Host is required.");
   }
 
-  const bracketless = trimmed.startsWith("[") && trimmed.endsWith("]")
-    ? trimmed.slice(1, -1)
-    : trimmed;
+  const bracketless =
+    trimmed.startsWith("[") && trimmed.endsWith("]")
+      ? trimmed.slice(1, -1)
+      : trimmed;
   const ipVersion = net.isIP(bracketless);
   if (ipVersion === 4 || ipVersion === 6) {
     return bracketless;
@@ -83,9 +91,10 @@ function normalizeHost(host: string): string {
     return "localhost";
   }
 
-  const isValidHostname = /^(?=.{1,253}$)(?!-)(?:[a-zA-Z0-9-]{1,63}\.)*[a-zA-Z0-9-]{1,63}$/.test(
-    bracketless,
-  );
+  const isValidHostname =
+    /^(?=.{1,253}$)(?!-)(?:[a-zA-Z0-9-]{1,63}\.)*[a-zA-Z0-9-]{1,63}$/.test(
+      bracketless,
+    );
   if (!isValidHostname) {
     throw new Error("Host must be a valid hostname or IP address.");
   }
@@ -179,4 +188,142 @@ export function setTerminalSshTarget(
 
 export function clearTerminalSshTarget(userId: string): void {
   terminalSshTargets.delete(userId);
+}
+
+function toKeyMaterial(secret: string): Buffer {
+  return crypto.createHash("sha256").update(secret, "utf8").digest();
+}
+
+function resolveCookieSecret(): Buffer {
+  const configuredSecret =
+    process.env.TERMINAL_TARGET_SECRET ?? process.env.AUTH_SECRET;
+  if (configuredSecret && configuredSecret.trim().length > 0) {
+    return toKeyMaterial(configuredSecret.trim());
+  }
+
+  return toKeyMaterial("terminal-target-dev-secret");
+}
+
+function encodeEnvelope(envelope: {
+  iv: string;
+  tag: string;
+  data: string;
+}): string {
+  return Buffer.from(JSON.stringify(envelope), "utf8").toString("base64url");
+}
+
+function decodeEnvelope(value: string): {
+  iv: string;
+  tag: string;
+  data: string;
+} | null {
+  try {
+    const parsed = JSON.parse(
+      Buffer.from(value, "base64url").toString("utf8"),
+    ) as Partial<{
+      iv: unknown;
+      tag: unknown;
+      data: unknown;
+    }>;
+    if (
+      typeof parsed.iv !== "string" ||
+      typeof parsed.tag !== "string" ||
+      typeof parsed.data !== "string"
+    ) {
+      return null;
+    }
+
+    return {
+      iv: parsed.iv,
+      tag: parsed.tag,
+      data: parsed.data,
+    };
+  } catch {
+    return null;
+  }
+}
+
+interface TerminalTargetCookiePayload {
+  v: number;
+  userId: string;
+  savedAt: number;
+  target: TerminalSshTarget;
+}
+
+export function createTerminalSshTargetCookieValue(
+  userId: string,
+  target: TerminalSshTarget,
+): string {
+  const payload: TerminalTargetCookiePayload = {
+    v: TERMINAL_TARGET_COOKIE_VERSION,
+    userId,
+    savedAt: Date.now(),
+    target,
+  };
+
+  const iv = crypto.randomBytes(12);
+  const key = resolveCookieSecret();
+  const cipher = crypto.createCipheriv("aes-256-gcm", key, iv);
+  const encrypted = Buffer.concat([
+    cipher.update(JSON.stringify(payload), "utf8"),
+    cipher.final(),
+  ]);
+  const tag = cipher.getAuthTag();
+
+  return encodeEnvelope({
+    iv: iv.toString("base64url"),
+    tag: tag.toString("base64url"),
+    data: encrypted.toString("base64url"),
+  });
+}
+
+export function restoreTerminalSshTargetFromCookie(
+  userId: string,
+  cookieValue: string | undefined,
+): TerminalSshTarget | null {
+  if (!cookieValue || cookieValue.trim().length === 0) {
+    return null;
+  }
+
+  const envelope = decodeEnvelope(cookieValue);
+  if (!envelope) {
+    return null;
+  }
+
+  try {
+    const key = resolveCookieSecret();
+    const decipher = crypto.createDecipheriv(
+      "aes-256-gcm",
+      key,
+      Buffer.from(envelope.iv, "base64url"),
+    );
+    decipher.setAuthTag(Buffer.from(envelope.tag, "base64url"));
+
+    const payloadJson = Buffer.concat([
+      decipher.update(Buffer.from(envelope.data, "base64url")),
+      decipher.final(),
+    ]).toString("utf8");
+
+    const payload = JSON.parse(
+      payloadJson,
+    ) as Partial<TerminalTargetCookiePayload>;
+    if (
+      payload.v !== TERMINAL_TARGET_COOKIE_VERSION ||
+      payload.userId !== userId ||
+      !payload.target
+    ) {
+      return null;
+    }
+
+    const normalized = setTerminalSshTarget(userId, {
+      username: payload.target.username,
+      hostOrUrl: payload.target.host,
+      port: payload.target.port,
+      password: payload.target.password,
+    });
+
+    return normalized;
+  } catch {
+    return null;
+  }
 }

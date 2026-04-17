@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   fetchSshTerminalTarget,
@@ -22,6 +23,7 @@ interface TerminalState {
 
 interface TerminalWorkspaceProps {
   persistenceKey: string;
+  showSshGate?: boolean;
 }
 
 interface PersistedTerminalTab {
@@ -119,7 +121,11 @@ function readPersistedState(key: string): TerminalState | null {
   }
 }
 
-export function TerminalWorkspace({ persistenceKey }: TerminalWorkspaceProps) {
+export function TerminalWorkspace({
+  persistenceKey,
+  showSshGate = true,
+}: TerminalWorkspaceProps) {
+  const router = useRouter();
   const [state, setState] = useState<TerminalState>(createDefaultState);
   const [isStateReady, setIsStateReady] = useState(false);
   const [sshTarget, setSshTarget] = useState<SshTerminalTarget | null>(null);
@@ -256,7 +262,79 @@ export function TerminalWorkspace({ persistenceKey }: TerminalWorkspaceProps) {
     }
   };
 
+  const renderTerminalEmptyState = (input: {
+    title: string;
+    description: string;
+    actionLabel: string;
+    onAction: () => void;
+  }) => (
+    <div className="terminal-workspace-empty-state">
+      <div className="terminal-workspace-empty-icon" aria-hidden="true">
+        <svg
+          viewBox="0 0 24 24"
+          width="24"
+          height="24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <title>Terminal</title>
+          <rect
+            x="3"
+            y="5"
+            width="18"
+            height="14"
+            rx="2"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          />
+          <path
+            d="M7 10L10 12L7 14"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M12.5 14H17"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+        </svg>
+      </div>
+      <p className="terminal-workspace-empty-title">{input.title}</p>
+      <p className="terminal-workspace-empty-description">
+        {input.description}
+      </p>
+      <button
+        type="button"
+        className="terminal-workspace-empty-action"
+        onClick={input.onAction}
+      >
+        {input.actionLabel}
+      </button>
+    </div>
+  );
+
   if (!sshTarget) {
+    if (!showSshGate) {
+      return (
+        <section className="terminal-workspace-shell is-empty">
+          <div className="terminal-workspace-body">
+            {renderTerminalEmptyState({
+              title: "Terminal target not configured",
+              description:
+                "Set your SSH target in Settings before opening terminal sessions.",
+              actionLabel: "Open Terminal Settings",
+              onAction: () => {
+                router.push("/settings?section=terminal");
+              },
+            })}
+          </div>
+        </section>
+      );
+    }
+
     return (
       <section className="terminal-workspace-shell is-empty">
         <div className="terminal-workspace-body">
@@ -326,62 +404,21 @@ export function TerminalWorkspace({ persistenceKey }: TerminalWorkspaceProps) {
       ) : null}
 
       <div className="terminal-workspace-body">
-        {tabs.length === 0 ? (
-          <div className="terminal-workspace-empty-state">
-            <div className="terminal-workspace-empty-icon" aria-hidden="true">
-              <svg
-                viewBox="0 0 24 24"
-                width="24"
-                height="24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <title>Terminal</title>
-                <rect
-                  x="3"
-                  y="5"
-                  width="18"
-                  height="14"
-                  rx="2"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                />
-                <path
-                  d="M7 10L10 12L7 14"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M12.5 14H17"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </div>
-            <p className="terminal-workspace-empty-title">No terminal open</p>
-            <p className="terminal-workspace-empty-description">
-              Start a new session to run commands through your SSH target.
-            </p>
-            <button
-              type="button"
-              className="terminal-workspace-empty-action"
-              onClick={handleAddTab}
-            >
-              + New Terminal
-            </button>
-          </div>
-        ) : (
-          tabs.map((tab) => (
-            <TerminalPane
-              key={tab.id}
-              sessionId={tab.id}
-              isActive={tab.id === activeTab?.id}
-            />
-          ))
-        )}
+        {tabs.length === 0
+          ? renderTerminalEmptyState({
+              title: "No terminal open",
+              description:
+                "Start a new session to run commands through your SSH target.",
+              actionLabel: "+ New Terminal",
+              onAction: handleAddTab,
+            })
+          : tabs.map((tab) => (
+              <TerminalPane
+                key={tab.id}
+                sessionId={tab.id}
+                isActive={tab.id === activeTab?.id}
+              />
+            ))}
       </div>
     </section>
   );

@@ -28,18 +28,20 @@ var (
 	ErrDuplicateUser      = errors.New("user already exists")
 	ErrUserNotFound       = errors.New("user not found")
 	ErrUserProtected      = errors.New("user is protected")
+	ErrInvalidPassword    = errors.New("invalid password")
 )
 
 type Role string
 
 type User struct {
-	ID        string `json:"id"`
-	Name      string `json:"name"`
-	Username  string `json:"username"`
-	Email     string `json:"email"`
-	Role      Role   `json:"role"`
-	CreatedAt string `json:"createdAt"`
-	UpdatedAt string `json:"updatedAt"`
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Username    string `json:"username"`
+	Email       string `json:"email"`
+	Role        Role   `json:"role"`
+	IsBootstrap bool   `json:"isBootstrap"`
+	CreatedAt   string `json:"createdAt"`
+	UpdatedAt   string `json:"updatedAt"`
 }
 
 func (u User) IsAdmin() bool {
@@ -515,6 +517,118 @@ func (s *Store) RegeneratePassword(ctx context.Context, targetID string) (User, 
 	return target.toPublic(), password, nil
 }
 
+func (s *Store) UpdateCurrentUserName(ctx context.Context, userID string, name string) (User, error) {
+	parsedUserID, err := primitive.ObjectIDFromHex(strings.TrimSpace(userID))
+	if err != nil {
+		return User{}, fmt.Errorf("invalid user id: %w", err)
+	}
+
+	var target userRecord
+	if err := s.users.FindOne(ctx, bson.M{"_id": parsedUserID}).Decode(&target); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return User{}, ErrUserNotFound
+		}
+		return User{}, fmt.Errorf("find user: %w", err)
+	}
+
+	if target.IsBootstrap {
+		return User{}, ErrUserProtected
+	}
+
+	trimmedName := strings.TrimSpace(name)
+	if trimmedName == "" {
+		return User{}, fmt.Errorf("name is required")
+	}
+	if len(trimmedName) > 120 {
+		return User{}, fmt.Errorf("name is too long")
+	}
+
+	now := time.Now().UTC()
+	_, err = s.users.UpdateOne(
+		ctx,
+		bson.M{"_id": parsedUserID},
+		bson.M{
+			"$set": bson.M{
+				"name":      trimmedName,
+				"updatedAt": now,
+			},
+		},
+	)
+	if err != nil {
+		return User{}, fmt.Errorf("update user profile: %w", err)
+	}
+
+	target.Name = trimmedName
+	target.UpdatedAt = now
+	return target.toPublic(), nil
+}
+
+func (s *Store) ChangeCurrentUserPassword(
+	ctx context.Context,
+	userID string,
+	currentPassword string,
+	newPassword string,
+) (User, error) {
+	parsedUserID, err := primitive.ObjectIDFromHex(strings.TrimSpace(userID))
+	if err != nil {
+		return User{}, fmt.Errorf("invalid user id: %w", err)
+	}
+
+	var target userRecord
+	if err := s.users.FindOne(ctx, bson.M{"_id": parsedUserID}).Decode(&target); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return User{}, ErrUserNotFound
+		}
+		return User{}, fmt.Errorf("find user: %w", err)
+	}
+
+	if target.IsBootstrap {
+		return User{}, ErrUserProtected
+	}
+
+	if bcrypt.CompareHashAndPassword(target.PasswordHash, []byte(currentPassword)) != nil {
+		return User{}, ErrInvalidPassword
+	}
+
+	if len(strings.TrimSpace(newPassword)) == 0 {
+		return User{}, fmt.Errorf("new password is required")
+	}
+	if len(newPassword) < 8 {
+		return User{}, fmt.Errorf("new password must be at least 8 characters")
+	}
+	if len(newPassword) > 128 {
+		return User{}, fmt.Errorf("new password is too long")
+	}
+
+	newPasswordHash, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
+	if err != nil {
+		return User{}, fmt.Errorf("hash new password: %w", err)
+	}
+
+	now := time.Now().UTC()
+	_, err = s.users.UpdateOne(
+		ctx,
+		bson.M{"_id": parsedUserID},
+		bson.M{
+			"$set": bson.M{
+				"passwordHash": newPasswordHash,
+				"updatedAt":    now,
+			},
+		},
+	)
+	if err != nil {
+		return User{}, fmt.Errorf("update user password: %w", err)
+	}
+
+	if err := s.deleteSessionsByUserID(ctx, parsedUserID); err != nil {
+		return User{}, err
+	}
+
+	target.PasswordHash = newPasswordHash
+	target.UpdatedAt = now
+	return target.toPublic(), nil
+}
+
 func (s *Store) findUserByEmail(ctx context.Context, email string) (userRecord, error) {
 	var record userRecord
 	err := s.users.FindOne(ctx, bson.M{
@@ -573,13 +687,14 @@ func (s *Store) deleteSessionsByUserID(ctx context.Context, userID primitive.Obj
 
 func (u userRecord) toPublic() User {
 	return User{
-		ID:        u.ID.Hex(),
-		Name:      u.Name,
-		Username:  usernameOrFallback(u.Username, u.Email),
-		Email:     u.Email,
-		Role:      u.Role,
-		CreatedAt: u.CreatedAt.UTC().Format(time.RFC3339Nano),
-		UpdatedAt: u.UpdatedAt.UTC().Format(time.RFC3339Nano),
+		ID:          u.ID.Hex(),
+		Name:        u.Name,
+		Username:    usernameOrFallback(u.Username, u.Email),
+		Email:       u.Email,
+		Role:        u.Role,
+		IsBootstrap: u.IsBootstrap,
+		CreatedAt:   u.CreatedAt.UTC().Format(time.RFC3339Nano),
+		UpdatedAt:   u.UpdatedAt.UTC().Format(time.RFC3339Nano),
 	}
 }
 

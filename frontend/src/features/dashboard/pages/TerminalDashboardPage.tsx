@@ -13,7 +13,7 @@ export function TerminalDashboardPage({ auth }: TerminalDashboardPageProps) {
 
   return (
     <DashboardFrame auth={auth}>
-      <TerminalWorkspace persistenceKey={persistenceKey} />
+      <TerminalWorkspace persistenceKey={persistenceKey} showSshGate={false} />
     </DashboardFrame>
   );
 }

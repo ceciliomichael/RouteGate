@@ -2,6 +2,9 @@ import type { ApiError } from "../routes/types";
 import type {
   CreateUserPayload,
   CreateUserResponse,
+  CurrentUserPasswordChangePayload,
+  CurrentUserProfileUpdatePayload,
+  CurrentUserResponse,
   ManagedUser,
   PasswordRotationResponse,
 } from "./types";
@@ -76,4 +79,34 @@ export async function regenerateUserPassword(
   });
   if (!res.ok) throw await parseError(res);
   return (await res.json()) as PasswordRotationResponse;
+}
+
+export async function updateCurrentUserProfile(
+  payload: CurrentUserProfileUpdatePayload,
+): Promise<CurrentUserResponse> {
+  const res = await fetch(`${USERS_API_PATH}/me`, {
+    method: "PATCH",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw await parseError(res);
+  return (await res.json()) as CurrentUserResponse;
+}
+
+export async function changeCurrentUserPassword(
+  payload: CurrentUserPasswordChangePayload,
+): Promise<CurrentUserResponse> {
+  const res = await fetch(`${USERS_API_PATH}/me/password`, {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw await parseError(res);
+  return (await res.json()) as CurrentUserResponse;
 }

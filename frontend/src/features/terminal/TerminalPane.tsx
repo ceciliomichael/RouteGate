@@ -129,10 +129,6 @@ export function TerminalPane({ sessionId, isActive }: TerminalPaneProps) {
     });
 
     const inputDisposable = terminal.onData((data) => {
-      if (!runtime.isConnected()) {
-        return;
-      }
-
       runtime.sendInput(data);
     });
 

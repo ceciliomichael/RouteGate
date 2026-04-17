@@ -6,6 +6,10 @@ import {
   DEFAULT_TERMINAL_ROWS,
   openTerminalSession,
 } from "@/lib/terminal-session";
+import {
+  restoreTerminalSshTargetFromCookie,
+  TERMINAL_SSH_TARGET_COOKIE_NAME,
+} from "@/lib/terminal-ssh-target";
 import { resolveAuthenticatedUser } from "@/server/terminal-access";
 
 export const runtime = "nodejs";
@@ -46,10 +50,31 @@ export async function GET(request: NextRequest): Promise<Response> {
 
     const result = openTerminalSession(sessionId, user.id, { cols, rows });
     if (result.status === "missing_target") {
-      return NextResponse.json(
-        { error: result.message },
-        { status: 412 },
+      restoreTerminalSshTargetFromCookie(
+        user.id,
+        request.cookies.get(TERMINAL_SSH_TARGET_COOKIE_NAME)?.value,
       );
+      const retry = openTerminalSession(sessionId, user.id, { cols, rows });
+      if (retry.status === "missing_target") {
+        return NextResponse.json({ error: retry.message }, { status: 412 });
+      }
+      if (retry.status === "forbidden") {
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      }
+
+      const response = new NextResponse(
+        createTerminalEventStream(retry.session),
+        {
+          headers: {
+            "Cache-Control": "no-cache, no-transform",
+            Connection: "keep-alive",
+            "Content-Type": "text/event-stream; charset=utf-8",
+            "X-Accel-Buffering": "no",
+          },
+        },
+      );
+
+      return response;
     }
     if (result.status === "forbidden") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });

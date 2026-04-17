@@ -27,7 +27,6 @@ interface RuntimeOutputAttachment {
 
 export interface TerminalRuntimeHandle {
   attachOutput: (listener: OutputListener) => RuntimeOutputAttachment;
-  isConnected: () => boolean;
   release: () => void;
   resize: (size: TerminalSize) => void;
   sendInput: (data: string) => void;
@@ -39,8 +38,38 @@ const DEFAULT_TERMINAL_SIZE: TerminalSize = { cols: 120, rows: 30 };
 const MAX_BUFFER_LENGTH = 1_000_000;
 const TERMINAL_CONNECTION_ERROR_MESSAGE =
   "[terminal] Connection error. Check frontend server logs for terminal startup details.";
+const TERMINAL_BUFFER_STORAGE_PREFIX = "wc_terminal_buffer:";
 
 const runtimesBySessionId = new Map<string, TerminalRuntime>();
+
+function getBufferStorageKey(sessionId: string): string {
+  return `${TERMINAL_BUFFER_STORAGE_PREFIX}${sessionId}`;
+}
+
+function readStoredBuffer(sessionId: string): string {
+  try {
+    const raw = window.localStorage.getItem(getBufferStorageKey(sessionId));
+    return typeof raw === "string" ? raw : "";
+  } catch {
+    return "";
+  }
+}
+
+function storeBuffer(sessionId: string, value: string): void {
+  try {
+    window.localStorage.setItem(getBufferStorageKey(sessionId), value);
+  } catch {
+    // Ignore storage write failures.
+  }
+}
+
+function clearStoredBuffer(sessionId: string): void {
+  try {
+    window.localStorage.removeItem(getBufferStorageKey(sessionId));
+  } catch {
+    // Ignore storage delete failures.
+  }
+}
 
 function sanitizeTerminalSize(size: TerminalSize): TerminalSize {
   const cols = Number.isFinite(size.cols) ? Math.trunc(size.cols) : 0;
@@ -67,12 +96,14 @@ function decodeBase64Payload(payload: string): string {
 function appendToRuntimeBuffer(runtime: TerminalRuntime, chunk: string): void {
   runtime.buffer += chunk;
   if (runtime.buffer.length <= MAX_BUFFER_LENGTH) {
+    storeBuffer(runtime.sessionId, runtime.buffer);
     return;
   }
 
   runtime.buffer = runtime.buffer.slice(
     runtime.buffer.length - MAX_BUFFER_LENGTH,
   );
+  storeBuffer(runtime.sessionId, runtime.buffer);
 }
 
 function emitConnection(runtime: TerminalRuntime, isConnected: boolean): void {
@@ -140,7 +171,7 @@ function createRuntime(
     errorListeners: new Set<ErrorListener>(),
     connectionListeners: new Set<ConnectionListener>(),
     isConnected: false,
-    buffer: "",
+    buffer: readStoredBuffer(sessionId),
   };
 
   openRuntimeStream(runtime, initialSize);
@@ -180,9 +211,6 @@ export function acquireTerminalRuntime(
         },
       };
     },
-    isConnected() {
-      return runtime.isConnected;
-    },
     release() {
       runtime.refCount = Math.max(0, runtime.refCount - 1);
     },
@@ -193,10 +221,6 @@ export function acquireTerminalRuntime(
       }).catch(() => undefined);
     },
     sendInput(data) {
-      if (!runtime.isConnected) {
-        return;
-      }
-
       void fetchJson("/api/terminal/input", {
         sessionId,
         data,
@@ -228,5 +252,6 @@ export function disposeTerminalRuntime(sessionId: string): void {
   runtime.errorListeners.clear();
   runtime.connectionListeners.clear();
   runtime.buffer = "";
+  clearStoredBuffer(sessionId);
   runtimesBySessionId.delete(sessionId);
 }

@@ -26,3 +26,10 @@ export async function DELETE(
 ): Promise<Response> {
   return forwardToBackendApi(request, context.params, ["users"]);
 }
+
+export async function PATCH(
+  request: Request,
+  context: { params: Promise<Params> },
+): Promise<Response> {
+  return forwardToBackendApi(request, context.params, ["users"]);
+}

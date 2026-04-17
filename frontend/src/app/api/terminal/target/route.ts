@@ -1,11 +1,14 @@
 import { type NextRequest, NextResponse } from "next/server";
-
+import { destroyTerminalSessionsByOwner } from "@/lib/terminal-session";
 import {
   clearTerminalSshTarget,
+  createTerminalSshTargetCookieValue,
   getTerminalSshTargetPublic,
+  restoreTerminalSshTargetFromCookie,
   setTerminalSshTarget,
+  TERMINAL_SSH_TARGET_COOKIE_MAX_AGE_SECONDS,
+  TERMINAL_SSH_TARGET_COOKIE_NAME,
 } from "@/lib/terminal-ssh-target";
-import { destroyTerminalSessionsByOwner } from "@/lib/terminal-session";
 import { resolveAuthenticatedUser } from "@/server/terminal-access";
 
 export const runtime = "nodejs";
@@ -24,7 +27,23 @@ export async function GET(request: NextRequest): Promise<Response> {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const target = getTerminalSshTargetPublic(user.id);
+  const fromMemory = getTerminalSshTargetPublic(user.id);
+  if (fromMemory) {
+    return NextResponse.json({ target: fromMemory });
+  }
+
+  const restored = restoreTerminalSshTargetFromCookie(
+    user.id,
+    request.cookies.get(TERMINAL_SSH_TARGET_COOKIE_NAME)?.value,
+  );
+  const target = restored
+    ? {
+        username: restored.username,
+        host: restored.host,
+        port: restored.port,
+      }
+    : null;
+
   return NextResponse.json({ target });
 }
 
@@ -57,7 +76,8 @@ export async function POST(request: NextRequest): Promise<Response> {
     });
 
     destroyTerminalSessionsByOwner(user.id);
-    return NextResponse.json({
+
+    const response = NextResponse.json({
       target: {
         username: target.username,
         host: target.host,
@@ -65,6 +85,18 @@ export async function POST(request: NextRequest): Promise<Response> {
       },
       ok: true,
     });
+
+    response.cookies.set({
+      name: TERMINAL_SSH_TARGET_COOKIE_NAME,
+      value: createTerminalSshTargetCookieValue(user.id, target),
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: TERMINAL_SSH_TARGET_COOKIE_MAX_AGE_SECONDS,
+    });
+
+    return response;
   } catch (error) {
     const message =
       error instanceof Error
@@ -82,5 +114,15 @@ export async function DELETE(request: NextRequest): Promise<Response> {
 
   clearTerminalSshTarget(user.id);
   destroyTerminalSessionsByOwner(user.id);
-  return NextResponse.json({ ok: true });
+  const response = NextResponse.json({ ok: true });
+  response.cookies.set({
+    name: TERMINAL_SSH_TARGET_COOKIE_NAME,
+    value: "",
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: 0,
+  });
+  return response;
 }
