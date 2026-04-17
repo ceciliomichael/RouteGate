@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ConfirmDialog } from "../../components/ConfirmDialog";
 import type { AuthState } from "../auth/useAuth";
 import { createRoute, deleteRoute, listRoutes, updateRoute } from "./api";
-import { RouteDetailsPanel } from "./components/RouteDetailsPanel";
 import { StatusBanner } from "./components/StatusBanner";
 import { SummaryStrip } from "./components/SummaryStrip";
 import { RouteForm } from "./RouteForm";
@@ -23,7 +22,6 @@ export function RoutesWorkspace({ auth, showOwner }: RoutesWorkspaceProps) {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [bannerError, setBannerError] = useState<string | null>(null);
-  const [selectedRoute, setSelectedRoute] = useState<Route | null>(null);
   const [editingRoute, setEditingRoute] = useState<Route | null | "new">(null);
   const [deletingRoute, setDeletingRoute] = useState<Route | null>(null);
   const [isFormLoading, setIsFormLoading] = useState(false);
@@ -94,16 +92,10 @@ export function RoutesWorkspace({ auth, showOwner }: RoutesWorkspaceProps) {
           payload.subdomain.trim().toLowerCase() === RESERVED_ROUTE_SUBDOMAIN
         ) {
           setRoutes((prev) => prev.filter((route) => route.id !== updated.id));
-          if (selectedRoute?.id === updated.id) {
-            setSelectedRoute(null);
-          }
         } else {
           setRoutes((prev) =>
             prev.map((route) => (route.id === updated.id ? updated : route)),
           );
-          if (selectedRoute?.id === updated.id) {
-            setSelectedRoute(updated);
-          }
         }
       } else {
         const created = await createRoute(payload);
@@ -141,9 +133,6 @@ export function RoutesWorkspace({ auth, showOwner }: RoutesWorkspaceProps) {
       setRoutes((prev) =>
         prev.map((entry) => (entry.id === updated.id ? updated : entry)),
       );
-      if (selectedRoute?.id === updated.id) {
-        setSelectedRoute(updated);
-      }
     } catch (err) {
       if (
         err &&
@@ -171,9 +160,6 @@ export function RoutesWorkspace({ auth, showOwner }: RoutesWorkspaceProps) {
       setRoutes((prev) =>
         prev.filter((route) => route.id !== deletingRoute.id),
       );
-      if (selectedRoute?.id === deletingRoute.id) {
-        setSelectedRoute(null);
-      }
       setDeletingRoute(null);
     } catch (err) {
       if (
@@ -216,11 +202,7 @@ export function RoutesWorkspace({ auth, showOwner }: RoutesWorkspaceProps) {
       {!isFetching ? <SummaryStrip routes={routes} /> : null}
 
       <div
-        className={
-          selectedRoute
-            ? "dashboard-content-grid with-panel"
-            : "dashboard-content-grid"
-        }
+        className="dashboard-content-grid"
         style={{
           display: "grid",
           gap: "1rem",
@@ -232,10 +214,6 @@ export function RoutesWorkspace({ auth, showOwner }: RoutesWorkspaceProps) {
         ) : (
           <RouteTable
             routes={routes}
-            selectedId={selectedRoute?.id ?? null}
-            onSelect={(route) =>
-              setSelectedRoute((prev) => (prev?.id === route.id ? null : route))
-            }
             onEdit={(route) => setEditingRoute(route)}
             onToggle={(route) => void handleToggle(route)}
             onDelete={(route) => setDeletingRoute(route)}
@@ -246,18 +224,6 @@ export function RoutesWorkspace({ auth, showOwner }: RoutesWorkspaceProps) {
             isRefreshing={isRefreshing}
           />
         )}
-
-        {selectedRoute && !isFetching ? (
-          <RouteDetailsPanel
-            route={selectedRoute}
-            onEdit={(route) => setEditingRoute(route)}
-            onToggle={(route) => void handleToggle(route)}
-            onDelete={(route) => setDeletingRoute(route)}
-            onClose={() => setSelectedRoute(null)}
-            isTogglingId={isTogglingId}
-            showOwner={showOwner}
-          />
-        ) : null}
       </div>
 
       {editingRoute !== null ? (
@@ -289,14 +255,6 @@ export function RoutesWorkspace({ auth, showOwner }: RoutesWorkspaceProps) {
           isLoading={isDeleting}
         />
       ) : null}
-
-      <style>{`
-        @media (min-width: 768px) {
-          .dashboard-content-grid.with-panel {
-            grid-template-columns: minmax(0, 1fr) 320px;
-          }
-        }
-      `}</style>
     </>
   );
 }

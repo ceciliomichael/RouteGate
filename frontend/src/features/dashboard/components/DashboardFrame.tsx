@@ -45,6 +45,7 @@ export function DashboardFrame({
       <main
         style={{
           flex: 1,
+          minHeight: 0,
           maxWidth: "1280px",
           margin: "0 auto",
           width: "100%",

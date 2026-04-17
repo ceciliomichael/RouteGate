@@ -11,9 +11,13 @@ export function getDashboardNavigation(
   if (user.role === "admin") {
     return [
       { href: "/admin/routes", label: "Routes" },
+      { href: "/terminal", label: "Terminal" },
       { href: "/admin/users", label: "Users" },
     ];
   }
 
-  return [{ href: "/", label: "Routes" }];
+  return [
+    { href: "/", label: "Routes" },
+    { href: "/terminal", label: "Terminal" },
+  ];
 }

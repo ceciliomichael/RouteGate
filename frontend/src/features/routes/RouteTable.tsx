@@ -9,8 +9,6 @@ import type { Route } from "./types";
 
 interface RouteTableProps {
   routes: Route[];
-  selectedId: string | null;
-  onSelect: (route: Route) => void;
   onEdit: (route: Route) => void;
   onToggle: (route: Route) => void;
   onDelete: (route: Route) => void;
@@ -55,8 +53,6 @@ function shortDest(destination: string): string {
 
 export function RouteTable({
   routes,
-  selectedId,
-  onSelect,
   onEdit,
   onToggle,
   onDelete,
@@ -288,9 +284,7 @@ export function RouteTable({
               <RouteCard
                 key={route.id}
                 route={route}
-                isSelected={route.id === selectedId}
                 isToggling={isTogglingId === route.id}
-                onSelect={onSelect}
                 onEdit={onEdit}
                 onToggle={onToggle}
                 onDelete={onDelete}
@@ -316,9 +310,7 @@ export function RouteTable({
                   <RouteRow
                     key={route.id}
                     route={route}
-                    isSelected={route.id === selectedId}
                     isToggling={isTogglingId === route.id}
-                    onSelect={onSelect}
                     onEdit={onEdit}
                     onToggle={onToggle}
                     onDelete={onDelete}
@@ -350,9 +342,7 @@ export function RouteTable({
 
 interface RouteCardProps {
   route: Route;
-  isSelected: boolean;
   isToggling: boolean;
-  onSelect: (r: Route) => void;
   onEdit: (r: Route) => void;
   onToggle: (r: Route) => void;
   onDelete: (r: Route) => void;
@@ -361,37 +351,18 @@ interface RouteCardProps {
 
 function RouteCard({
   route,
-  isSelected,
   isToggling,
-  onSelect,
   onEdit,
   onToggle,
   onDelete,
   showOwner,
 }: RouteCardProps) {
   return (
-    /* biome-ignore lint/a11y/useSemanticElements: card selection needs nested action buttons inside, so a semantic button wrapper is not valid here */
     <div
-      onClick={() => onSelect(route)}
-      onKeyDown={(event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          onSelect(route);
-        }
-      }}
-      role="button"
-      tabIndex={0}
       style={{
         padding: "1rem",
         borderBottom: "1px solid var(--color-border)",
-        background: isSelected
-          ? "var(--color-surface-subtle)"
-          : "var(--color-surface)",
-        cursor: "pointer",
-        transition: "background 0.1s",
-        borderLeft: isSelected
-          ? "3px solid var(--color-ink)"
-          : "3px solid transparent",
+        background: "var(--color-surface)",
       }}
     >
       {/* Top row: subdomain + status */}
@@ -596,9 +567,7 @@ function RouteCard({
 
 interface RouteRowProps {
   route: Route;
-  isSelected: boolean;
   isToggling: boolean;
-  onSelect: (r: Route) => void;
   onEdit: (r: Route) => void;
   onToggle: (r: Route) => void;
   onDelete: (r: Route) => void;
@@ -607,20 +576,14 @@ interface RouteRowProps {
 
 function RouteRow({
   route,
-  isSelected,
   isToggling,
-  onSelect,
   onEdit,
   onToggle,
   onDelete,
   showOwner,
 }: RouteRowProps) {
   return (
-    <tr
-      className={isSelected ? "selected" : ""}
-      onClick={() => onSelect(route)}
-      style={{ cursor: "pointer" }}
-    >
+    <tr>
       <td>
         <span
           className="mono"

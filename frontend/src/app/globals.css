@@ -546,4 +546,280 @@
   .dot-muted {
     background: var(--color-ink-muted);
   }
+
+  .terminal-workspace-shell {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    background: #121212;
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    border-radius: 0;
+  }
+
+  .terminal-workspace-shell.is-empty {
+    grid-template-rows: 1fr;
+  }
+
+  .terminal-workspace-header {
+    display: flex;
+    align-items: stretch;
+    min-height: 2.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    background: #171717;
+    border-bottom: 1px solid #2f2f2f;
+  }
+
+  .terminal-workspace-tabs {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    min-width: 0;
+    overflow-x: auto;
+    justify-content: flex-start;
+    flex: 1 1 auto;
+  }
+
+  .terminal-workspace-tab {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #373737;
+    border-bottom-color: #373737;
+    border-radius: 0;
+    background: #1f1f1f;
+    color: #b8b8b8;
+    min-width: 8rem;
+    height: 2.5rem;
+    overflow: hidden;
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .terminal-workspace-tab:has(.terminal-workspace-tab-button:hover) {
+    background: #262626;
+    border-color: #525252;
+    color: #f7f7f7;
+  }
+
+  .terminal-workspace-tabs .terminal-workspace-tab + .terminal-workspace-tab,
+  .terminal-workspace-tabs .terminal-workspace-tab + .terminal-workspace-tab:hover,
+  .terminal-workspace-tabs
+    .terminal-workspace-tab
+    + .terminal-workspace-tab.is-active,
+  .terminal-workspace-tabs
+    .terminal-workspace-tab
+    + .terminal-workspace-tab.is-active:hover {
+    border-left-color: transparent;
+  }
+
+  .terminal-workspace-tab.is-active {
+    background: #000000;
+    border-color: #525252;
+    border-bottom-color: transparent;
+    color: #ffffff;
+  }
+
+  .terminal-workspace-tab.is-active:has(.terminal-workspace-tab-button:hover) {
+    background: #050505;
+    border-color: #666666;
+    border-bottom-color: transparent;
+  }
+
+  .terminal-workspace-tab-button {
+    align-items: center;
+    appearance: none;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    color: inherit;
+    display: inline-flex;
+    flex: 1 1 auto;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    gap: 0.4rem;
+    justify-content: flex-start;
+    min-width: 0;
+    padding: 0 0.9rem;
+    position: relative;
+    white-space: nowrap;
+  }
+
+  .terminal-workspace-tab-button:focus-visible,
+  .terminal-workspace-tab-close:focus-visible,
+  .terminal-workspace-tab-add-action:focus-visible {
+    outline: none;
+  }
+
+  .terminal-workspace-tab-close {
+    align-items: center;
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: inherit;
+    display: inline-block;
+    flex: 0 0 auto;
+    font-size: 0.95rem;
+    line-height: 1;
+    margin-right: 0.65rem;
+    min-width: 0;
+    padding: 0;
+    width: auto;
+    transition: none;
+  }
+
+  .terminal-workspace-tab-close:hover {
+    background: transparent;
+    color: inherit;
+  }
+
+  .terminal-workspace-tab-close-icon {
+    display: inline-block;
+    line-height: 1;
+    color: #d7d7d7;
+    transition: color 0.15s ease;
+  }
+
+  .terminal-workspace-tab-close:hover .terminal-workspace-tab-close-icon {
+    color: #ffffff;
+  }
+
+  .terminal-workspace-tab-add {
+    justify-content: center;
+    min-width: 2.75rem;
+    padding: 0 0.75rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: inherit;
+    border-bottom-color: transparent;
+  }
+
+  .terminal-workspace-tab-add-right {
+    margin-left: auto;
+    border-left-color: #373737;
+    border-right-color: #373737;
+    background: #1f1f1f;
+  }
+
+  .terminal-workspace-tab-add-right:hover {
+    background: #1f1f1f;
+    border-color: #373737;
+    border-bottom-color: transparent;
+    color: inherit;
+  }
+
+  .terminal-workspace-tab-add-action {
+    align-items: center;
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    display: inline-flex;
+    height: 100%;
+    justify-content: center;
+    margin: 0;
+    min-width: 1.1rem;
+    padding: 0;
+  }
+
+  .terminal-workspace-tab-add-symbol {
+    color: #d7d7d7;
+    transition: color 0.15s ease;
+  }
+
+  .terminal-workspace-tab-add-action:hover .terminal-workspace-tab-add-symbol {
+    color: #ffffff;
+  }
+
+  .terminal-workspace-body {
+    position: relative;
+    min-height: 0;
+    background: #000000;
+    height: 100%;
+  }
+
+  .terminal-workspace-empty-state {
+    align-items: center;
+    background: #000000;
+    color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    height: 100%;
+    justify-content: center;
+    min-height: 100%;
+    padding: 1.25rem;
+    text-align: center;
+  }
+
+  .terminal-workspace-empty-icon {
+    align-items: center;
+    color: #d4d4d4;
+    display: inline-flex;
+    height: 2.75rem;
+    justify-content: center;
+    margin-bottom: 0.2rem;
+    width: 2.75rem;
+  }
+
+  .terminal-workspace-empty-title {
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 650;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .terminal-workspace-empty-description {
+    color: #a3a3a3;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  .terminal-workspace-empty-action {
+    align-items: center;
+    appearance: none;
+    background: #151515;
+    border: 1px solid #3f3f3f;
+    border-radius: 0.5rem;
+    color: #f4f4f4;
+    display: inline-flex;
+    font-size: 0.82rem;
+    font-weight: 600;
+    gap: 0.35rem;
+    height: 2.35rem;
+    justify-content: center;
+    margin-top: 0.4rem;
+    min-width: 8.5rem;
+    padding: 0 0.9rem;
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .terminal-workspace-empty-action:hover {
+    background: #1f1f1f;
+    border-color: #5a5a5a;
+    color: #ffffff;
+  }
+
+  .workspace-terminal-host
+    .xterm
+    .xterm-accessibility-tree:not(.debug)
+    *::selection {
+    color: transparent;
+    background-color: transparent;
+  }
+
+  .workspace-terminal-host .xterm .xterm-accessibility-tree:not(.debug),
+  .workspace-terminal-host .xterm .xterm-accessibility-tree:not(.debug) * {
+    user-select: none;
+    -webkit-user-select: none;
+  }
 }
