@@ -237,7 +237,11 @@ export function resolveTerminalSpawnTarget(): TerminalSpawnTarget {
   }
 
   if (targetMode === "docker") {
-    return resolveDockerSpawnTarget();
+    try {
+      return resolveDockerSpawnTarget();
+    } catch {
+      return resolveHostSpawnTarget();
+    }
   }
 
   const autoDockerTarget = tryResolveDockerSpawnTarget();

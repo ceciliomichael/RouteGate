@@ -42,7 +42,7 @@ Example local values:
 BACKEND_API_BASE=http://localhost:3067
 NEXT_PUBLIC_API_BASE=http://localhost:3067
 NEXT_ALLOWED_DEV_ORIGINS=
-TERMINAL_TARGET=auto
+TERMINAL_TARGET=host
 TERMINAL_DOCKER_SERVICE=backend
 ```
 
@@ -50,9 +50,8 @@ Notes:
 
 - When running outside Docker, point the frontend at the backend on `localhost:3067`.
 - When running in Docker Compose, the frontend can use `http://backend:3067` internally.
-- Terminal sessions default to `TERMINAL_TARGET=auto`, which tries the Docker Compose `backend` container first and falls back to the host shell.
-- Set `TERMINAL_TARGET=docker` to force container shell usage, or `TERMINAL_TARGET=host` to force local shell usage.
-- In Docker Compose mode, docker-target terminal access requires frontend runtime access to Docker (`docker-cli` + `/var/run/docker.sock`), which is included in this repo compose setup.
+- Terminal sessions are recommended with `TERMINAL_TARGET=host`, which matches `ssh-terminal` behavior and opens a shell inside the running frontend container.
+- `TERMINAL_TARGET=auto` or `TERMINAL_TARGET=docker` can still target another container when Docker access is available; otherwise they fall back to host shell.
 - If multiple Compose projects run on the same host, set `TERMINAL_DOCKER_PROJECT` to pin the right stack.
 - If label-based detection is unavailable, set `TERMINAL_DOCKER_COMPOSE_DIR` or `TERMINAL_DOCKER_CONTAINER`.
 - For tunnel-based development, set `NEXT_ALLOWED_DEV_ORIGINS` to your tunnel host if needed.

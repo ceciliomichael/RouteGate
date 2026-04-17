@@ -28,7 +28,6 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV HOSTNAME=0.0.0.0
 ENV PORT=3000
 
-RUN apk add --no-cache docker-cli
 RUN addgroup -S nextjs && adduser -S nextjs -G nextjs
 
 COPY --from=builder /app/public ./public
