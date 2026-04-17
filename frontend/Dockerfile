@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY package.json package-lock.json ./
 
+# node-pty requires a native build toolchain on Alpine during install.
+RUN apk add --no-cache python3 make g++
 RUN npm ci
 
 FROM node:22-alpine AS builder
