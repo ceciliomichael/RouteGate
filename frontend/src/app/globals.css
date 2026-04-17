@@ -89,7 +89,24 @@
   input,
   textarea,
   select {
-    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  input:focus,
+  input:focus-visible,
+  textarea:focus,
+  textarea:focus-visible,
+  select:focus,
+  select:focus-visible {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none !important;
+    box-shadow: none !important;
   }
 }
 
@@ -221,7 +238,14 @@
     color: var(--color-ink-muted);
   }
   .field-input:focus {
-    border-color: var(--color-ink-secondary);
+    border-color: var(--color-border);
+    box-shadow: none;
+    outline: none;
+  }
+  .field-input:focus-visible {
+    border-color: var(--color-border);
+    box-shadow: none;
+    outline: none;
   }
   .field-input:disabled {
     background: var(--color-surface-subtle);
@@ -259,7 +283,9 @@
     color: var(--color-ink-muted);
   }
   .field-textarea:focus {
-    border-color: var(--color-ink-secondary);
+    border-color: var(--color-border);
+    box-shadow: none;
+    outline: none;
   }
 
   .field-error {

@@ -1,5 +1,6 @@
 "use client";
 
+import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useEffect, useState } from "react";
 import type { AuthState } from "./useAuth";
@@ -12,6 +13,7 @@ export function LoginScreen({ auth }: LoginScreenProps) {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (auth.isAuthenticated) {
@@ -38,9 +40,9 @@ export function LoginScreen({ auth }: LoginScreenProps) {
       style={{
         minHeight: "100dvh",
         display: "grid",
-        alignItems: "stretch",
+        placeItems: "center",
         background:
-          "linear-gradient(180deg, var(--color-surface-muted) 0%, var(--color-brand-soft) 100%)",
+          "radial-gradient(circle at top, rgba(16, 16, 17, 0.08), transparent 42%), linear-gradient(180deg, var(--color-surface-muted) 0%, #fbfbfd 58%, var(--color-brand-light) 100%)",
       }}
     >
       <div
@@ -48,24 +50,21 @@ export function LoginScreen({ auth }: LoginScreenProps) {
           width: "100%",
           maxWidth: "1180px",
           margin: "0 auto",
-          padding: "1.25rem 1rem",
-          display: "grid",
-          gap: "1rem",
-          alignItems: "center",
+          padding: "1rem",
         }}
       >
         <section
           style={{
             display: "grid",
             gap: "1rem",
-            minHeight: "calc(100dvh - 2.5rem)",
+            minHeight: "calc(100dvh - 2rem)",
           }}
           className="login-layout"
         >
           <div
             style={{
               display: "grid",
-              gap: "1rem",
+              gap: "1.15rem",
               alignContent: "center",
               padding: "1rem 0.25rem",
             }}
@@ -74,45 +73,45 @@ export function LoginScreen({ auth }: LoginScreenProps) {
               className="badge badge-brand"
               style={{ width: "fit-content" }}
             >
-              Account access
+              RouteGate
             </span>
             <div style={{ display: "grid", gap: "0.75rem" }}>
               <h1
                 style={{
                   margin: 0,
-                  fontSize: "clamp(2rem, 7vw, 4.25rem)",
-                  lineHeight: 0.95,
-                  letterSpacing: "-0.06em",
+                  fontSize: "clamp(2.1rem, 6.5vw, 4rem)",
+                  lineHeight: 1,
+                  letterSpacing: "-0.05em",
                   color: "var(--color-ink)",
+                  maxWidth: "13ch",
                 }}
               >
-                Wildcard operations for every managed route.
+                Manage wildcard routes from one place.
               </h1>
               <p
                 style={{
                   margin: 0,
-                  maxWidth: "34rem",
-                  fontSize: "1rem",
+                  maxWidth: "36rem",
+                  fontSize: "1.02rem",
                   color: "var(--color-ink-secondary)",
                 }}
               >
-                Sign in with your assigned account. Admins can create users and
-                oversee all routes. Standard users manage only the routes they
-                own.
+                Sign in to open your RouteGate dashboard and manage subdomain
+                routes, user access, and account settings.
               </p>
             </div>
             <div className="login-highlights">
               <FeatureCard
-                title="Session-secure"
-                description="HTTP-only sessions replace the shared backend API key."
+                title="Route workspace"
+                description="Review, add, and update wildcard subdomain routes."
               />
               <FeatureCard
-                title="Role-aware"
-                description="Admin access and standard user access now follow separate permissions."
+                title="User access"
+                description="Keep route management and team access in one place."
               />
               <FeatureCard
-                title="Mongo-backed"
-                description="Users, sessions, and route ownership live in MongoDB."
+                title="Account settings"
+                description="Adjust your dashboard, terminal, and profile settings."
               />
             </div>
           </div>
@@ -147,7 +146,7 @@ export function LoginScreen({ auth }: LoginScreenProps) {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
-                  <title>Secure login</title>
+                  <title>Sign in</title>
                   <rect x="3" y="11" width="18" height="10" rx="2" />
                   <path d="M7 11V8a5 5 0 0 1 10 0v3" />
                 </svg>
@@ -160,7 +159,7 @@ export function LoginScreen({ auth }: LoginScreenProps) {
                   color: "var(--color-ink)",
                 }}
               >
-                Sign in
+                RouteGate login
               </h2>
               <p
                 style={{
@@ -169,7 +168,7 @@ export function LoginScreen({ auth }: LoginScreenProps) {
                   fontSize: "0.9rem",
                 }}
               >
-                Use the credentials generated for your account.
+                Use your username and password to access route management.
               </p>
             </div>
 
@@ -201,7 +200,7 @@ export function LoginScreen({ auth }: LoginScreenProps) {
                 <input
                   id="login-username"
                   type="text"
-                  className="field-input"
+                  className="field-input login-field-reset"
                   placeholder="Enter your username"
                   value={username}
                   onChange={(event) => setUsername(event.target.value)}
@@ -214,16 +213,30 @@ export function LoginScreen({ auth }: LoginScreenProps) {
                 <label htmlFor="login-password" className="field-label">
                   Password
                 </label>
-                <input
-                  id="login-password"
-                  type="password"
-                  className="field-input"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(event) => setPassword(event.target.value)}
-                  autoComplete="current-password"
-                  disabled={auth.isLoading}
-                />
+                <div className="login-password-field">
+                  <input
+                    id="login-password"
+                    type={showPassword ? "text" : "password"}
+                    className="field-input login-field-reset login-password-field__input"
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                    autoComplete="current-password"
+                    disabled={auth.isLoading}
+                  />
+                  <button
+                    type="button"
+                    className="login-password-field__toggle"
+                    onClick={() => setShowPassword((current) => !current)}
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
+                    aria-pressed={showPassword}
+                    disabled={auth.isLoading}
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
               </div>
 
               <button
@@ -234,7 +247,7 @@ export function LoginScreen({ auth }: LoginScreenProps) {
                   auth.isLoading || !username.trim() || !password.trim()
                 }
               >
-                {auth.isLoading ? "Signing in..." : "Open dashboard"}
+                {auth.isLoading ? "Signing in..." : "Sign in"}
               </button>
             </form>
           </div>
@@ -261,6 +274,63 @@ export function LoginScreen({ auth }: LoginScreenProps) {
           .login-highlights {
             grid-template-columns: repeat(3, minmax(0, 1fr));
           }
+        }
+
+        .login-password-field {
+          position: relative;
+        }
+
+        .login-field-reset {
+          appearance: none;
+          -webkit-appearance: none;
+          box-shadow: none !important;
+          outline: none !important;
+        }
+
+        .login-field-reset:focus,
+        .login-field-reset:focus-visible,
+        .login-field-reset:active {
+          box-shadow: none !important;
+          outline: none !important;
+        }
+
+        .login-password-field__input {
+          padding-right: 3rem;
+        }
+
+        .login-password-field__toggle {
+          appearance: none;
+          -webkit-appearance: none;
+          position: absolute;
+          right: 0.4rem;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 2rem;
+          height: 2rem;
+          border: 0;
+          border-radius: 9999px;
+          background: transparent;
+          color: var(--color-ink-secondary);
+          display: inline-grid;
+          place-items: center;
+          transition:
+            background-color 0.15s ease,
+            color 0.15s ease;
+        }
+
+        .login-password-field__toggle:hover:not(:disabled) {
+          background: var(--color-surface-subtle);
+          color: var(--color-ink);
+        }
+
+        .login-password-field__toggle::-moz-focus-inner {
+          border: 0;
+        }
+
+        .login-password-field__toggle:focus,
+        .login-password-field__toggle:focus-visible {
+          outline: none;
+          box-shadow: none;
         }
       `}</style>
     </main>
