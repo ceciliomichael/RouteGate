@@ -10,13 +10,13 @@ import (
 	"path/filepath"
 	"time"
 
-	"wildcard-catcher/internal/api"
-	"wildcard-catcher/internal/config"
-	"wildcard-catcher/internal/envfile"
-	"wildcard-catcher/internal/identity"
-	"wildcard-catcher/internal/proxy"
-	"wildcard-catcher/internal/registry"
-	"wildcard-catcher/internal/server"
+	"routegate/internal/api"
+	"routegate/internal/config"
+	"routegate/internal/envfile"
+	"routegate/internal/identity"
+	"routegate/internal/proxy"
+	"routegate/internal/registry"
+	"routegate/internal/server"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -44,7 +44,7 @@ func main() {
 	}()
 
 	db := client.Database(cfg.MongoDatabase)
-	routeStore := registry.NewStore(db)
+	routeStore := registry.NewStore(db, cfg.FrontendRouteSubdomain)
 	identityStore := identity.NewStore(db)
 
 	if err := identityStore.EnsureIndexes(ctx); err != nil {
@@ -78,7 +78,7 @@ func main() {
 		IdleTimeout:       120 * time.Second,
 	}
 
-	log.Printf("wildcard-catcher backend listening on %s", cfg.ListenAddress())
+	log.Printf("routegate backend listening on %s", cfg.ListenAddress())
 	log.Printf("base domain: %s", cfg.BaseDomain)
 	log.Printf("mongodb: %s", sanitizeMongoURI(cfg.MongoURI, cfg.MongoDatabase))
 

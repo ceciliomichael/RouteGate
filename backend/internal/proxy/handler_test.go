@@ -12,8 +12,8 @@ import (
 	"testing"
 	"time"
 
-	"wildcard-catcher/internal/config"
-	"wildcard-catcher/internal/registry"
+	"routegate/internal/config"
+	"routegate/internal/registry"
 )
 
 type stubRouteStore struct {
@@ -288,9 +288,9 @@ func TestHandlerCanProxyToBareHostPortDestination(t *testing.T) {
 	handler := NewHandler(
 		config.Config{BaseDomain: "echosphere.systems"},
 		stubRouteStore{routes: map[string]registry.Route{
-			"router": {
+			"routegate": {
 				ID:          "route-1",
-				Subdomain:   "router",
+				Subdomain:   "routegate",
 				Destination: parsedUpstream.Host,
 				Enabled:     true,
 			},
@@ -306,7 +306,7 @@ func TestHandlerCanProxyToBareHostPortDestination(t *testing.T) {
 		t.Fatalf("new request: %v", err)
 	}
 	request.Host = "proxy.internal"
-	request.Header.Set("X-Forwarded-Host", "router.echosphere.systems")
+	request.Header.Set("X-Forwarded-Host", "routegate.echosphere.systems")
 	request.Header.Set("X-Forwarded-Proto", "https")
 
 	response, err := proxyServer.Client().Do(request)
@@ -335,7 +335,7 @@ func TestHandlerAutomaticallyRoutesFrontendSubdomain(t *testing.T) {
 	handler := NewHandler(
 		config.Config{
 			BaseDomain:               "echosphere.systems",
-			FrontendRouteSubdomain:   "router",
+			FrontendRouteSubdomain:   "routegate",
 			FrontendRouteDestination: upstream.URL,
 		},
 		stubRouteStore{routes: map[string]registry.Route{}},
@@ -350,7 +350,7 @@ func TestHandlerAutomaticallyRoutesFrontendSubdomain(t *testing.T) {
 		t.Fatalf("new request: %v", err)
 	}
 	request.Host = "backend:3067"
-	request.Header.Set("X-Forwarded-Host", "router.echosphere.systems")
+	request.Header.Set("X-Forwarded-Host", "routegate.echosphere.systems")
 	request.Header.Set("X-Forwarded-Proto", "https")
 
 	response, err := proxyServer.Client().Do(request)
@@ -380,13 +380,13 @@ func TestHandlerPrefersReservedFrontendRouteOverStoredRoute(t *testing.T) {
 	handler := NewHandler(
 		config.Config{
 			BaseDomain:               "echosphere.systems",
-			FrontendRouteSubdomain:   "router",
+			FrontendRouteSubdomain:   "routegate",
 			FrontendRouteDestination: frontendUpstream.URL,
 		},
 		stubRouteStore{routes: map[string]registry.Route{
-			"router": {
+			"routegate": {
 				ID:          "route-1",
-				Subdomain:   "router",
+				Subdomain:   "routegate",
 				Destination: "http://127.0.0.1:65535",
 				Enabled:     true,
 			},
@@ -402,7 +402,7 @@ func TestHandlerPrefersReservedFrontendRouteOverStoredRoute(t *testing.T) {
 		t.Fatalf("new request: %v", err)
 	}
 	request.Host = "backend:3067"
-	request.Header.Set("X-Forwarded-Host", "router.echosphere.systems")
+	request.Header.Set("X-Forwarded-Host", "routegate.echosphere.systems")
 	request.Header.Set("X-Forwarded-Proto", "https")
 
 	response, err := proxyServer.Client().Do(request)

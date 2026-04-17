@@ -1,4 +1,4 @@
-export const RESERVED_ROUTE_SUBDOMAIN = "router";
+export const RESERVED_ROUTE_SUBDOMAIN = "routegate";
 
 export function isReservedRouteSubdomain(value: string): boolean {
   return value.trim().toLowerCase() === RESERVED_ROUTE_SUBDOMAIN;

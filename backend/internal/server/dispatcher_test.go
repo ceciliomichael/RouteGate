@@ -7,9 +7,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"wildcard-catcher/internal/config"
-	"wildcard-catcher/internal/proxy"
-	"wildcard-catcher/internal/registry"
+	"routegate/internal/config"
+	"routegate/internal/proxy"
+	"routegate/internal/registry"
 )
 
 type apiCaptureHandler struct {

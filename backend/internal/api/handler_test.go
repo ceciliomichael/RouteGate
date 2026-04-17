@@ -3,19 +3,19 @@ package api
 import (
 	"testing"
 
-	"wildcard-catcher/internal/config"
-	"wildcard-catcher/internal/identity"
+	"routegate/internal/config"
+	"routegate/internal/identity"
 )
 
 func TestIsReservedRouteSubdomain(t *testing.T) {
 	t.Parallel()
 
 	handler := &Handler{
-		cfg: config.Config{FrontendRouteSubdomain: "router"},
+		cfg: config.Config{FrontendRouteSubdomain: "routegate"},
 	}
 
-	if !handler.isReservedRouteSubdomain("router") {
-		t.Fatalf("expected router to be reserved")
+	if !handler.isReservedRouteSubdomain("routegate") {
+		t.Fatalf("expected routegate to be reserved")
 	}
 	if handler.isReservedRouteSubdomain("docs") {
 		t.Fatalf("expected docs not to be reserved")

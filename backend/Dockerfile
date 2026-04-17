@@ -12,7 +12,7 @@ COPY . .
 ARG TARGETOS
 ARG TARGETARCH
 
-RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -trimpath -o /out/wildcard-catcher ./cmd/wildcard-catcher
+RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -trimpath -o /out/routegate ./cmd/routegate
 
 FROM alpine:3.21 AS runtime
 
@@ -22,10 +22,10 @@ RUN apk add --no-cache ca-certificates tzdata && \
 
 WORKDIR /app
 
-COPY --from=builder /out/wildcard-catcher /usr/local/bin/wildcard-catcher
+COPY --from=builder /out/routegate /usr/local/bin/routegate
 
 EXPOSE 3067
 
 USER app
 
-ENTRYPOINT ["/usr/local/bin/wildcard-catcher"]
+ENTRYPOINT ["/usr/local/bin/routegate"]

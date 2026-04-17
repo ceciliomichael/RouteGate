@@ -10,8 +10,8 @@ import (
 	"strings"
 	"sync"
 
-	"wildcard-catcher/internal/config"
-	"wildcard-catcher/internal/registry"
+	"routegate/internal/config"
+	"routegate/internal/registry"
 )
 
 type routeLookupStore interface {

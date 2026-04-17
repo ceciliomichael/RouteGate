@@ -10,9 +10,9 @@ import (
 	"strings"
 	"time"
 
-	"wildcard-catcher/internal/config"
-	"wildcard-catcher/internal/identity"
-	"wildcard-catcher/internal/registry"
+	"routegate/internal/config"
+	"routegate/internal/identity"
+	"routegate/internal/registry"
 )
 
 type Handler struct {
@@ -389,6 +389,8 @@ func (h *Handler) handleRoutesCollection(writer http.ResponseWriter, request *ht
 		}, payload)
 		if err != nil {
 			switch {
+			case errors.Is(err, registry.ErrReservedSubdomain):
+				h.writeError(writer, http.StatusConflict, err.Error())
 			case errors.Is(err, registry.ErrDuplicateSubdomain):
 				h.writeError(writer, http.StatusConflict, err.Error())
 			default:
@@ -440,6 +442,8 @@ func (h *Handler) handleRoutesItem(writer http.ResponseWriter, request *http.Req
 		route, err := h.routes.Update(ctx, scope, id, payload)
 		if err != nil {
 			switch {
+			case errors.Is(err, registry.ErrReservedSubdomain):
+				h.writeError(writer, http.StatusConflict, err.Error())
 			case errors.Is(err, registry.ErrRouteNotFound):
 				h.writeError(writer, http.StatusNotFound, err.Error())
 			case errors.Is(err, registry.ErrDuplicateSubdomain):

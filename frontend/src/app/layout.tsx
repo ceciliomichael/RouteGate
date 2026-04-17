@@ -10,7 +10,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Wildcard Catcher — Route Manager",
+  title: "RouteGate — Route Manager",
   description: "Admin dashboard for managing wildcard subdomain routes",
   icons: {
     icon: "/favicon.svg",

@@ -1,6 +1,6 @@
-# Wildcard Catcher
+# RouteGate
 
-Wildcard Catcher is a subdomain router and admin dashboard for managing wildcard tunnel targets.
+RouteGate is a subdomain router and admin dashboard for managing wildcard tunnel targets.
 
 It exists so you can point a single wildcard domain or wildcard tunnel at the catcher, then route many subdomains to different local or remote services without recreating tunnel entries one by one.
 
@@ -23,7 +23,7 @@ That makes retunneling much easier when you want `*.your-domain.com` to keep wor
 - Supports admin and standard user access
 - Proxies enabled wildcard subdomains to their configured destinations
 - Keeps the frontend and backend separate so each can be run independently
-- Automatically serves the dashboard on the reserved `router` subdomain by default
+- Automatically serves the dashboard on the reserved `routegate` subdomain by default
 - Can optionally skip upstream TLS verification for services like Proxmox that use self-signed HTTPS certificates
 
 ## Project layout
@@ -66,7 +66,7 @@ If you use Docker Compose, copy `.env.example` to `.env` and adjust the values f
 - The frontend uses the backend through its own API routes.
 - The backend performs the actual wildcard proxying.
 - Routes can be pointed at `https://` upstreams and, when needed, can skip upstream TLS verification for self-signed services.
-- The backend reserves `router` for the frontend by default; you can override the subdomain or destination with `FRONTEND_ROUTE_SUBDOMAIN` and `FRONTEND_ROUTE_DESTINATION`.
+- The backend reserves `routegate` for the frontend by default; you can override the subdomain or destination with `FRONTEND_ROUTE_SUBDOMAIN` and `FRONTEND_ROUTE_DESTINATION`.
 - Standard users cannot point routes at reserved local destinations like `localhost` or the router node IP; admins can use any destination except the reserved frontend subdomain.
-- The dashboard hides the reserved `router` route and rejects attempts to create or edit it manually.
+- The dashboard hides the reserved `routegate` route and rejects attempts to create or edit it manually.
 - For tunnel-based development, the frontend Next config includes dev-origin support for common tunnel hosts and a custom allowlist variable.

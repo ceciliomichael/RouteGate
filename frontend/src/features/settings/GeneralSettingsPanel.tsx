@@ -27,7 +27,7 @@ export function GeneralSettingsPanel({
   const [profileError, setProfileError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
 
-  const isBootstrapAdmin = user.role === "admin" && user.isBootstrap;
+  const isBootstrapAdmin = user.isBootstrap;
 
   useEffect(() => {
     setName(user.name);
@@ -111,14 +111,10 @@ export function GeneralSettingsPanel({
         </p>
       </header>
 
-      {isBootstrapAdmin ? (
-        <p className="settings-section__notice">
-          Bootstrap admin credentials are protected and cannot be changed from
-          this UI.
-        </p>
-      ) : null}
-
-      <div className="settings-form-grid">
+      <fieldset
+        className="settings-fieldset"
+        disabled={isBootstrapAdmin || isSavingProfile}
+      >
         <label className="field">
           <span className="field-label">Display Name</span>
           <input
@@ -126,6 +122,8 @@ export function GeneralSettingsPanel({
             type="text"
             value={name}
             disabled={isBootstrapAdmin || isSavingProfile}
+            readOnly={isBootstrapAdmin}
+            aria-readonly={isBootstrapAdmin}
             placeholder="e.g. Operations Admin"
             onChange={(event) => {
               setName(event.target.value);
@@ -154,11 +152,14 @@ export function GeneralSettingsPanel({
             <span className="settings-error">{profileError}</span>
           ) : null}
         </div>
-      </div>
+      </fieldset>
 
       <div className="settings-divider" />
 
-      <div className="settings-form-grid">
+      <fieldset
+        className="settings-fieldset"
+        disabled={isBootstrapAdmin || isSavingPassword}
+      >
         <label className="field">
           <span className="field-label">Current Password</span>
           <input
@@ -230,7 +231,7 @@ export function GeneralSettingsPanel({
             <span className="settings-error">{passwordError}</span>
           ) : null}
         </div>
-      </div>
+      </fieldset>
     </section>
   );
 }

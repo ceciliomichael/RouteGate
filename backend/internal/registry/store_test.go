@@ -27,3 +27,17 @@ func TestNormalizeDestinationPreservesExplicitHTTPS(t *testing.T) {
 		t.Fatalf("unexpected normalized destination: %s", normalized)
 	}
 }
+
+func TestStoreReservedSubdomainMatchesConfiguredValue(t *testing.T) {
+	t.Parallel()
+
+	store := &Store{reservedSubdomain: normalizeSubdomain("routegate")}
+
+	if !store.isReservedSubdomain("routegate") {
+		t.Fatalf("expected routegate to be reserved")
+	}
+
+	if store.isReservedSubdomain("docs") {
+		t.Fatalf("expected docs not to be reserved")
+	}
+}

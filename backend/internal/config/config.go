@@ -66,7 +66,7 @@ func Load() (Config, error) {
 		return Config{}, err
 	}
 
-	frontendRouteSubdomain := normalizeHost(firstNonEmpty(os.Getenv("FRONTEND_ROUTE_SUBDOMAIN"), "router"))
+	frontendRouteSubdomain := normalizeHost(firstNonEmpty(os.Getenv("FRONTEND_ROUTE_SUBDOMAIN"), "routegate"))
 	frontendRouteDestination, err := normalizeDestination(firstNonEmpty(
 		os.Getenv("FRONTEND_ROUTE_DESTINATION"),
 		fmt.Sprintf("http://frontend:%d", frontendPort),
@@ -83,14 +83,14 @@ func Load() (Config, error) {
 		Port:                       port,
 		BaseDomain:                 baseDomain,
 		MongoURI:                   mongoURI,
-		MongoDatabase:              strings.TrimSpace(firstNonEmpty(os.Getenv("MONGODB_DATABASE"), "wildcard_catcher")),
+		MongoDatabase:              strings.TrimSpace(firstNonEmpty(os.Getenv("MONGODB_DATABASE"), "routegate")),
 		FrontendRouteSubdomain:     frontendRouteSubdomain,
 		FrontendRouteDestination:   frontendRouteDestination,
 		RestrictedDestinationHosts: restrictedDestinationHosts,
 		BootstrapAdminUsername:     strings.TrimSpace(os.Getenv("BOOTSTRAP_ADMIN_USERNAME")),
 		BootstrapAdminPassword:     os.Getenv("BOOTSTRAP_ADMIN_PASSWORD"),
 		BootstrapAdminName:         strings.TrimSpace(firstNonEmpty(os.Getenv("BOOTSTRAP_ADMIN_NAME"), "Main Admin")),
-		SessionCookieName:          strings.TrimSpace(firstNonEmpty(os.Getenv("SESSION_COOKIE_NAME"), "wc_session")),
+		SessionCookieName:          strings.TrimSpace(firstNonEmpty(os.Getenv("SESSION_COOKIE_NAME"), "routegate_session")),
 		SessionHours:               sessionHours,
 		SessionCookieSecure:        parseBoolDefaultFalse(os.Getenv("SESSION_COOKIE_SECURE")),
 	}, nil

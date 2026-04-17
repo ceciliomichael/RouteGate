@@ -1,4 +1,4 @@
-module wildcard-catcher
+module routegate
 
 go 1.25.0
 

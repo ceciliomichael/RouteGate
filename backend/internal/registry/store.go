@@ -19,6 +19,7 @@ var (
 	subdomainPattern = regexp.MustCompile(`^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*$`)
 
 	ErrDuplicateSubdomain = errors.New("subdomain already exists")
+	ErrReservedSubdomain  = errors.New("subdomain is reserved")
 	ErrRouteNotFound      = errors.New("route not found")
 	ErrRouteForbidden     = errors.New("forbidden")
 )
@@ -65,7 +66,8 @@ type OwnerInfo struct {
 }
 
 type Store struct {
-	collection *mongo.Collection
+	collection        *mongo.Collection
+	reservedSubdomain string
 }
 
 type routeRecord struct {
@@ -83,8 +85,11 @@ type routeRecord struct {
 	UpdatedAt             time.Time          `bson:"updatedAt"`
 }
 
-func NewStore(db *mongo.Database) *Store {
-	return &Store{collection: db.Collection("routes")}
+func NewStore(db *mongo.Database, reservedSubdomain string) *Store {
+	return &Store{
+		collection:        db.Collection("routes"),
+		reservedSubdomain: normalizeSubdomain(reservedSubdomain),
+	}
 }
 
 func (s *Store) EnsureIndexes(ctx context.Context) error {
@@ -166,6 +171,9 @@ func (s *Store) Create(ctx context.Context, owner OwnerInfo, input CreateRouteIn
 	if err != nil {
 		return Route{}, err
 	}
+	if s.isReservedSubdomain(normalized.subdomain) {
+		return Route{}, ErrReservedSubdomain
+	}
 
 	now := time.Now().UTC()
 	record := routeRecord{
@@ -211,6 +219,9 @@ func (s *Store) Update(ctx context.Context, scope AccessScope, id string, input 
 	normalized, err := normalizeAndValidateInput(input.Subdomain, input.Destination, input.Note)
 	if err != nil {
 		return Route{}, err
+	}
+	if s.isReservedSubdomain(normalized.subdomain) {
+		return Route{}, ErrReservedSubdomain
 	}
 
 	record.Subdomain = normalized.subdomain
@@ -297,6 +308,10 @@ func (r routeRecord) toPublic() Route {
 
 func normalizeSubdomain(value string) string {
 	return strings.ToLower(strings.TrimSpace(value))
+}
+
+func (s *Store) isReservedSubdomain(subdomain string) bool {
+	return s.reservedSubdomain != "" && normalizeSubdomain(subdomain) == s.reservedSubdomain
 }
 
 func normalizeAndValidateInput(subdomain string, destination string, note string) (normalizedInput, error) {

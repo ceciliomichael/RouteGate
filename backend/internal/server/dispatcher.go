@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	"wildcard-catcher/internal/proxy"
+	"routegate/internal/proxy"
 )
 
 type Dispatcher struct {

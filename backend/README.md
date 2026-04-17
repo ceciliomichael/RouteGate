@@ -1,6 +1,6 @@
-# Wildcard Catcher Backend
+# RouteGate Backend
 
-The backend is the control plane and wildcard proxy for Wildcard Catcher.
+The backend is the control plane and wildcard proxy for RouteGate.
 
 It provides:
 
@@ -22,7 +22,7 @@ That is useful when you want to retunnel or change destinations without rebuildi
 
 ```bash
 cd backend
-go run ./cmd/wildcard-catcher
+go run ./cmd/routegate
 ```
 
 Default listen port:
@@ -37,14 +37,14 @@ Create `backend/.env`:
 WILDCARD_BASE_DOMAIN=echosphere.systems
 PORT=3067
 MONGODB_URI=mongodb://wc_root:replace-with-a-strong-password@localhost:27019/?authSource=admin
-MONGODB_DATABASE=wildcard_catcher
+MONGODB_DATABASE=routegate
 BOOTSTRAP_ADMIN_USERNAME=main-admin
 BOOTSTRAP_ADMIN_PASSWORD=replace-with-a-strong-password
 BOOTSTRAP_ADMIN_NAME=Main Admin
-SESSION_COOKIE_NAME=wc_session
+SESSION_COOKIE_NAME=routegate_session
 SESSION_TTL_HOURS=168
 SESSION_COOKIE_SECURE=false
-FRONTEND_ROUTE_SUBDOMAIN=router
+FRONTEND_ROUTE_SUBDOMAIN=routegate
 FRONTEND_ROUTE_DESTINATION=http://frontend:3000
 NON_ADMIN_BLOCKED_DESTINATION_HOSTS=localhost,127.0.0.1,::1,192.168.1.28
 ```
@@ -54,7 +54,7 @@ Notes:
 - `BOOTSTRAP_ADMIN_USERNAME` and `BOOTSTRAP_ADMIN_PASSWORD` are required on first startup so the initial admin account can be created.
 - If MongoDB already contains an admin user, bootstrap credentials may be omitted.
 - `SESSION_COOKIE_SECURE` should be `true` when the app is served over HTTPS.
-- The backend reserves `FRONTEND_ROUTE_SUBDOMAIN` as an automatic route to the frontend service. By default it points `router` at `http://frontend:3000` inside Docker Compose.
+- The backend reserves `FRONTEND_ROUTE_SUBDOMAIN` as an automatic route to the frontend service. By default it points `routegate` at `http://frontend:3000` inside Docker Compose.
 - Non-admin users are blocked from saving routes to the reserved local hosts listed in `NON_ADMIN_BLOCKED_DESTINATION_HOSTS`. Admin users can use any destination except the reserved frontend subdomain.
 - For local development, the backend usually talks to MongoDB on `localhost:27019`.
 - In Docker Compose, the backend connects to `mongo:27019` inside the Docker network.
@@ -124,5 +124,5 @@ That allows one wildcard tunnel to retarget many services without creating indiv
 ```bash
 cd backend
 go test ./...
-go build ./cmd/wildcard-catcher
+go build ./cmd/routegate
 ```
