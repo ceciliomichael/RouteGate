@@ -28,7 +28,6 @@ type Route struct {
 	ID                    string `json:"id"`
 	OwnerID               string `json:"ownerId"`
 	OwnerName             string `json:"ownerName"`
-	OwnerEmail            string `json:"ownerEmail"`
 	Subdomain             string `json:"subdomain"`
 	Destination           string `json:"destination"`
 	Enabled               bool   `json:"enabled"`
@@ -60,9 +59,8 @@ type AccessScope struct {
 }
 
 type OwnerInfo struct {
-	UserID    string
-	UserName  string
-	UserEmail string
+	UserID   string
+	UserName string
 }
 
 type Store struct {
@@ -74,7 +72,6 @@ type routeRecord struct {
 	ID                    primitive.ObjectID `bson:"_id,omitempty"`
 	OwnerID               primitive.ObjectID `bson:"ownerId"`
 	OwnerName             string             `bson:"ownerName"`
-	OwnerEmail            string             `bson:"ownerEmail"`
 	Subdomain             string             `bson:"subdomain"`
 	NormalizedSubdomain   string             `bson:"normalizedSubdomain"`
 	Destination           string             `bson:"destination"`
@@ -179,7 +176,6 @@ func (s *Store) Create(ctx context.Context, owner OwnerInfo, input CreateRouteIn
 	record := routeRecord{
 		OwnerID:               ownerID,
 		OwnerName:             strings.TrimSpace(owner.UserName),
-		OwnerEmail:            strings.TrimSpace(owner.UserEmail),
 		Subdomain:             normalized.subdomain,
 		NormalizedSubdomain:   normalized.subdomain,
 		Destination:           normalized.destination,
@@ -295,7 +291,6 @@ func (r routeRecord) toPublic() Route {
 		ID:                    r.ID.Hex(),
 		OwnerID:               r.OwnerID.Hex(),
 		OwnerName:             r.OwnerName,
-		OwnerEmail:            r.OwnerEmail,
 		Subdomain:             r.Subdomain,
 		Destination:           r.Destination,
 		Enabled:               r.Enabled,

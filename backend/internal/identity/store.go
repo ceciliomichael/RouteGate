@@ -37,7 +37,6 @@ type User struct {
 	ID          string `json:"id"`
 	Name        string `json:"name"`
 	Username    string `json:"username"`
-	Email       string `json:"email"`
 	Role        Role   `json:"role"`
 	IsBootstrap bool   `json:"isBootstrap"`
 	CreatedAt   string `json:"createdAt"`
@@ -51,14 +50,12 @@ func (u User) IsAdmin() bool {
 type CreateUserInput struct {
 	Name     string `json:"name"`
 	Username string `json:"username"`
-	Email    string `json:"email"`
 	Role     Role   `json:"role"`
 }
 
 type UpdateUserInput struct {
 	Name     string `json:"name"`
 	Username string `json:"username"`
-	Email    string `json:"email"`
 	Role     Role   `json:"role"`
 }
 
@@ -72,8 +69,6 @@ type userRecord struct {
 	Name               string             `bson:"name"`
 	Username           string             `bson:"username"`
 	NormalizedUsername string             `bson:"normalizedUsername"`
-	Email              string             `bson:"email"`
-	NormalizedEmail    string             `bson:"normalizedEmail"`
 	Role               Role               `bson:"role"`
 	PasswordHash       []byte             `bson:"passwordHash"`
 	IsBootstrap        bool               `bson:"isBootstrap,omitempty"`
@@ -97,11 +92,11 @@ func NewStore(db *mongo.Database) *Store {
 }
 
 func (s *Store) EnsureIndexes(ctx context.Context) error {
+	if err := s.dropLegacyUserIndex(ctx, "normalizedEmail_1"); err != nil {
+		return err
+	}
+
 	_, err := s.users.Indexes().CreateMany(ctx, []mongo.IndexModel{
-		{
-			Keys:    bson.D{{Key: "normalizedEmail", Value: 1}},
-			Options: options.Index().SetUnique(true),
-		},
 		{
 			Keys: bson.D{{Key: "normalizedUsername", Value: 1}},
 			Options: options.Index().
@@ -153,7 +148,10 @@ func (s *Store) BackfillUsernames(ctx context.Context) error {
 			return fmt.Errorf("decode user for backfill: %w", err)
 		}
 
-		baseUsername := usernameFromEmail(record.Email)
+		baseUsername := strings.TrimSpace(record.Username)
+		if baseUsername == "" {
+			baseUsername = strings.TrimSpace(record.Name)
+		}
 		if baseUsername == "" {
 			baseUsername = fmt.Sprintf("user-%s", record.ID.Hex()[:8])
 		}
@@ -222,8 +220,6 @@ func (s *Store) EnsureBootstrapAdmin(
 				"name":               nameOrDefault(name),
 				"username":           normalizedUsername,
 				"normalizedUsername": normalizedUsername,
-				"email":              "",
-				"normalizedEmail":    "",
 				"role":               RoleAdmin,
 				"isBootstrap":        true,
 				"updatedAt":          now,
@@ -245,16 +241,10 @@ func (s *Store) EnsureBootstrapAdmin(
 func (s *Store) Authenticate(ctx context.Context, identifier string, password string) (User, error) {
 	record, err := s.findUserByUsername(ctx, identifier)
 	if err != nil {
-		if !errors.Is(err, mongo.ErrNoDocuments) {
-			return User{}, err
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return User{}, ErrInvalidCredentials
 		}
-		record, err = s.findUserByEmail(ctx, identifier)
-		if err != nil {
-			if errors.Is(err, mongo.ErrNoDocuments) {
-				return User{}, ErrInvalidCredentials
-			}
-			return User{}, err
-		}
+		return User{}, err
 	}
 
 	if bcrypt.CompareHashAndPassword(record.PasswordHash, []byte(password)) != nil {
@@ -333,7 +323,7 @@ func (s *Store) ListUsers(ctx context.Context) ([]User, error) {
 		"isBootstrap": bson.M{"$ne": true},
 	}, options.Find().SetSort(bson.D{
 		{Key: "role", Value: 1},
-		{Key: "normalizedEmail", Value: 1},
+		{Key: "normalizedUsername", Value: 1},
 	}))
 	if err != nil {
 		return nil, fmt.Errorf("find users: %w", err)
@@ -366,11 +356,6 @@ func (s *Store) CreateUser(ctx context.Context, input CreateUserInput) (User, st
 		return User{}, "", fmt.Errorf("username is required")
 	}
 
-	normalizedEmail := normalizeEmail(input.Email)
-	if normalizedEmail == "" {
-		normalizedEmail = emailFromUsername(normalizedUsername)
-	}
-
 	name := strings.TrimSpace(input.Name)
 	if name == "" {
 		return User{}, "", fmt.Errorf("name is required")
@@ -398,8 +383,6 @@ func (s *Store) CreateUser(ctx context.Context, input CreateUserInput) (User, st
 		Name:               name,
 		Username:           username,
 		NormalizedUsername: normalizedUsername,
-		Email:              normalizedEmail,
-		NormalizedEmail:    normalizedEmail,
 		Role:               role,
 		PasswordHash:       passwordHash,
 		CreatedAt:          now,
@@ -463,15 +446,6 @@ func (s *Store) UpdateUser(ctx context.Context, targetID string, input UpdateUse
 		return User{}, fmt.Errorf("username is required")
 	}
 
-	email := strings.TrimSpace(input.Email)
-	if email == "" {
-		return User{}, fmt.Errorf("email is required")
-	}
-	normalizedEmail := normalizeEmail(email)
-	if normalizedEmail == "" {
-		return User{}, fmt.Errorf("email is required")
-	}
-
 	role := input.Role
 	if role == "" {
 		return User{}, fmt.Errorf("role is required")
@@ -494,8 +468,6 @@ func (s *Store) UpdateUser(ctx context.Context, targetID string, input UpdateUse
 		"name":               name,
 		"username":           username,
 		"normalizedUsername": normalizedUsername,
-		"email":              normalizedEmail,
-		"normalizedEmail":    normalizedEmail,
 		"role":               role,
 		"updatedAt":          now,
 	}
@@ -515,8 +487,6 @@ func (s *Store) UpdateUser(ctx context.Context, targetID string, input UpdateUse
 	target.Name = name
 	target.Username = username
 	target.NormalizedUsername = normalizedUsername
-	target.Email = normalizedEmail
-	target.NormalizedEmail = normalizedEmail
 	target.Role = role
 	target.UpdatedAt = now
 
@@ -736,17 +706,6 @@ func (s *Store) ChangeCurrentUserPassword(
 	return target.toPublic(), nil
 }
 
-func (s *Store) findUserByEmail(ctx context.Context, email string) (userRecord, error) {
-	var record userRecord
-	err := s.users.FindOne(ctx, bson.M{
-		"normalizedEmail": normalizeEmail(email),
-	}).Decode(&record)
-	if err != nil {
-		return userRecord{}, err
-	}
-	return record, nil
-}
-
 func (s *Store) findUserByUsername(ctx context.Context, username string) (userRecord, error) {
 	var record userRecord
 	err := s.users.FindOne(ctx, bson.M{
@@ -796,8 +755,7 @@ func (u userRecord) toPublic() User {
 	return User{
 		ID:          u.ID.Hex(),
 		Name:        u.Name,
-		Username:    usernameOrFallback(u.Username, u.Email),
-		Email:       u.Email,
+		Username:    usernameOrFallback(u.Username, u.Name, u.ID),
 		Role:        u.Role,
 		IsBootstrap: u.IsBootstrap,
 		CreatedAt:   u.CreatedAt.UTC().Format(time.RFC3339Nano),
@@ -805,40 +763,53 @@ func (u userRecord) toPublic() User {
 	}
 }
 
-func normalizeEmail(value string) string {
-	return strings.ToLower(strings.TrimSpace(value))
-}
-
 func normalizeUsername(value string) string {
 	return strings.ToLower(strings.TrimSpace(value))
 }
 
-func usernameOrFallback(username string, email string) string {
+
+func usernameOrFallback(username string, name string, id primitive.ObjectID) string {
 	trimmed := strings.TrimSpace(username)
 	if trimmed != "" {
 		return trimmed
 	}
-	return usernameFromEmail(email)
+	trimmedName := strings.TrimSpace(name)
+	if trimmedName != "" {
+		return trimmedName
+	}
+	if id != (primitive.ObjectID{}) {
+		return fmt.Sprintf("user-%s", id.Hex()[:8])
+	}
+	return "user"
 }
 
-func usernameFromEmail(email string) string {
-	normalized := normalizeEmail(email)
-	if normalized == "" {
-		return ""
+func (s *Store) dropLegacyUserIndex(ctx context.Context, indexName string) error {
+	cursor, err := s.users.Indexes().List(ctx)
+	if err != nil {
+		return fmt.Errorf("list user indexes: %w", err)
 	}
-	localPart, _, found := strings.Cut(normalized, "@")
-	if !found {
-		return normalized
-	}
-	return strings.TrimSpace(localPart)
-}
+	defer cursor.Close(ctx)
 
-func emailFromUsername(username string) string {
-	normalized := normalizeUsername(username)
-	if normalized == "" {
-		return ""
+	for cursor.Next(ctx) {
+		var indexDoc struct {
+			Name string `bson:"name"`
+		}
+		if err := cursor.Decode(&indexDoc); err != nil {
+			return fmt.Errorf("decode user index: %w", err)
+		}
+		if indexDoc.Name == indexName {
+			if err := s.users.Indexes().DropOne(ctx, indexName); err != nil {
+				return fmt.Errorf("drop legacy user index %s: %w", indexName, err)
+			}
+			break
+		}
 	}
-	return normalized + "@users.local"
+
+	if err := cursor.Err(); err != nil {
+		return fmt.Errorf("iterate user indexes: %w", err)
+	}
+
+	return nil
 }
 
 func nameOrDefault(value string) string {

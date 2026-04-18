@@ -19,16 +19,14 @@ export function EditUserDialog({
   return (
     <UserUpsertDialog
       title={`Edit ${user.name}`}
-      description="Update profile details, username, email, or role."
+      description="Update profile details, username, or role."
       submitLabel="Save changes"
       busyLabel="Saving..."
       initialValues={{
         name: user.name,
         username: user.username,
-        email: user.email,
         role: user.role,
       }}
-      showEmail={true}
       isLoading={isLoading}
       onClose={onClose}
       onSubmit={onSubmit}

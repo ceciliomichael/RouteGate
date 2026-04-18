@@ -12,7 +12,6 @@ interface CreateUserDialogProps {
 const emptyUserValues: UserFormValues = {
   name: "",
   username: "",
-  email: "",
   role: "user",
 };
 
@@ -28,7 +27,6 @@ export function CreateUserDialog({
       submitLabel="Create user"
       busyLabel="Creating..."
       initialValues={emptyUserValues}
-      showEmail={false}
       isLoading={isLoading}
       onClose={onClose}
       onSubmit={async (values) => {
@@ -36,7 +34,6 @@ export function CreateUserDialog({
           name: values.name,
           username: values.username,
           role: values.role,
-          email: values.email.trim() ? values.email.trim() : undefined,
         });
       }}
     />

@@ -28,7 +28,7 @@ export function DashboardTopBar({
     {
       value: "account",
       label: user.name,
-      description: user.username || user.email || "Account",
+      description: user.username || "Account",
     },
     {
       value: "settings",
@@ -243,7 +243,7 @@ export function DashboardTopBar({
                       lineHeight: 1.1,
                     }}
                   >
-                    {user.username || user.email || "Account"}
+                    {user.username || "Account"}
                   </span>
                 </span>
               </div>
@@ -358,6 +358,6 @@ export function DashboardTopBar({
 }
 
 function getInitial(user: AuthUser): string {
-  const source = user.name.trim() || user.username.trim() || user.email.trim();
+  const source = user.name.trim() || user.username.trim();
   return source.charAt(0).toUpperCase() || "R";
 }

@@ -15,7 +15,6 @@ import type { UserRole } from "./types";
 export interface UserFormValues {
   name: string;
   username: string;
-  email: string;
   role: UserRole;
 }
 
@@ -25,7 +24,6 @@ interface UserUpsertDialogProps {
   submitLabel: string;
   busyLabel: string;
   initialValues: UserFormValues;
-  showEmail: boolean;
   isLoading: boolean;
   onClose: () => void;
   onSubmit: (values: UserFormValues) => Promise<void>;
@@ -37,7 +35,6 @@ export function UserUpsertDialog({
   submitLabel,
   busyLabel,
   initialValues,
-  showEmail,
   isLoading,
   onClose,
   onSubmit,
@@ -57,7 +54,6 @@ export function UserUpsertDialog({
 
   const [name, setName] = useState(initialValues.name);
   const [username, setUsername] = useState(initialValues.username);
-  const [email, setEmail] = useState(initialValues.email);
   const [role, setRole] = useState<UserRole>(initialValues.role);
   const [error, setError] = useState<string | null>(null);
 
@@ -77,14 +73,9 @@ export function UserUpsertDialog({
 
     const trimmedName = name.trim();
     const trimmedUsername = username.trim();
-    const trimmedEmail = email.trim();
 
     if (!trimmedName || !trimmedUsername) {
       setError("Name and username are required.");
-      return;
-    }
-    if (showEmail && !trimmedEmail) {
-      setError("Email is required.");
       return;
     }
 
@@ -93,7 +84,6 @@ export function UserUpsertDialog({
       await onSubmit({
         name: trimmedName,
         username: trimmedUsername,
-        email: trimmedEmail,
         role,
       });
     } catch (submitError) {
@@ -232,26 +222,6 @@ export function UserUpsertDialog({
               disabled={isLoading}
             />
           </div>
-
-          {showEmail ? (
-            <div>
-              <label htmlFor="user-email" className="field-label">
-                Email
-              </label>
-              <input
-                id="user-email"
-                className="field-input"
-                type="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                placeholder="jane-admin@users.local"
-                disabled={isLoading}
-              />
-              <span className="field-help">
-                This is used for login alongside the username.
-              </span>
-            </div>
-          ) : null}
 
           <div>
             <span className="field-label">Role</span>

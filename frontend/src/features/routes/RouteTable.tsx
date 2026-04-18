@@ -87,8 +87,7 @@ export function RouteTable({
           r.subdomain.toLowerCase().includes(q) ||
           r.destination.toLowerCase().includes(q) ||
           (r.note ?? "").toLowerCase().includes(q) ||
-          r.ownerName.toLowerCase().includes(q) ||
-          r.ownerEmail.toLowerCase().includes(q)
+          r.ownerName.toLowerCase().includes(q)
         );
       })
       .sort((a, b) => {

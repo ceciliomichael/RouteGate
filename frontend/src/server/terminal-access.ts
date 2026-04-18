@@ -16,7 +16,6 @@ function isAuthUser(value: unknown): value is AuthUser {
     typeof candidate.id === "string" &&
     typeof candidate.name === "string" &&
     typeof candidate.username === "string" &&
-    typeof candidate.email === "string" &&
     (candidate.role === "admin" || candidate.role === "user") &&
     typeof candidate.createdAt === "string" &&
     typeof candidate.updatedAt === "string"

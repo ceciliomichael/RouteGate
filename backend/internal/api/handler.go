@@ -54,7 +54,6 @@ func (h *Handler) handleLogin(writer http.ResponseWriter, request *http.Request)
 
 	var payload struct {
 		Username string `json:"username"`
-		Email    string `json:"email"`
 		Password string `json:"password"`
 	}
 	if err := decodeBody(request, &payload); err != nil {
@@ -63,10 +62,6 @@ func (h *Handler) handleLogin(writer http.ResponseWriter, request *http.Request)
 	}
 
 	identifier := strings.TrimSpace(payload.Username)
-	if identifier == "" {
-		identifier = strings.TrimSpace(payload.Email)
-	}
-
 	ctx, cancel := context.WithTimeout(request.Context(), 5*time.Second)
 	defer cancel()
 
@@ -406,9 +401,8 @@ func (h *Handler) handleRoutesCollection(writer http.ResponseWriter, request *ht
 		}
 
 		route, err := h.routes.Create(ctx, registry.OwnerInfo{
-			UserID:    user.ID,
-			UserName:  user.Name,
-			UserEmail: user.Email,
+			UserID:   user.ID,
+			UserName: user.Name,
 		}, payload)
 		if err != nil {
 			switch {

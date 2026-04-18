@@ -4,7 +4,6 @@ export interface ManagedUser {
   id: string;
   name: string;
   username: string;
-  email: string;
   role: UserRole;
   isBootstrap: boolean;
   createdAt: string;
@@ -14,14 +13,12 @@ export interface ManagedUser {
 export interface CreateUserPayload {
   name: string;
   username: string;
-  email?: string;
   role: UserRole;
 }
 
 export interface UpdateUserPayload {
   name: string;
   username: string;
-  email: string;
   role: UserRole;
 }
 
