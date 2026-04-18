@@ -1,6 +1,6 @@
 #
 # Copy `.env.example` to `.env` before starting the stack.
-# MongoDB is published only on localhost on the host machine.
+# MongoDB is published on all host interfaces so it is reachable from the network.
 #
 services:
   mongo:
@@ -13,7 +13,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-wc_root}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-replace-with-a-strong-password}
     ports:
-      - "127.0.0.1:${MONGODB_HOST_PORT:-27019}:27019"
+      - "${MONGODB_HOST_PORT:-27019}:27019"
     volumes:
       - mongo-data:/data/db
     healthcheck:
