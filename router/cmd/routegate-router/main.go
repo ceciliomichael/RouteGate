@@ -19,6 +19,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+const routeCacheRefreshInterval = 30 * time.Second
+
 func main() {
 	loadEnv()
 
@@ -48,6 +50,10 @@ func main() {
 	}
 
 	proxyHandler := proxy.NewHandler(cfg, routeStore, log.Default())
+	if err := proxyHandler.RefreshCache(ctx); err != nil {
+		log.Printf("initial route cache warm failed: %v", err)
+	}
+	proxyHandler.StartCacheRefresher(context.Background(), routeCacheRefreshInterval)
 
 	httpServer := &http.Server{
 		Addr:              cfg.ListenAddress(),

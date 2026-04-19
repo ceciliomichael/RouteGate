@@ -1,6 +1,7 @@
 package proxy
 
 import (
+	"context"
 	"crypto/tls"
 	"fmt"
 	"log"
@@ -9,6 +10,7 @@ import (
 	"net/url"
 	"strings"
 	"sync"
+	"time"
 
 	"routegate-router/internal/config"
 	"routegate-router/internal/registry"
@@ -16,22 +18,29 @@ import (
 
 type routeLookupStore interface {
 	Lookup(subdomain string) (registry.Route, bool, error)
+	List(ctx context.Context) ([]registry.Route, error)
 }
 
 type Handler struct {
 	cfg    config.Config
 	store  routeLookupStore
 	logger *log.Logger
+	cache  *routeCache
 
 	mu      sync.RWMutex
 	proxies map[string]*httputil.ReverseProxy
 }
 
 func NewHandler(cfg config.Config, store routeLookupStore, logger *log.Logger) *Handler {
+	if logger == nil {
+		logger = log.Default()
+	}
+
 	return &Handler{
 		cfg:     cfg,
 		store:   store,
 		logger:  logger,
+		cache:   newRouteCache(),
 		proxies: make(map[string]*httputil.ReverseProxy),
 	}
 }
@@ -63,6 +72,11 @@ func (h *Handler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	route, found, err := h.store.Lookup(subdomain)
 	if err != nil {
 		h.logger.Printf("registry lookup failed for host=%s subdomain=%s: %v", host, subdomain, err)
+		if cachedRoute, cachedFound := h.cache.lookup(subdomain); cachedFound {
+			h.logger.Printf("serving cached route for host=%s subdomain=%s", host, subdomain)
+			h.serveRoute(writer, request, host, subdomain, cachedRoute)
+			return
+		}
 		http.Error(writer, "registry error", http.StatusInternalServerError)
 		return
 	}
@@ -73,6 +87,44 @@ func (h *Handler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	}
 
 	h.serveRoute(writer, request, host, subdomain, route)
+}
+
+func (h *Handler) RefreshCache(ctx context.Context) error {
+	if h.store == nil {
+		return nil
+	}
+
+	routes, err := h.store.List(ctx)
+	if err != nil {
+		return err
+	}
+
+	h.cache.replace(routes)
+	return nil
+}
+
+func (h *Handler) StartCacheRefresher(ctx context.Context, interval time.Duration) {
+	if h.store == nil || interval <= 0 {
+		return
+	}
+
+	go func() {
+		ticker := time.NewTicker(interval)
+		defer ticker.Stop()
+
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case <-ticker.C:
+				refreshCtx, cancel := context.WithTimeout(ctx, 15*time.Second)
+				if err := h.RefreshCache(refreshCtx); err != nil {
+					h.logger.Printf("route cache refresh failed: %v", err)
+				}
+				cancel()
+			}
+		}
+	}()
 }
 
 func (h *Handler) serveRoute(

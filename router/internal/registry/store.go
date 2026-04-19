@@ -82,6 +82,41 @@ func (s *Store) Lookup(subdomain string) (Route, bool, error) {
 	}, true, nil
 }
 
+func (s *Store) List(ctx context.Context) ([]Route, error) {
+	queryCtx, cancel := context.WithTimeout(ctx, 10*time.Second)
+	defer cancel()
+
+	cursor, err := s.collection.Find(queryCtx, bson.M{"enabled": true}, options.Find().SetSort(bson.D{
+		{Key: "normalizedSubdomain", Value: 1},
+	}))
+	if err != nil {
+		return nil, fmt.Errorf("find enabled routes: %w", err)
+	}
+	defer cursor.Close(queryCtx)
+
+	routes := make([]Route, 0)
+	for cursor.Next(queryCtx) {
+		var record routeRecord
+		if err := cursor.Decode(&record); err != nil {
+			return nil, fmt.Errorf("decode route: %w", err)
+		}
+		if _, err := NormalizeDestination(record.Destination); err != nil {
+			return nil, fmt.Errorf("invalid destination for %q: %w", record.Subdomain, err)
+		}
+		routes = append(routes, Route{
+			Subdomain:             record.Subdomain,
+			Destination:           record.Destination,
+			Enabled:               record.Enabled,
+			InsecureSkipTLSVerify: record.InsecureSkipTLSVerify,
+		})
+	}
+	if err := cursor.Err(); err != nil {
+		return nil, fmt.Errorf("iterate routes: %w", err)
+	}
+
+	return routes, nil
+}
+
 func NormalizeDestination(raw string) (string, error) {
 	trimmed := strings.TrimSpace(raw)
 	if trimmed == "" {

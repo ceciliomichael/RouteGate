@@ -8,6 +8,7 @@ It provides:
 - reverse proxying to configured route destinations
 - HTTPS redirect + HSTS on wildcard traffic
 - automatic frontend fallback route for `FRONTEND_ROUTE_SUBDOMAIN`
+- an in-memory route snapshot so already-registered subdomains keep routing even if live registry reads fail temporarily
 
 ## Run
 
@@ -38,6 +39,7 @@ Notes:
 - `WILDCARD_BASE_DOMAIN` is required so subdomains can be extracted correctly.
 - Router and backend should point to the same MongoDB/database so route writes are visible to routing reads.
 - `FRONTEND_ROUTE_SUBDOMAIN` is always resolved directly to `FRONTEND_ROUTE_DESTINATION` by the router.
+- The router refreshes an in-memory snapshot of enabled routes from MongoDB and uses that snapshot if the live registry is unavailable.
 
 ## Build and test
 

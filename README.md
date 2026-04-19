@@ -22,6 +22,7 @@ That makes retunneling much easier when you want `*.your-domain.com` to keep wor
 - Authenticates users with sessions
 - Supports admin and standard user access
 - Proxies enabled wildcard subdomains to their configured destinations
+- Keeps a local enabled-route snapshot so registered subdomains continue to route if the control plane is temporarily unavailable
 - Keeps router, backend, and frontend separated so each can be scaled or deployed independently
 - Automatically serves the dashboard on the reserved `routegate` subdomain by default
 - Can optionally skip upstream TLS verification for services like Proxmox that use self-signed HTTPS certificates
@@ -70,6 +71,7 @@ For router and MongoDB, copy `router/.env.example` to `router/.env`.
 
 - The frontend uses the backend through its own API routes.
 - The router performs wildcard proxying; backend serves admin/auth/routes APIs only.
+- The router refreshes an in-memory snapshot from MongoDB and can keep routing already-registered subdomains if the backend/frontend are down or the registry lookup is temporarily unavailable.
 - Routes can be pointed at `https://` upstreams and, when needed, can skip upstream TLS verification for self-signed services.
 - The router reserves `routegate` for the frontend by default; you can override the subdomain or destination with `FRONTEND_ROUTE_SUBDOMAIN` and `FRONTEND_ROUTE_DESTINATION`.
 - Standard users cannot point routes at reserved local destinations like `localhost` or the router node IP.
