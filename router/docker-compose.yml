@@ -49,7 +49,7 @@ services:
       FRONTEND_ROUTE_SUBDOMAIN: ${FRONTEND_ROUTE_SUBDOMAIN:-routegate}
       FRONTEND_ROUTE_DESTINATION: ${FRONTEND_ROUTE_DESTINATION:-http://frontend:3000}
     ports:
-      - "${ROUTER_PORT:-3068}:${ROUTER_PORT:-3068}"
+      - "${ROUTER_PORT:-3069}:${ROUTER_PORT:-3069}"
 
 volumes:
   mongo-data:
