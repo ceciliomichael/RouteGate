@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"net/url"
 	"os"
 	"strconv"
 	"strings"
@@ -11,11 +10,9 @@ import (
 
 type Config struct {
 	Port                       int
-	BaseDomain                 string
 	MongoURI                   string
 	MongoDatabase              string
 	FrontendRouteSubdomain     string
-	FrontendRouteDestination   string
 	RestrictedDestinationHosts []string
 	BootstrapAdminUsername     string
 	BootstrapAdminPassword     string
@@ -30,19 +27,9 @@ func (c Config) ListenAddress() string {
 }
 
 func Load() (Config, error) {
-	port, err := parsePort(
-		firstNonEmpty(
-			os.Getenv("PORT"),
-			os.Getenv("WILDCARD_PORT"),
-		),
-	)
+	port, err := parsePort(os.Getenv("PORT"))
 	if err != nil {
 		return Config{}, err
-	}
-
-	baseDomain := normalizeHost(os.Getenv("WILDCARD_BASE_DOMAIN"))
-	if baseDomain == "" {
-		return Config{}, fmt.Errorf("WILDCARD_BASE_DOMAIN is required")
 	}
 
 	mongoURI := strings.TrimSpace(firstNonEmpty(
@@ -61,19 +48,7 @@ func Load() (Config, error) {
 		return Config{}, err
 	}
 
-	frontendPort, err := parsePort(firstNonEmpty(os.Getenv("FRONTEND_PORT"), "3000"))
-	if err != nil {
-		return Config{}, err
-	}
-
 	frontendRouteSubdomain := normalizeHost(firstNonEmpty(os.Getenv("FRONTEND_ROUTE_SUBDOMAIN"), "routegate"))
-	frontendRouteDestination, err := normalizeDestination(firstNonEmpty(
-		os.Getenv("FRONTEND_ROUTE_DESTINATION"),
-		fmt.Sprintf("http://frontend:%d", frontendPort),
-	))
-	if err != nil {
-		return Config{}, fmt.Errorf("FRONTEND_ROUTE_DESTINATION: %w", err)
-	}
 	restrictedDestinationHosts := parseHostList(firstNonEmpty(
 		os.Getenv("NON_ADMIN_BLOCKED_DESTINATION_HOSTS"),
 		"localhost,127.0.0.1,::1,192.168.1.28",
@@ -81,11 +56,9 @@ func Load() (Config, error) {
 
 	return Config{
 		Port:                       port,
-		BaseDomain:                 baseDomain,
 		MongoURI:                   mongoURI,
 		MongoDatabase:              strings.TrimSpace(firstNonEmpty(os.Getenv("MONGODB_DATABASE"), "routegate")),
 		FrontendRouteSubdomain:     frontendRouteSubdomain,
-		FrontendRouteDestination:   frontendRouteDestination,
 		RestrictedDestinationHosts: restrictedDestinationHosts,
 		BootstrapAdminUsername:     strings.TrimSpace(os.Getenv("BOOTSTRAP_ADMIN_USERNAME")),
 		BootstrapAdminPassword:     os.Getenv("BOOTSTRAP_ADMIN_PASSWORD"),
@@ -160,30 +133,4 @@ func parseHostList(raw string) []string {
 
 func normalizeDestinationHost(value string) string {
 	return strings.ToLower(strings.TrimSuffix(strings.TrimSpace(value), "."))
-}
-
-func normalizeDestination(raw string) (string, error) {
-	trimmed := strings.TrimSpace(raw)
-	if trimmed == "" {
-		return "", fmt.Errorf("destination is required")
-	}
-
-	parsedInput := trimmed
-	if !strings.Contains(parsedInput, "://") {
-		parsedInput = "http://" + parsedInput
-	}
-
-	parsed, err := url.Parse(parsedInput)
-	if err != nil {
-		return "", err
-	}
-
-	if parsed.Scheme != "http" && parsed.Scheme != "https" {
-		return "", fmt.Errorf("scheme must be http or https")
-	}
-	if parsed.Host == "" {
-		return "", fmt.Errorf("host is required")
-	}
-
-	return parsed.String(), nil
 }

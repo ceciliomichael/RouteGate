@@ -42,11 +42,38 @@ services:
     env_file:
       - .env
     environment:
-      PORT: ${PORT:-3067}
+      PORT: ${BACKEND_PORT:-3067}
       MONGODB_URI: ${MONGODB_URI:-mongodb://${MONGO_INITDB_ROOT_USERNAME:-wc_root}:${MONGO_INITDB_ROOT_PASSWORD:-replace-with-a-strong-password}@mongo:27019/?authSource=admin}
       MONGODB_DATABASE: ${MONGODB_DATABASE:-routegate}
+      FRONTEND_ROUTE_SUBDOMAIN: ${FRONTEND_ROUTE_SUBDOMAIN:-routegate}
+      NON_ADMIN_BLOCKED_DESTINATION_HOSTS: ${NON_ADMIN_BLOCKED_DESTINATION_HOSTS:-localhost,127.0.0.1,::1,192.168.1.28}
+      BOOTSTRAP_ADMIN_USERNAME: ${BOOTSTRAP_ADMIN_USERNAME:-main-admin}
+      BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD:-replace-with-a-strong-password}
+      BOOTSTRAP_ADMIN_NAME: ${BOOTSTRAP_ADMIN_NAME:-Main Admin}
+      SESSION_COOKIE_NAME: ${SESSION_COOKIE_NAME:-routegate_session}
+      SESSION_TTL_HOURS: ${SESSION_TTL_HOURS:-168}
+      SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-false}
     ports:
-      - "${BACKEND_HOST_PORT:-3067}:3067"
+      - "${BACKEND_PORT:-3067}:${BACKEND_PORT:-3067}"
+
+  router:
+    build:
+      context: ./router
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      ROUTER_PORT: 3068
+      WILDCARD_BASE_DOMAIN: ${WILDCARD_BASE_DOMAIN}
+      MONGODB_URI: ${MONGODB_URI:-mongodb://${MONGO_INITDB_ROOT_USERNAME:-wc_root}:${MONGO_INITDB_ROOT_PASSWORD:-replace-with-a-strong-password}@mongo:27019/?authSource=admin}
+      MONGODB_DATABASE: ${MONGODB_DATABASE:-routegate}
+      FRONTEND_ROUTE_SUBDOMAIN: ${FRONTEND_ROUTE_SUBDOMAIN:-routegate}
+      FRONTEND_ROUTE_DESTINATION: ${FRONTEND_ROUTE_DESTINATION:-http://frontend:3000}
+    ports:
+      - "3068:3068"
 
   frontend:
     build:

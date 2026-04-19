@@ -222,11 +222,11 @@ func (s *Store) EnsureBootstrapAdmin(
 				"normalizedUsername": normalizedUsername,
 				"role":               RoleAdmin,
 				"isBootstrap":        true,
+				"passwordHash":       passwordHash,
 				"updatedAt":          now,
 			},
 			"$setOnInsert": bson.M{
-				"passwordHash": passwordHash,
-				"createdAt":    now,
+				"createdAt": now,
 			},
 		},
 		options.Update().SetUpsert(true),

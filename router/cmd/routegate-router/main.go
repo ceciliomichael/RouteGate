@@ -10,11 +10,10 @@ import (
 	"path/filepath"
 	"time"
 
-	"routegate/internal/api"
-	"routegate/internal/config"
-	"routegate/internal/envfile"
-	"routegate/internal/identity"
-	"routegate/internal/registry"
+	"routegate-router/internal/config"
+	"routegate-router/internal/envfile"
+	"routegate-router/internal/proxy"
+	"routegate-router/internal/registry"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -42,39 +41,25 @@ func main() {
 	}()
 
 	db := client.Database(cfg.MongoDatabase)
-	routeStore := registry.NewStore(db, cfg.FrontendRouteSubdomain)
-	identityStore := identity.NewStore(db)
+	routeStore := registry.NewStore(db)
 
-	if err := identityStore.EnsureIndexes(ctx); err != nil {
-		log.Fatalf("ensure identity indexes: %v", err)
-	}
 	if err := routeStore.EnsureIndexes(ctx); err != nil {
 		log.Fatalf("ensure route indexes: %v", err)
 	}
-	if err := identityStore.BackfillUsernames(ctx); err != nil {
-		log.Fatalf("backfill usernames: %v", err)
-	}
-	if err := identityStore.EnsureBootstrapAdmin(
-		ctx,
-		cfg.BootstrapAdminUsername,
-		cfg.BootstrapAdminPassword,
-		cfg.BootstrapAdminName,
-	); err != nil {
-		log.Fatalf("bootstrap admin error: %v", err)
-	}
 
-	apiHandler := api.NewHandler(routeStore, identityStore, log.Default(), cfg)
+	proxyHandler := proxy.NewHandler(cfg, routeStore, log.Default())
 
 	httpServer := &http.Server{
 		Addr:              cfg.ListenAddress(),
-		Handler:           apiHandler,
+		Handler:           proxyHandler,
 		ReadHeaderTimeout: 5 * time.Second,
 		ReadTimeout:       15 * time.Second,
 		WriteTimeout:      60 * time.Second,
 		IdleTimeout:       120 * time.Second,
 	}
 
-	log.Printf("routegate backend listening on %s", cfg.ListenAddress())
+	log.Printf("routegate router listening on %s", cfg.ListenAddress())
+	log.Printf("base domain: %s", cfg.BaseDomain)
 	log.Printf("mongodb: %s", sanitizeMongoURI(cfg.MongoURI, cfg.MongoDatabase))
 
 	if err := httpServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {

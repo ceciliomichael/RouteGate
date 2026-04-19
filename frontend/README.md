@@ -2,7 +2,7 @@
 
 The frontend is the Next.js dashboard for managing routes, users, and authentication.
 
-It is the UI layer for the catcher and talks to the backend through local API routes under `/api/*`.
+It is the UI layer for RouteGate and talks to the backend through local API routes under `/api/*`.
 
 ## Purpose
 
@@ -50,6 +50,7 @@ Notes:
 
 - When running outside Docker, point the frontend at the backend on `localhost:3067`.
 - When running in Docker Compose, the frontend can use `http://backend:3067` internally.
+- Wildcard tunnel ingress should target the separate `router` service, not backend.
 - Terminal sessions are recommended with `TERMINAL_TARGET=host`, which matches `ssh-terminal` behavior and opens a shell inside the running frontend container.
 - `TERMINAL_TARGET=auto` or `TERMINAL_TARGET=docker` can still target another container when Docker access is available; otherwise they fall back to host shell.
 - If multiple Compose projects run on the same host, set `TERMINAL_DOCKER_PROJECT` to pin the right stack.

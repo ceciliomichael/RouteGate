@@ -10,8 +10,8 @@ import (
 	"strings"
 	"sync"
 
-	"routegate/internal/config"
-	"routegate/internal/registry"
+	"routegate-router/internal/config"
+	"routegate-router/internal/registry"
 )
 
 type routeLookupStore interface {
@@ -37,84 +37,60 @@ func NewHandler(cfg config.Config, store routeLookupStore, logger *log.Logger) *
 }
 
 func (h *Handler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
-	handled, _ := h.TryServe(writer, request)
-	if !handled {
-		http.NotFound(writer, request)
-	}
-}
-
-func (h *Handler) TryServe(writer http.ResponseWriter, request *http.Request) (bool, error) {
 	host, subdomain, ok := h.resolveRouteTarget(request)
 	if !ok {
 		if normalizeHost(request.Host) == "" {
 			http.Error(writer, "host header required", http.StatusBadRequest)
-			return true, nil
+			return
 		}
-		return false, nil
+		http.NotFound(writer, request)
+		return
 	}
 
 	if !isSecureRequest(request) {
 		redirectToHTTPS(writer, request, host)
-		return true, nil
+		return
 	}
 
 	setStrictTransportSecurity(writer)
 	request.Host = host
 
 	if fallbackRoute, fallbackFound := h.defaultFrontendRoute(subdomain); fallbackFound {
-		route := fallbackRoute
-		proxy, err := h.proxyFor(route.Destination, route.InsecureSkipTLSVerify)
-		if err != nil {
-			h.logger.Printf("proxy setup failed for destination=%s: %v", route.Destination, err)
-			http.Error(writer, "proxy configuration error", http.StatusInternalServerError)
-			return true, err
-		}
-
-		h.logger.Printf("%s %s host=%s subdomain=%s -> %s", request.Method, request.URL.Path, host, subdomain, route.Destination)
-		proxy.ServeHTTP(writer, request)
-		return true, nil
+		h.serveRoute(writer, request, host, subdomain, fallbackRoute)
+		return
 	}
 
 	route, found, err := h.store.Lookup(subdomain)
 	if err != nil {
 		h.logger.Printf("registry lookup failed for host=%s subdomain=%s: %v", host, subdomain, err)
 		http.Error(writer, "registry error", http.StatusInternalServerError)
-		return true, err
+		return
 	}
 
 	if !found {
 		h.writeMissingRoutePage(writer, request, host, subdomain)
-		return true, nil
+		return
 	}
 
+	h.serveRoute(writer, request, host, subdomain, route)
+}
+
+func (h *Handler) serveRoute(
+	writer http.ResponseWriter,
+	request *http.Request,
+	host string,
+	subdomain string,
+	route registry.Route,
+) {
 	proxy, err := h.proxyFor(route.Destination, route.InsecureSkipTLSVerify)
 	if err != nil {
 		h.logger.Printf("proxy setup failed for destination=%s: %v", route.Destination, err)
 		http.Error(writer, "proxy configuration error", http.StatusInternalServerError)
-		return true, err
+		return
 	}
 
 	h.logger.Printf("%s %s host=%s subdomain=%s -> %s", request.Method, request.URL.Path, host, subdomain, route.Destination)
 	proxy.ServeHTTP(writer, request)
-	return true, nil
-}
-
-func (h *Handler) HasRoute(request *http.Request) (bool, error) {
-	_, subdomain, ok := h.resolveRouteTarget(request)
-	if !ok {
-		return false, nil
-	}
-
-	_, found, err := h.store.Lookup(subdomain)
-	if err != nil {
-		return false, err
-	}
-	if found {
-		return true, nil
-	}
-
-	_, fallbackFound := h.defaultFrontendRoute(subdomain)
-	return fallbackFound, nil
 }
 
 func (h *Handler) resolveRouteTarget(request *http.Request) (string, string, bool) {
@@ -197,7 +173,11 @@ func (h *Handler) proxyFor(destination string, insecureSkipTLSVerify bool) (*htt
 	}
 	proxy.ErrorHandler = func(writer http.ResponseWriter, request *http.Request, err error) {
 		h.logger.Printf("upstream error for %s: %v", normalizedDestination, err)
-		http.Error(writer, "upstream unavailable", http.StatusBadGateway)
+		displayHost := normalizeHost(extractForwardedHost(request))
+		if displayHost == "" {
+			displayHost = normalizeHost(request.Host)
+		}
+		h.writeMaintenancePage(writer, displayHost)
 	}
 
 	h.mu.Lock()
