@@ -1,7 +1,7 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../auth/useAuth";
 
@@ -61,15 +61,15 @@ export function NotFoundScreen() {
   const auth = useAuth();
   const router = useRouter();
   const [secondsLeft, setSecondsLeft] = useState(3);
+  const targetPathRef = useRef("/login");
 
   const destinationLabel = auth.isAuthenticated ? "routes" : "login";
-  const targetPath = auth.isAuthenticated ? "/" : "/login";
 
   useEffect(() => {
-    if (auth.isLoading) {
-      return;
-    }
+    targetPathRef.current = auth.isAuthenticated ? "/" : "/login";
+  }, [auth.isAuthenticated]);
 
+  useEffect(() => {
     setSecondsLeft(3);
 
     const countdown = window.setInterval(() => {
@@ -77,14 +77,14 @@ export function NotFoundScreen() {
     }, 1000);
 
     const redirect = window.setTimeout(() => {
-      router.replace(targetPath);
+      router.replace(targetPathRef.current);
     }, 3000);
 
     return () => {
       window.clearInterval(countdown);
       window.clearTimeout(redirect);
     };
-  }, [auth.isLoading, router, targetPath]);
+  }, [router]);
 
   return (
     <main style={rootStyle}>
@@ -95,14 +95,8 @@ export function NotFoundScreen() {
         </h1>
         <p style={bodyStyle}>We could not find a page for this request.</p>
         <p style={noteStyle}>
-          {auth.isLoading ? (
-            "Redirecting..."
-          ) : (
-            <>
-              Redirecting to {destinationLabel} in {secondsLeft}{" "}
-              {secondsLeft === 1 ? "second" : "seconds"}.
-            </>
-          )}
+          Redirecting to {destinationLabel} in {secondsLeft}{" "}
+          {secondsLeft === 1 ? "second" : "seconds"}.
         </p>
       </section>
     </main>
