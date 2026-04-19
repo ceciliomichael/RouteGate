@@ -1,49 +1,18 @@
 #
 # Copy `.env.example` to `.env` before starting the stack.
-# MongoDB is published on all host interfaces so it is reachable from the network.
+# Root compose runs backend + frontend only.
+# Router and MongoDB are managed from router/docker-compose.yml.
 #
 services:
-  mongo:
-    image: mongo:7.0
-    restart: unless-stopped
-    command: ["mongod", "--port", "27019", "--bind_ip_all"]
-    env_file:
-      - .env
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-wc_root}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-replace-with-a-strong-password}
-    ports:
-      - "${MONGODB_HOST_PORT:-27019}:27019"
-    volumes:
-      - mongo-data:/data/db
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "mongosh",
-          "--port",
-          "27019",
-          "--quiet",
-          "--eval",
-          "db.adminCommand({ ping: 1 })",
-        ]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-      start_period: 20s
-
   backend:
     build:
       context: ./backend
     restart: unless-stopped
-    depends_on:
-      mongo:
-        condition: service_healthy
     env_file:
       - .env
     environment:
       PORT: ${BACKEND_PORT:-3067}
-      MONGODB_URI: ${MONGODB_URI:-mongodb://${MONGO_INITDB_ROOT_USERNAME:-wc_root}:${MONGO_INITDB_ROOT_PASSWORD:-replace-with-a-strong-password}@mongo:27019/?authSource=admin}
+      MONGODB_URI: ${MONGODB_URI}
       MONGODB_DATABASE: ${MONGODB_DATABASE:-routegate}
       FRONTEND_ROUTE_SUBDOMAIN: ${FRONTEND_ROUTE_SUBDOMAIN:-routegate}
       NON_ADMIN_BLOCKED_DESTINATION_HOSTS: ${NON_ADMIN_BLOCKED_DESTINATION_HOSTS:-localhost,127.0.0.1,::1,192.168.1.28}
@@ -55,25 +24,6 @@ services:
       SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-false}
     ports:
       - "${BACKEND_PORT:-3067}:${BACKEND_PORT:-3067}"
-
-  router:
-    build:
-      context: ./router
-    restart: unless-stopped
-    depends_on:
-      mongo:
-        condition: service_healthy
-    env_file:
-      - .env
-    environment:
-      ROUTER_PORT: 3068
-      WILDCARD_BASE_DOMAIN: ${WILDCARD_BASE_DOMAIN}
-      MONGODB_URI: ${MONGODB_URI:-mongodb://${MONGO_INITDB_ROOT_USERNAME:-wc_root}:${MONGO_INITDB_ROOT_PASSWORD:-replace-with-a-strong-password}@mongo:27019/?authSource=admin}
-      MONGODB_DATABASE: ${MONGODB_DATABASE:-routegate}
-      FRONTEND_ROUTE_SUBDOMAIN: ${FRONTEND_ROUTE_SUBDOMAIN:-routegate}
-      FRONTEND_ROUTE_DESTINATION: ${FRONTEND_ROUTE_DESTINATION:-http://frontend:3000}
-    ports:
-      - "3068:3068"
 
   frontend:
     build:
@@ -90,7 +40,3 @@ services:
       NEXT_PUBLIC_API_BASE: ${NEXT_PUBLIC_API_BASE:-http://backend:3067}
     ports:
       - "${FRONTEND_PORT:-3000}:${FRONTEND_PORT:-3000}"
-
-volumes:
-  mongo-data:
-

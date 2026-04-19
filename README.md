@@ -31,7 +31,8 @@ That makes retunneling much easier when you want `*.your-domain.com` to keep wor
 - `router/` Go wildcard ingress proxy
 - `backend/` Go admin/auth/routes API
 - `frontend/` Next.js dashboard and API bridge
-- `docker-compose.yml` local stack for MongoDB, router, backend, and frontend
+- `docker-compose.yml` local stack for backend + frontend
+- `router/docker-compose.yml` local stack for router + MongoDB
 
 ## Ports
 
@@ -63,6 +64,7 @@ See the component READMEs for the full setup details:
 - [frontend/README.md](frontend/README.md)
 
 If you use Docker Compose, copy `.env.example` to `.env` and adjust the values for your machine.
+For router and MongoDB, copy `router/.env.example` to `router/.env`.
 
 ## Notes
 
