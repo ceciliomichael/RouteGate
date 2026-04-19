@@ -1,7 +1,6 @@
 import type { CSSProperties } from "react";
 
 const rootStyle: CSSProperties = {
-  minHeight: "100svh",
   minHeight: "100dvh",
   display: "grid",
   placeItems: "center",
