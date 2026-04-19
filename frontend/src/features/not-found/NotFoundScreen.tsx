@@ -36,6 +36,7 @@ const titleStyle: CSSProperties = {
   fontSize: "clamp(2.4rem, 8vw, 4.8rem)",
   lineHeight: 0.98,
   letterSpacing: "-0.06em",
+  fontWeight: 700,
   color: "var(--color-ink)",
 };
 
