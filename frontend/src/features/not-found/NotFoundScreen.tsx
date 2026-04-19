@@ -4,21 +4,22 @@ const rootStyle: CSSProperties = {
   minHeight: "100dvh",
   display: "grid",
   placeItems: "center",
-  padding: 16,
+  padding: 24,
   textAlign: "center",
   color: "var(--color-ink)",
   lineHeight: 1.5,
   fontFamily:
-    'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
   background:
     "radial-gradient(circle at top, rgba(16, 16, 17, 0.08), transparent 32%), linear-gradient(180deg, var(--color-surface-muted) 0%, #fbfbfd 58%, #f6f7fa 100%)",
 };
 
 const shellStyle: CSSProperties = {
-  width: "min(100%, 36rem)",
+  width: "100%",
+  maxWidth: "42rem",
   display: "grid",
-  justifyItems: "center",
-  gap: "0.8rem",
+  gap: "0.9rem",
+  textAlign: "center",
 };
 
 const eyebrowStyle: CSSProperties = {
@@ -36,7 +37,6 @@ const titleStyle: CSSProperties = {
   lineHeight: 0.98,
   letterSpacing: "-0.06em",
   color: "var(--color-ink)",
-  textWrap: "balance",
 };
 
 const bodyStyle: CSSProperties = {
@@ -60,9 +60,7 @@ export function NotFoundScreen() {
           This page does not exist.
         </h1>
         <p style={bodyStyle}>We could not find a page for this request.</p>
-        <p style={noteStyle}>
-          RouteGate will serve this page again after the upstream is back online.
-        </p>
+        <p style={noteStyle}>Redirecting to routes in 3 seconds.</p>
       </section>
     </main>
   );
