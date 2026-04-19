@@ -25,9 +25,7 @@ export function getBackendApiBase(): string {
 
 export function getBackendApiBaseCandidates(): string[] {
   const configured =
-    process.env.BACKEND_API_BASE?.trim() ||
-    process.env.NEXT_PUBLIC_API_BASE?.trim() ||
-    FALLBACK_BACKEND_API_BASE;
+    process.env.BACKEND_API_BASE?.trim() || FALLBACK_BACKEND_API_BASE;
   let parsed: URL;
   try {
     parsed = new URL(configured);
