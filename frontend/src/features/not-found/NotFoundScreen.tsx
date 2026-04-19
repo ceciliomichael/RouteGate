@@ -9,7 +9,7 @@ const rootStyle: CSSProperties = {
   color: "var(--color-ink)",
   lineHeight: 1.5,
   fontFamily:
-    'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
   background:
     "radial-gradient(circle at top, rgba(16, 16, 17, 0.08), transparent 32%), linear-gradient(180deg, var(--color-surface-muted) 0%, #fbfbfd 58%, #f6f7fa 100%)",
 };
