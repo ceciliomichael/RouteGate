@@ -24,8 +24,6 @@ WORKDIR /app
 
 COPY --from=builder /out/routegate-router /usr/local/bin/routegate-router
 
-EXPOSE 3068
-
 USER app
 
 ENTRYPOINT ["/usr/local/bin/routegate-router"]
