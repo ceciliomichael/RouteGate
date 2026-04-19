@@ -49,7 +49,6 @@ export function DashboardTopBar({
         ? currentPath === item.href
         : currentPath.startsWith(item.href),
     )?.href ??
-    navigation[0]?.href ??
     "";
 
   return (
