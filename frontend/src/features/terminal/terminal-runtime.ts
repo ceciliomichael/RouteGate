@@ -12,9 +12,12 @@ type ConnectionListener = (isConnected: boolean) => void;
 interface TerminalRuntime {
   buffer: string;
   connectionListeners: Set<ConnectionListener>;
+  connectionErrorTimer: ReturnType<typeof setTimeout> | null;
   errorListeners: Set<ErrorListener>;
   eventSource: EventSource | null;
+  isFlushingInput: boolean;
   isConnected: boolean;
+  pendingInput: string[];
   outputListeners: Set<OutputListener>;
   refCount: number;
   sessionId: string;
@@ -35,6 +38,8 @@ export interface TerminalRuntimeHandle {
 }
 
 const DEFAULT_TERMINAL_SIZE: TerminalSize = { cols: 120, rows: 30 };
+const CONNECTION_ERROR_DELAY_MS = 4_000;
+const MAX_INPUT_CHUNK_LENGTH = 8_192;
 const MAX_BUFFER_LENGTH = 1_000_000;
 const TERMINAL_CONNECTION_ERROR_MESSAGE =
   "[terminal] Connection error. Check frontend server logs for terminal startup details.";
@@ -108,6 +113,15 @@ function appendToRuntimeBuffer(runtime: TerminalRuntime, chunk: string): void {
 
 function emitConnection(runtime: TerminalRuntime, isConnected: boolean): void {
   runtime.isConnected = isConnected;
+  if (isConnected && runtime.connectionErrorTimer) {
+    clearTimeout(runtime.connectionErrorTimer);
+    runtime.connectionErrorTimer = null;
+  }
+
+  if (isConnected) {
+    void flushPendingInput(runtime);
+  }
+
   for (const listener of runtime.connectionListeners) {
     listener(isConnected);
   }
@@ -129,7 +143,88 @@ function emitOutput(runtime: TerminalRuntime, chunk: string): void {
 function closeRuntime(runtime: TerminalRuntime): void {
   runtime.eventSource?.close();
   runtime.eventSource = null;
+  if (runtime.connectionErrorTimer) {
+    clearTimeout(runtime.connectionErrorTimer);
+    runtime.connectionErrorTimer = null;
+  }
   emitConnection(runtime, false);
+}
+
+function scheduleConnectionError(runtime: TerminalRuntime): void {
+  if (runtime.connectionErrorTimer) {
+    return;
+  }
+
+  runtime.connectionErrorTimer = setTimeout(() => {
+    runtime.connectionErrorTimer = null;
+    if (!runtime.isConnected) {
+      emitError(runtime, TERMINAL_CONNECTION_ERROR_MESSAGE);
+    }
+  }, CONNECTION_ERROR_DELAY_MS);
+}
+
+function splitInputIntoChunks(data: string): string[] {
+  if (data.length <= MAX_INPUT_CHUNK_LENGTH) {
+    return [data];
+  }
+
+  const chunks: string[] = [];
+  for (let index = 0; index < data.length; index += MAX_INPUT_CHUNK_LENGTH) {
+    chunks.push(data.slice(index, index + MAX_INPUT_CHUNK_LENGTH));
+  }
+
+  return chunks;
+}
+
+async function flushPendingInput(runtime: TerminalRuntime): Promise<void> {
+  if (
+    !runtime.isConnected ||
+    runtime.isFlushingInput ||
+    runtime.pendingInput.length === 0
+  ) {
+    return;
+  }
+
+  runtime.isFlushingInput = true;
+  try {
+    while (runtime.isConnected && runtime.pendingInput.length > 0) {
+      const nextInput = runtime.pendingInput[0];
+      if (typeof nextInput !== "string" || nextInput.length === 0) {
+        runtime.pendingInput.shift();
+        continue;
+      }
+
+      try {
+        const response = await fetchJson("/api/terminal/input", {
+          sessionId: runtime.sessionId,
+          data: nextInput,
+        });
+
+        if (!response.ok) {
+          break;
+        }
+
+        runtime.pendingInput.shift();
+      } catch {
+        break;
+      }
+    }
+  } finally {
+    runtime.isFlushingInput = false;
+
+    if (runtime.isConnected && runtime.pendingInput.length > 0) {
+      void flushPendingInput(runtime);
+    }
+  }
+}
+
+function queueTerminalInput(runtime: TerminalRuntime, data: string): void {
+  if (data.length === 0) {
+    return;
+  }
+
+  runtime.pendingInput.push(...splitInputIntoChunks(data));
+  void flushPendingInput(runtime);
 }
 
 function openRuntimeStream(runtime: TerminalRuntime, size: TerminalSize): void {
@@ -153,7 +248,7 @@ function openRuntimeStream(runtime: TerminalRuntime, size: TerminalSize): void {
 
   eventSource.onerror = () => {
     emitConnection(runtime, false);
-    emitError(runtime, TERMINAL_CONNECTION_ERROR_MESSAGE);
+    scheduleConnectionError(runtime);
   };
 
   runtime.eventSource = eventSource;
@@ -167,6 +262,9 @@ function createRuntime(
     sessionId,
     refCount: 0,
     eventSource: null,
+    connectionErrorTimer: null,
+    isFlushingInput: false,
+    pendingInput: [],
     outputListeners: new Set<OutputListener>(),
     errorListeners: new Set<ErrorListener>(),
     connectionListeners: new Set<ConnectionListener>(),
@@ -221,10 +319,7 @@ export function acquireTerminalRuntime(
       }).catch(() => undefined);
     },
     sendInput(data) {
-      void fetchJson("/api/terminal/input", {
-        sessionId,
-        data,
-      }).catch(() => undefined);
+      queueTerminalInput(runtime, data);
     },
     subscribeConnection(listener) {
       runtime.connectionListeners.add(listener);
@@ -251,6 +346,7 @@ export function disposeTerminalRuntime(sessionId: string): void {
   runtime.outputListeners.clear();
   runtime.errorListeners.clear();
   runtime.connectionListeners.clear();
+  runtime.pendingInput.length = 0;
   runtime.buffer = "";
   clearStoredBuffer(sessionId);
   runtimesBySessionId.delete(sessionId);
