@@ -40,8 +40,21 @@ const TERMINAL_THEME = {
   yellow: "#fcd34d",
 };
 
+const DEFAULT_TERMINAL_SIZE: TerminalSize = { cols: 120, rows: 30 };
+
 function areSizesEqual(left: TerminalSize, right: TerminalSize): boolean {
   return left.cols === right.cols && left.rows === right.rows;
+}
+
+function getTerminalSize(terminal: Terminal): TerminalSize {
+  if (terminal.cols > 0 && terminal.rows > 0) {
+    return {
+      cols: terminal.cols,
+      rows: terminal.rows,
+    };
+  }
+
+  return DEFAULT_TERMINAL_SIZE;
 }
 
 export function TerminalPane({
@@ -67,11 +80,13 @@ export function TerminalPane({
     const terminal = new Terminal({
       allowTransparency: false,
       convertEol: true,
+      cols: DEFAULT_TERMINAL_SIZE.cols,
       cursorBlink: true,
       fontFamily:
         'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
       fontSize: 14,
       lineHeight: 1.25,
+      rows: DEFAULT_TERMINAL_SIZE.rows,
       scrollback: 5000,
       theme: TERMINAL_THEME,
     });
@@ -82,10 +97,16 @@ export function TerminalPane({
     terminalRef.current = terminal;
     fitAddonRef.current = fitAddon;
 
-    const runtime = acquireTerminalRuntime(sessionId, {
-      cols: terminal.cols,
-      rows: terminal.rows,
-    });
+    try {
+      fitAddon.fit();
+    } catch {
+      // Ignore the first fit while the browser is still measuring layout.
+    }
+
+    const runtime = acquireTerminalRuntime(
+      sessionId,
+      getTerminalSize(terminal),
+    );
 
     const sendResize = (size: TerminalSize): void => {
       if (areSizesEqual(lastKnownSizeRef.current, size)) {
@@ -117,7 +138,14 @@ export function TerminalPane({
       }
     };
 
-    fitAndResize();
+    const scheduleFit = (): void => {
+      window.requestAnimationFrame(() => {
+        fitAndResize();
+        window.setTimeout(fitAndResize, 50);
+      });
+    };
+
+    scheduleFit();
 
     const outputAttachment = runtime.attachOutput((chunk) => {
       terminal.write(chunk);
@@ -145,9 +173,12 @@ export function TerminalPane({
     });
 
     const resizeObserver = new ResizeObserver(() => {
-      fitAndResize();
+      scheduleFit();
     });
     resizeObserver.observe(container);
+    if (container.parentElement) {
+      resizeObserver.observe(container.parentElement);
+    }
 
     const handleWindowResize = (): void => {
       fitAndResize();
@@ -185,6 +216,14 @@ export function TerminalPane({
     try {
       currentFitAddon.fit();
       currentTerminal.focus();
+      window.requestAnimationFrame(() => {
+        try {
+          currentFitAddon.fit();
+          currentTerminal.focus();
+        } catch {
+          // Ignore activation fit errors.
+        }
+      });
     } catch {
       // Ignore activation fit errors.
     }
