@@ -1,0 +1,110 @@
+[
+  {
+    "id": "af6e5950-689e-4293-bfc4-f9895b7ea586",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "1b006fa8-d33e-4fd8-9b5e-11b20eaeaaa7",
+    "sectionKind": "fact",
+    "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\features\\routes\\RouteTable.tsx",
+    "action": "modified",
+    "reason": "Added admin-only owner filtering, persisted selection wiring, and empty-state clearing behavior in the routes table UI.",
+    "notes": "Also now accepts current user identity props from the workspace.",
+    "createdAt": "2026-04-30T06:11:38.278Z",
+    "updatedAt": "2026-04-30T06:11:38.278Z"
+  },
+  {
+    "id": "7fe081bb-bcdc-4ef4-b72e-cbc0dcbda428",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "1b006fa8-d33e-4fd8-9b5e-11b20eaeaaa7",
+    "sectionKind": "fact",
+    "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\features\\routes\\RoutesWorkspace.tsx",
+    "action": "modified",
+    "reason": "Passed current user identity to the route table so filter persistence can be scoped per signed-in user and account labels can be rendered.",
+    "notes": "No backend changes were required.",
+    "createdAt": "2026-04-30T06:11:38.278Z",
+    "updatedAt": "2026-04-30T06:11:38.278Z"
+  },
+  {
+    "id": "96e0e6a1-6b50-4f65-ab73-ce0aa2218362",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "1b006fa8-d33e-4fd8-9b5e-11b20eaeaaa7",
+    "sectionKind": "fact",
+    "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\features\\routes\\routeTablePreferences.ts",
+    "action": "created",
+    "reason": "Centralized localStorage keying and read/write helpers for the persisted account filter preference.",
+    "notes": "Keeps storage access out of the main table component.",
+    "createdAt": "2026-04-30T06:11:38.278Z",
+    "updatedAt": "2026-04-30T06:11:38.278Z"
+  },
+  {
+    "id": "2bbafbc8-61b7-4203-bb6f-42ab5d59ef1c",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "5a54e627-5c31-4883-8748-0490fa35ef01",
+    "sectionKind": "decision",
+    "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\features\\routes\\RouteTable.tsx",
+    "action": "modified",
+    "reason": "Added admin-only owner filtering, persisted selection wiring, and empty-state clearing behavior in the routes table UI.",
+    "notes": "Also now accepts current user identity props from the workspace.",
+    "createdAt": "2026-04-30T06:11:38.306Z",
+    "updatedAt": "2026-04-30T06:11:38.306Z"
+  },
+  {
+    "id": "b5225bbc-9f1a-44bc-984a-8a3567c4c563",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "5a54e627-5c31-4883-8748-0490fa35ef01",
+    "sectionKind": "decision",
+    "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\features\\routes\\RoutesWorkspace.tsx",
+    "action": "modified",
+    "reason": "Passed current user identity to the route table so filter persistence can be scoped per signed-in user and account labels can be rendered.",
+    "notes": "No backend changes were required.",
+    "createdAt": "2026-04-30T06:11:38.306Z",
+    "updatedAt": "2026-04-30T06:11:38.306Z"
+  },
+  {
+    "id": "7b37a518-9239-45ba-9da8-6e689fcbf712",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "5a54e627-5c31-4883-8748-0490fa35ef01",
+    "sectionKind": "decision",
+    "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\features\\routes\\routeTablePreferences.ts",
+    "action": "created",
+    "reason": "Centralized localStorage keying and read/write helpers for the persisted account filter preference.",
+    "notes": "Keeps storage access out of the main table component.",
+    "createdAt": "2026-04-30T06:11:38.306Z",
+    "updatedAt": "2026-04-30T06:11:38.306Z"
+  },
+  {
+    "id": "ef2c6cf1-2512-43b2-b5cd-5e95fe5c6c8b",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "2ed74e93-5e7d-46f9-a2dc-6e1c04f952f6",
+    "sectionKind": "task",
+    "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\features\\routes\\RouteTable.tsx",
+    "action": "modified",
+    "reason": "Added admin-only owner filtering, persisted selection wiring, and empty-state clearing behavior in the routes table UI.",
+    "notes": "Also now accepts current user identity props from the workspace.",
+    "createdAt": "2026-04-30T06:11:38.336Z",
+    "updatedAt": "2026-04-30T06:11:38.336Z"
+  },
+  {
+    "id": "0e1725bd-1662-4897-b95d-a3c8221abbc9",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "2ed74e93-5e7d-46f9-a2dc-6e1c04f952f6",
+    "sectionKind": "task",
+    "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\features\\routes\\RoutesWorkspace.tsx",
+    "action": "modified",
+    "reason": "Passed current user identity to the route table so filter persistence can be scoped per signed-in user and account labels can be rendered.",
+    "notes": "No backend changes were required.",
+    "createdAt": "2026-04-30T06:11:38.336Z",
+    "updatedAt": "2026-04-30T06:11:38.336Z"
+  },
+  {
+    "id": "6d523f93-409c-456b-9f6e-268555ea9b21",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "2ed74e93-5e7d-46f9-a2dc-6e1c04f952f6",
+    "sectionKind": "task",
+    "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\features\\routes\\routeTablePreferences.ts",
+    "action": "created",
+    "reason": "Centralized localStorage keying and read/write helpers for the persisted account filter preference.",
+    "notes": "Keeps storage access out of the main table component.",
+    "createdAt": "2026-04-30T06:11:38.336Z",
+    "updatedAt": "2026-04-30T06:11:38.336Z"
+  }
+]

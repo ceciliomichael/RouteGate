@@ -220,6 +220,8 @@ export function RoutesWorkspace({ auth, showOwner }: RoutesWorkspaceProps) {
             onAdd={() => setEditingRoute("new")}
             isTogglingId={isTogglingId}
             showOwner={showOwner}
+            currentUserId={auth.user?.id ?? null}
+            currentUserName={auth.user?.name ?? auth.user?.username ?? null}
             onRefresh={() => void fetchRoutes(true)}
             isRefreshing={isRefreshing}
           />

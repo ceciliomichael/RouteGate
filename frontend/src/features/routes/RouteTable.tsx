@@ -1,11 +1,17 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   CustomDropdown,
   type DropdownOption,
 } from "../../components/CustomDropdown";
 import { SegmentedField } from "../../components/SegmentedField";
+import {
+  getRouteOwnerFilterStorageKey,
+  ROUTE_OWNER_FILTER_ALL,
+  readPersistedRouteOwnerFilter,
+  writePersistedRouteOwnerFilter,
+} from "./routeTablePreferences";
 import type { Route } from "./types";
 
 interface RouteTableProps {
@@ -18,6 +24,8 @@ interface RouteTableProps {
   isTogglingId: string | null;
   isRefreshing: boolean;
   showOwner?: boolean;
+  currentUserId?: string | null;
+  currentUserName?: string | null;
 }
 
 type FilterState = "all" | "enabled" | "disabled";
@@ -71,10 +79,104 @@ export function RouteTable({
   isTogglingId,
   isRefreshing,
   showOwner = false,
+  currentUserId = null,
+  currentUserName = null,
 }: RouteTableProps) {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<FilterState>("all");
   const [sort, setSort] = useState<SortKey>("updatedAt");
+  const [ownerFilter, setOwnerFilter] = useState(ROUTE_OWNER_FILTER_ALL);
+
+  const ownerFilterStorageKey = currentUserId
+    ? getRouteOwnerFilterStorageKey(currentUserId)
+    : null;
+
+  const ownerOptions = useMemo<DropdownOption<string>[]>(() => {
+    if (!showOwner) {
+      return [];
+    }
+
+    const uniqueOwners = new Map<string, string>();
+    for (const route of routes) {
+      uniqueOwners.set(route.ownerId, route.ownerName);
+    }
+
+    const myAccountLabel =
+      currentUserName?.trim() ||
+      routes
+        .find((route) => route.ownerId === currentUserId)
+        ?.ownerName?.trim() ||
+      "My account";
+
+    const otherAccounts = [...uniqueOwners.entries()]
+      .filter(([ownerId]) => ownerId !== currentUserId)
+      .map(([ownerId, ownerName]) => ({
+        value: ownerId,
+        label: ownerName,
+        description: "Account owner",
+      }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+
+    return [
+      {
+        value: ROUTE_OWNER_FILTER_ALL,
+        label: "All accounts",
+        description: "Show routes from every account",
+      },
+      ...(currentUserId
+        ? [
+            {
+              value: currentUserId,
+              label: myAccountLabel,
+              description: "Your routes",
+            },
+          ]
+        : []),
+      ...otherAccounts,
+    ];
+  }, [currentUserId, currentUserName, routes, showOwner]);
+
+  const normalizedOwnerFilter = useMemo(() => {
+    if (ownerFilter === ROUTE_OWNER_FILTER_ALL) {
+      return ROUTE_OWNER_FILTER_ALL;
+    }
+
+    return ownerOptions.some((option) => option.value === ownerFilter)
+      ? ownerFilter
+      : ROUTE_OWNER_FILTER_ALL;
+  }, [ownerFilter, ownerOptions]);
+
+  useEffect(() => {
+    if (!ownerFilterStorageKey) {
+      setOwnerFilter(ROUTE_OWNER_FILTER_ALL);
+      return;
+    }
+
+    const persisted = readPersistedRouteOwnerFilter(ownerFilterStorageKey);
+    setOwnerFilter(persisted ?? ROUTE_OWNER_FILTER_ALL);
+  }, [ownerFilterStorageKey]);
+
+  useEffect(() => {
+    if (!ownerFilterStorageKey) {
+      return;
+    }
+
+    writePersistedRouteOwnerFilter(
+      ownerFilterStorageKey,
+      normalizedOwnerFilter,
+    );
+  }, [normalizedOwnerFilter, ownerFilterStorageKey]);
+
+  useEffect(() => {
+    if (
+      ownerFilter === ROUTE_OWNER_FILTER_ALL ||
+      ownerOptions.some((option) => option.value === ownerFilter)
+    ) {
+      return;
+    }
+
+    setOwnerFilter(ROUTE_OWNER_FILTER_ALL);
+  }, [ownerFilter, ownerOptions]);
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase();
@@ -82,6 +184,12 @@ export function RouteTable({
       .filter((r) => {
         if (filter === "enabled" && !r.enabled) return false;
         if (filter === "disabled" && r.enabled) return false;
+        if (
+          normalizedOwnerFilter !== ROUTE_OWNER_FILTER_ALL &&
+          r.ownerId !== normalizedOwnerFilter
+        ) {
+          return false;
+        }
         if (!q) return true;
         return (
           r.subdomain.toLowerCase().includes(q) ||
@@ -96,7 +204,7 @@ export function RouteTable({
           new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
         );
       });
-  }, [routes, search, filter, sort]);
+  }, [normalizedOwnerFilter, routes, search, filter, sort]);
 
   const toolbar = (
     <div
@@ -160,6 +268,18 @@ export function RouteTable({
           }
         }}
       />
+
+      {showOwner ? (
+        <CustomDropdown
+          ariaLabel="Account filter"
+          value={normalizedOwnerFilter}
+          options={ownerOptions}
+          onChange={(value) => {
+            setOwnerFilter(value);
+          }}
+          minMenuWidth="14rem"
+        />
+      ) : null}
 
       <CustomDropdown
         ariaLabel="Sort routes"
@@ -254,11 +374,16 @@ export function RouteTable({
       {filtered.length === 0 ? (
         <EmptyState
           hasRoutes={routes.length > 0}
-          hasSearch={!!search}
+          hasFilters={
+            search.trim().length > 0 ||
+            filter !== "all" ||
+            normalizedOwnerFilter !== ROUTE_OWNER_FILTER_ALL
+          }
           onAdd={onAdd}
           onClear={() => {
             setSearch("");
             setFilter("all");
+            setOwnerFilter(ROUTE_OWNER_FILTER_ALL);
           }}
         />
       ) : (
@@ -736,12 +861,17 @@ function RouteRow({
 
 interface EmptyStateProps {
   hasRoutes: boolean;
-  hasSearch: boolean;
+  hasFilters: boolean;
   onAdd: () => void;
   onClear: () => void;
 }
 
-function EmptyState({ hasRoutes, hasSearch, onAdd, onClear }: EmptyStateProps) {
+function EmptyState({
+  hasRoutes,
+  hasFilters,
+  onAdd,
+  onClear,
+}: EmptyStateProps) {
   return (
     <div
       style={{
@@ -791,7 +921,7 @@ function EmptyState({ hasRoutes, hasSearch, onAdd, onClear }: EmptyStateProps) {
             marginBottom: "0.25rem",
           }}
         >
-          {hasSearch || hasRoutes ? "No matching routes" : "No routes yet"}
+          {hasFilters || hasRoutes ? "No matching routes" : "No routes yet"}
         </div>
         <div
           style={{
@@ -800,12 +930,12 @@ function EmptyState({ hasRoutes, hasSearch, onAdd, onClear }: EmptyStateProps) {
             maxWidth: "280px",
           }}
         >
-          {hasSearch || hasRoutes
+          {hasFilters || hasRoutes
             ? "Try adjusting your search or filter."
             : "Create your first subdomain proxy route to get started."}
         </div>
       </div>
-      {hasSearch ? (
+      {hasFilters ? (
         <button
           type="button"
           className="btn btn-secondary btn-sm"
