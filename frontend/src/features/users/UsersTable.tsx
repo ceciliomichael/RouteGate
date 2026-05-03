@@ -46,6 +46,26 @@ function formatRelative(iso: string): string {
   }
 }
 
+function formatLastLogin(iso: string): string {
+  if (!iso.trim()) {
+    return "Never logged in";
+  }
+
+  try {
+    const value = new Date(iso);
+    if (Number.isNaN(value.getTime())) {
+      return "Never logged in";
+    }
+
+    return new Intl.DateTimeFormat(undefined, {
+      dateStyle: "medium",
+      timeStyle: "short",
+    }).format(value);
+  } catch {
+    return "Never logged in";
+  }
+}
+
 export function UsersTable({
   users,
   totalCount,
@@ -263,13 +283,14 @@ export function UsersTable({
             </div>
 
             <div className="users-table-desktop">
-              <table className="data-table" style={{ minWidth: "720px" }}>
+              <table className="data-table" style={{ minWidth: "860px" }}>
                 <thead>
                   <tr>
                     <th>Name</th>
                     <th>Username</th>
                     <th>Role</th>
                     <th>Created</th>
+                    <th>Last login</th>
                     <th>Updated</th>
                     <th style={{ textAlign: "right" }}>Actions</th>
                   </tr>
@@ -387,6 +408,29 @@ function UserCard({
         }}
       >
         {user.username}
+      </div>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "auto 1fr",
+          gap: "0.4rem 0.75rem",
+          alignItems: "center",
+          marginBottom: "0.75rem",
+          fontSize: "0.75rem",
+        }}
+      >
+        <span style={{ color: "var(--color-ink-muted)" }}>Last login</span>
+        <span
+          style={{
+            color: "var(--color-ink-secondary)",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {formatLastLogin(user.lastLoginAt)}
+        </span>
       </div>
 
       <div
@@ -528,6 +572,9 @@ function UserRow({
         {new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }).format(
           new Date(user.createdAt),
         )}
+      </td>
+      <td style={{ whiteSpace: "nowrap", color: "var(--color-ink-muted)" }}>
+        {formatLastLogin(user.lastLoginAt)}
       </td>
       <td style={{ whiteSpace: "nowrap", color: "var(--color-ink-muted)" }}>
         {formatRelative(user.updatedAt)}

@@ -41,6 +41,7 @@ type User struct {
 	IsBootstrap bool   `json:"isBootstrap"`
 	CreatedAt   string `json:"createdAt"`
 	UpdatedAt   string `json:"updatedAt"`
+	LastLoginAt string `json:"lastLoginAt"`
 }
 
 func (u User) IsAdmin() bool {
@@ -74,6 +75,7 @@ type userRecord struct {
 	IsBootstrap        bool               `bson:"isBootstrap,omitempty"`
 	CreatedAt          time.Time          `bson:"createdAt"`
 	UpdatedAt          time.Time          `bson:"updatedAt"`
+	LastLoginAt        time.Time          `bson:"lastLoginAt,omitempty"`
 }
 
 type sessionRecord struct {
@@ -278,6 +280,28 @@ func (s *Store) CreateSession(ctx context.Context, userID string, ttl time.Durat
 	}
 
 	return token, expiresAt, nil
+}
+
+func (s *Store) TouchLastLogin(ctx context.Context, userID string, when time.Time) error {
+	parsedUserID, err := primitive.ObjectIDFromHex(strings.TrimSpace(userID))
+	if err != nil {
+		return fmt.Errorf("invalid user id: %w", err)
+	}
+
+	_, err = s.users.UpdateOne(
+		ctx,
+		bson.M{"_id": parsedUserID},
+		bson.M{
+			"$set": bson.M{
+				"lastLoginAt": when.UTC(),
+			},
+		},
+	)
+	if err != nil {
+		return fmt.Errorf("update last login: %w", err)
+	}
+
+	return nil
 }
 
 func (s *Store) DeleteSession(ctx context.Context, token string) error {
@@ -760,7 +784,16 @@ func (u userRecord) toPublic() User {
 		IsBootstrap: u.IsBootstrap,
 		CreatedAt:   u.CreatedAt.UTC().Format(time.RFC3339Nano),
 		UpdatedAt:   u.UpdatedAt.UTC().Format(time.RFC3339Nano),
+		LastLoginAt: formatOptionalTime(u.LastLoginAt),
 	}
+}
+
+func formatOptionalTime(value time.Time) string {
+	if value.IsZero() {
+		return ""
+	}
+
+	return value.UTC().Format(time.RFC3339Nano)
 }
 
 func normalizeUsername(value string) string {

@@ -83,6 +83,11 @@ func (h *Handler) handleLogin(writer http.ResponseWriter, request *http.Request)
 		h.writeError(writer, http.StatusInternalServerError, "failed to start session")
 		return
 	}
+	lastLoginAt := time.Now().UTC()
+	if err := h.identity.TouchLastLogin(ctx, user.ID, lastLoginAt); err != nil {
+		h.logger.Printf("touch last login failed: %v", err)
+	}
+	user.LastLoginAt = lastLoginAt.Format(time.RFC3339Nano)
 
 	http.SetCookie(writer, h.buildSessionCookie(sessionToken, expiresAt))
 	h.writeJSON(writer, http.StatusOK, map[string]any{"user": user})
@@ -357,6 +362,11 @@ func (h *Handler) handleCurrentUserSettings(
 			h.writeError(writer, http.StatusInternalServerError, "failed to start session")
 			return
 		}
+		lastLoginAt := time.Now().UTC()
+		if err := h.identity.TouchLastLogin(ctx, updated.ID, lastLoginAt); err != nil {
+			h.logger.Printf("touch last login failed after password change: %v", err)
+		}
+		updated.LastLoginAt = lastLoginAt.Format(time.RFC3339Nano)
 
 		http.SetCookie(writer, h.buildSessionCookie(sessionToken, expiresAt))
 		h.writeJSON(writer, http.StatusOK, map[string]any{"user": updated})
