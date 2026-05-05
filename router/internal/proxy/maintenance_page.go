@@ -34,6 +34,7 @@ var maintenancePageTemplate = template.Must(template.New("maintenance-page").Par
     html, body {
       margin: 0;
       min-height: 100%;
+      width: 100%;
     }
 
     body {
@@ -47,10 +48,12 @@ var maintenancePageTemplate = template.Must(template.New("maintenance-page").Par
       display: grid;
       place-items: center;
       padding: 16px;
+      overflow-x: hidden;
     }
 
     main {
       width: min(100%, 36rem);
+      max-width: calc(100vw - 32px);
       display: grid;
       justify-items: center;
       gap: 0.8rem;
@@ -76,14 +79,12 @@ var maintenancePageTemplate = template.Must(template.New("maintenance-page").Par
 
     h1 {
       margin: 0;
-      font-size: clamp(2.4rem, 8vw, 4.8rem);
+      max-width: 100%;
+      font-size: clamp(2rem, 10vw, 4.8rem);
       line-height: 0.98;
       letter-spacing: -0.06em;
       text-wrap: balance;
-    }
-
-    .nowrap {
-      white-space: nowrap;
+      overflow-wrap: break-word;
     }
 
     .host {
@@ -113,7 +114,7 @@ var maintenancePageTemplate = template.Must(template.New("maintenance-page").Par
   <main>
     <section class="shell" aria-labelledby="maintenance-title">
       <p class="eyebrow">RouteGate</p>
-      <h1 id="maintenance-title">This destination is <span class="nowrap">temporarily unavailable.</span></h1>
+      <h1 id="maintenance-title">This destination is temporarily unavailable.</h1>
       <p>
         We could not connect to the destination for <strong class="host">{{.RequestedHost}}</strong>.
       </p>
