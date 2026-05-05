@@ -332,6 +332,95 @@
       ],
       "createdAt": "2026-05-05T17:34:14.454Z",
       "updatedAt": "2026-05-05T17:34:14.454Z"
+    },
+    {
+      "memoryId": "234961d7-b925-4cfe-b485-5a4042955c6c",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "234961d7-b925-4cfe-b485-5a4042955c6c",
+      "rootMemoryId": "234961d7-b925-4cfe-b485-5a4042955c6c",
+      "parentMemoryIds": [],
+      "relatedMemoryIds": [
+        "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+        "b238b9b9-e139-414f-aa29-66edd17f22f9",
+        "f2685cdb-b84f-4b41-b1b1-d745febb8c0a",
+        "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+        "0db92d97-110d-4f88-8397-62ee1d42e9cc"
+      ],
+      "childMemoryIds": [
+        "436107bb-1a5c-4d34-a0de-401ab8fc8696"
+      ],
+      "sectionKind": "fact",
+      "summary": "Updated the router maintenance page heading so 'temporarily unavailable.' stays on one unbroken line while preserving the viewport-centering fixes and avoiding horizontal overflow by reducing the responsive heading scale.",
+      "affectedFiles": [
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\router\\internal\\proxy\\maintenance_page.go",
+          "action": "modified",
+          "reason": "Adjusted the maintenance page template heading wrapping and responsive font sizing.",
+          "notes": "Restored the nowrap span around 'temporarily unavailable.' and changed the h1 clamp to use 8vw."
+        }
+      ],
+      "createdAt": "2026-05-05T17:41:22.059Z",
+      "updatedAt": "2026-05-05T17:41:22.059Z"
+    },
+    {
+      "memoryId": "436107bb-1a5c-4d34-a0de-401ab8fc8696",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "234961d7-b925-4cfe-b485-5a4042955c6c",
+      "rootMemoryId": "234961d7-b925-4cfe-b485-5a4042955c6c",
+      "parentMemoryIds": [
+        "234961d7-b925-4cfe-b485-5a4042955c6c"
+      ],
+      "relatedMemoryIds": [
+        "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+        "b238b9b9-e139-414f-aa29-66edd17f22f9",
+        "f2685cdb-b84f-4b41-b1b1-d745febb8c0a",
+        "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+        "0db92d97-110d-4f88-8397-62ee1d42e9cc"
+      ],
+      "childMemoryIds": [
+        "37be9179-2417-4131-9045-5def5f537b20"
+      ],
+      "sectionKind": "decision",
+      "summary": "Updated the router maintenance page heading so 'temporarily unavailable.' stays on one unbroken line while preserving the viewport-centering fixes and avoiding horizontal overflow by reducing the responsive heading scale.",
+      "affectedFiles": [
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\router\\internal\\proxy\\maintenance_page.go",
+          "action": "modified",
+          "reason": "Adjusted the maintenance page template heading wrapping and responsive font sizing.",
+          "notes": "Restored the nowrap span around 'temporarily unavailable.' and changed the h1 clamp to use 8vw."
+        }
+      ],
+      "createdAt": "2026-05-05T17:41:22.073Z",
+      "updatedAt": "2026-05-05T17:41:22.073Z"
+    },
+    {
+      "memoryId": "37be9179-2417-4131-9045-5def5f537b20",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "234961d7-b925-4cfe-b485-5a4042955c6c",
+      "rootMemoryId": "234961d7-b925-4cfe-b485-5a4042955c6c",
+      "parentMemoryIds": [
+        "436107bb-1a5c-4d34-a0de-401ab8fc8696"
+      ],
+      "relatedMemoryIds": [
+        "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+        "b238b9b9-e139-414f-aa29-66edd17f22f9",
+        "f2685cdb-b84f-4b41-b1b1-d745febb8c0a",
+        "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+        "0db92d97-110d-4f88-8397-62ee1d42e9cc"
+      ],
+      "childMemoryIds": [],
+      "sectionKind": "task",
+      "summary": "Updated the router maintenance page heading so 'temporarily unavailable.' stays on one unbroken line while preserving the viewport-centering fixes and avoiding horizontal overflow by reducing the responsive heading scale.",
+      "affectedFiles": [
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\router\\internal\\proxy\\maintenance_page.go",
+          "action": "modified",
+          "reason": "Adjusted the maintenance page template heading wrapping and responsive font sizing.",
+          "notes": "Restored the nowrap span around 'temporarily unavailable.' and changed the h1 clamp to use 8vw."
+        }
+      ],
+      "createdAt": "2026-05-05T17:41:22.082Z",
+      "updatedAt": "2026-05-05T17:41:22.082Z"
     }
   ],
   "edges": [
@@ -586,7 +675,140 @@
       "relation": "related",
       "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
       "createdAt": "2026-05-05T17:34:14.454Z"
+    },
+    {
+      "fromMemoryId": "234961d7-b925-4cfe-b485-5a4042955c6c",
+      "toMemoryId": "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:41:22.059Z"
+    },
+    {
+      "fromMemoryId": "234961d7-b925-4cfe-b485-5a4042955c6c",
+      "toMemoryId": "b238b9b9-e139-414f-aa29-66edd17f22f9",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:41:22.059Z"
+    },
+    {
+      "fromMemoryId": "234961d7-b925-4cfe-b485-5a4042955c6c",
+      "toMemoryId": "f2685cdb-b84f-4b41-b1b1-d745febb8c0a",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:41:22.059Z"
+    },
+    {
+      "fromMemoryId": "234961d7-b925-4cfe-b485-5a4042955c6c",
+      "toMemoryId": "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:41:22.059Z"
+    },
+    {
+      "fromMemoryId": "234961d7-b925-4cfe-b485-5a4042955c6c",
+      "toMemoryId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:41:22.059Z"
+    },
+    {
+      "fromMemoryId": "234961d7-b925-4cfe-b485-5a4042955c6c",
+      "toMemoryId": "436107bb-1a5c-4d34-a0de-401ab8fc8696",
+      "relation": "child",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:41:22.059Z"
+    },
+    {
+      "fromMemoryId": "436107bb-1a5c-4d34-a0de-401ab8fc8696",
+      "toMemoryId": "234961d7-b925-4cfe-b485-5a4042955c6c",
+      "relation": "parent",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:41:22.073Z"
+    },
+    {
+      "fromMemoryId": "436107bb-1a5c-4d34-a0de-401ab8fc8696",
+      "toMemoryId": "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:41:22.073Z"
+    },
+    {
+      "fromMemoryId": "436107bb-1a5c-4d34-a0de-401ab8fc8696",
+      "toMemoryId": "b238b9b9-e139-414f-aa29-66edd17f22f9",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:41:22.073Z"
+    },
+    {
+      "fromMemoryId": "436107bb-1a5c-4d34-a0de-401ab8fc8696",
+      "toMemoryId": "f2685cdb-b84f-4b41-b1b1-d745febb8c0a",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:41:22.073Z"
+    },
+    {
+      "fromMemoryId": "436107bb-1a5c-4d34-a0de-401ab8fc8696",
+      "toMemoryId": "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:41:22.073Z"
+    },
+    {
+      "fromMemoryId": "436107bb-1a5c-4d34-a0de-401ab8fc8696",
+      "toMemoryId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:41:22.073Z"
+    },
+    {
+      "fromMemoryId": "436107bb-1a5c-4d34-a0de-401ab8fc8696",
+      "toMemoryId": "37be9179-2417-4131-9045-5def5f537b20",
+      "relation": "child",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:41:22.073Z"
+    },
+    {
+      "fromMemoryId": "37be9179-2417-4131-9045-5def5f537b20",
+      "toMemoryId": "436107bb-1a5c-4d34-a0de-401ab8fc8696",
+      "relation": "parent",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:41:22.082Z"
+    },
+    {
+      "fromMemoryId": "37be9179-2417-4131-9045-5def5f537b20",
+      "toMemoryId": "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:41:22.082Z"
+    },
+    {
+      "fromMemoryId": "37be9179-2417-4131-9045-5def5f537b20",
+      "toMemoryId": "b238b9b9-e139-414f-aa29-66edd17f22f9",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:41:22.082Z"
+    },
+    {
+      "fromMemoryId": "37be9179-2417-4131-9045-5def5f537b20",
+      "toMemoryId": "f2685cdb-b84f-4b41-b1b1-d745febb8c0a",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:41:22.082Z"
+    },
+    {
+      "fromMemoryId": "37be9179-2417-4131-9045-5def5f537b20",
+      "toMemoryId": "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:41:22.082Z"
+    },
+    {
+      "fromMemoryId": "37be9179-2417-4131-9045-5def5f537b20",
+      "toMemoryId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:41:22.082Z"
     }
   ],
-  "updatedAt": "2026-05-05T17:34:14.455Z"
+  "updatedAt": "2026-05-05T17:41:22.084Z"
 }

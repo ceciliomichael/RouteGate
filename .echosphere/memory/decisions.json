@@ -1,5 +1,34 @@
 [
   {
+    "id": "436107bb-1a5c-4d34-a0de-401ab8fc8696",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "kind": "decision",
+    "content": "Summary: Updated the router maintenance page heading so 'temporarily unavailable.' stays on one unbroken line while preserving the viewport-centering fixes and avoiding horizontal overflow by reducing the responsive heading scale.\n\nDecisions:\n1. [finished] Use a scoped .nowrap span only around 'temporarily unavailable.' rather than forcing the full heading onto one line, preserving mobile responsiveness.\n2. [finished] Reduce the heading viewport scale from 10vw to 8vw to lower the risk of horizontal overflow while keeping the phrase on one line.\n\nAffected files:\n1. [modified] C:\\Users\\Administrator\\Desktop\\RouteGate\\router\\internal\\proxy\\maintenance_page.go — Adjusted the maintenance page template heading wrapping and responsive font sizing. | Notes: Restored the nowrap span around 'temporarily unavailable.' and changed the h1 clamp to use 8vw.\n\nMemory links:\nGraph group: 234961d7-b925-4cfe-b485-5a4042955c6c\nRoot memory: 234961d7-b925-4cfe-b485-5a4042955c6c\nParent memories: 234961d7-b925-4cfe-b485-5a4042955c6c\nRelated memories: c4d03ad1-84eb-47cd-9f25-d9e79ea50b70, b238b9b9-e139-414f-aa29-66edd17f22f9, f2685cdb-b84f-4b41-b1b1-d745febb8c0a, e1d15c90-65fd-47dc-bc34-5daa9370af70, 0db92d97-110d-4f88-8397-62ee1d42e9cc",
+    "createdAt": "2026-05-05T17:41:22.062Z",
+    "updatedAt": "2026-05-05T17:41:22.062Z",
+    "metadata": {
+      "summary": "Updated the router maintenance page heading so 'temporarily unavailable.' stays on one unbroken line while preserving the viewport-centering fixes and avoiding horizontal overflow by reducing the responsive heading scale.",
+      "topics": [
+        "summary",
+        "facts",
+        "decisions",
+        "tasks",
+        "modified"
+      ],
+      "tags": [
+        "memory-graph",
+        "C:\\Users\\Administrator\\Desktop\\RouteGate\\router\\internal\\proxy\\maintenance_page.go",
+        "finished",
+        "finished",
+        "finished",
+        "finished",
+        "finished",
+        "finished"
+      ],
+      "status": "finished"
+    }
+  },
+  {
     "id": "b238b9b9-e139-414f-aa29-66edd17f22f9",
     "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
     "kind": "decision",
