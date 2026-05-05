@@ -44,21 +44,21 @@ var maintenancePageTemplate = template.Must(template.New("maintenance-page").Par
         linear-gradient(180deg, var(--surface-muted) 0%, #fbfbfd 58%, #f6f7fa 100%);
       line-height: 1.5;
       min-height: 100dvh;
-      display: grid;
-      place-items: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       padding: 16px;
     }
 
     main {
-      width: 100%;
-      min-height: calc(100dvh - 32px);
+      width: min(100%, 36rem);
       display: grid;
       place-items: center;
       text-align: center;
     }
 
     .shell {
-      width: min(100%, 36rem);
+      width: 100%;
       display: grid;
       justify-items: center;
       gap: 0.8rem;
