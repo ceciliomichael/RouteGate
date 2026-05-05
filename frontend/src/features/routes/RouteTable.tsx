@@ -12,6 +12,7 @@ import {
   readPersistedRouteOwnerFilter,
   writePersistedRouteOwnerFilter,
 } from "./routeTablePreferences";
+import { buildSubdomainHref, getBaseDomainFromHostname } from "./subdomainUrl";
 import type { Route } from "./types";
 
 interface RouteTableProps {
@@ -69,6 +70,26 @@ function shortDest(destination: string): string {
   }
 }
 
+interface SiteLocationState {
+  baseDomain: string;
+  port: string;
+}
+
+function createSubdomainHref(
+  subdomain: string,
+  siteLocation: SiteLocationState | null,
+): string | null {
+  if (!siteLocation) {
+    return null;
+  }
+
+  return buildSubdomainHref(
+    subdomain,
+    siteLocation.baseDomain,
+    siteLocation.port,
+  );
+}
+
 export function RouteTable({
   routes,
   onEdit,
@@ -86,10 +107,20 @@ export function RouteTable({
   const [filter, setFilter] = useState<FilterState>("all");
   const [sort, setSort] = useState<SortKey>("updatedAt");
   const [ownerFilter, setOwnerFilter] = useState(ROUTE_OWNER_FILTER_ALL);
+  const [siteLocation, setSiteLocation] = useState<SiteLocationState | null>(
+    null,
+  );
 
   const ownerFilterStorageKey = currentUserId
     ? getRouteOwnerFilterStorageKey(currentUserId)
     : null;
+
+  useEffect(() => {
+    setSiteLocation({
+      baseDomain: getBaseDomainFromHostname(window.location.hostname),
+      port: window.location.port,
+    });
+  }, []);
 
   const ownerOptions = useMemo<DropdownOption<string>[]>(() => {
     if (!showOwner) {
@@ -399,6 +430,7 @@ export function RouteTable({
                 onToggle={onToggle}
                 onDelete={onDelete}
                 showOwner={showOwner}
+                siteLocation={siteLocation}
               />
             ))}
           </div>
@@ -425,6 +457,7 @@ export function RouteTable({
                     onToggle={onToggle}
                     onDelete={onDelete}
                     showOwner={showOwner}
+                    siteLocation={siteLocation}
                   />
                 ))}
               </tbody>
@@ -457,6 +490,7 @@ interface RouteCardProps {
   onToggle: (r: Route) => void;
   onDelete: (r: Route) => void;
   showOwner: boolean;
+  siteLocation: SiteLocationState | null;
 }
 
 function RouteCard({
@@ -466,7 +500,10 @@ function RouteCard({
   onToggle,
   onDelete,
   showOwner,
+  siteLocation,
 }: RouteCardProps) {
+  const href = createSubdomainHref(route.subdomain, siteLocation);
+
   return (
     <div
       style={{
@@ -485,19 +522,40 @@ function RouteCard({
           marginBottom: "0.375rem",
         }}
       >
-        <span
-          className="mono"
-          style={{
-            fontWeight: "700",
-            fontSize: "0.9375rem",
-            color: "var(--color-ink)",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-          }}
-        >
-          {route.subdomain}
-        </span>
+        {href ? (
+          <a
+            className="mono"
+            href={href}
+            style={{
+              fontWeight: "700",
+              fontSize: "0.9375rem",
+              color: "var(--color-ink)",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              cursor: "pointer",
+              textDecoration: "none",
+            }}
+            title={href}
+            aria-label={`Open ${route.subdomain}`}
+          >
+            {route.subdomain}
+          </a>
+        ) : (
+          <span
+            className="mono"
+            style={{
+              fontWeight: "700",
+              fontSize: "0.9375rem",
+              color: "var(--color-ink)",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {route.subdomain}
+          </span>
+        )}
         <span
           className={
             route.enabled ? "badge badge-enabled" : "badge badge-disabled"
@@ -682,6 +740,7 @@ interface RouteRowProps {
   onToggle: (r: Route) => void;
   onDelete: (r: Route) => void;
   showOwner: boolean;
+  siteLocation: SiteLocationState | null;
 }
 
 function RouteRow({
@@ -691,16 +750,35 @@ function RouteRow({
   onToggle,
   onDelete,
   showOwner,
+  siteLocation,
 }: RouteRowProps) {
+  const href = createSubdomainHref(route.subdomain, siteLocation);
+
   return (
     <tr>
       <td>
-        <span
-          className="mono"
-          style={{ fontWeight: "600", color: "var(--color-ink)" }}
-        >
-          {route.subdomain}
-        </span>
+        {href ? (
+          <a
+            className="mono"
+            href={href}
+            style={{
+              fontWeight: "600",
+              color: "var(--color-ink)",
+              cursor: "pointer",
+            }}
+            title={href}
+            aria-label={`Open ${route.subdomain}`}
+          >
+            {route.subdomain}
+          </a>
+        ) : (
+          <span
+            className="mono"
+            style={{ fontWeight: "600", color: "var(--color-ink)" }}
+          >
+            {route.subdomain}
+          </span>
+        )}
         {showOwner && (
           <div
             style={{
@@ -935,37 +1013,26 @@ function EmptyState({
             : "Create your first subdomain proxy route to get started."}
         </div>
       </div>
-      {hasFilters ? (
-        <button
-          type="button"
-          className="btn btn-secondary btn-sm"
-          onClick={onClear}
-        >
-          Clear filters
-        </button>
-      ) : (
-        <button
-          type="button"
-          className="btn btn-primary btn-sm"
-          onClick={onAdd}
-          id="empty-add-route"
-        >
-          <svg
-            width="13"
-            height="13"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
+      <div style={{ display: "flex", gap: "0.5rem", marginTop: "0.25rem" }}>
+        {hasFilters ? (
+          <button
+            type="button"
+            className="btn btn-secondary btn-sm"
+            onClick={onClear}
           >
-            <title>Add</title>
-            <line x1="12" y1="5" x2="12" y2="19" />
-            <line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
-          Add first route
-        </button>
-      )}
+            Clear filters
+          </button>
+        ) : null}
+        {!hasRoutes ? (
+          <button
+            type="button"
+            className="btn btn-primary btn-sm"
+            onClick={onAdd}
+          >
+            Add route
+          </button>
+        ) : null}
+      </div>
     </div>
   );
 }
