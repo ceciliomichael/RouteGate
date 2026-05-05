@@ -471,6 +471,15 @@ export function RouteTable({
       <style>{`
         .route-cards-mobile { display: flex; flex-direction: column; }
         .route-table-desktop { display: none; }
+        .route-subdomain-link {
+          display: inline-block;
+          transition: color 0.15s ease, text-decoration-color 0.15s ease;
+        }
+        .route-subdomain-link:hover {
+          color: var(--color-ink-secondary);
+          text-decoration: underline;
+          text-underline-offset: 0.15em;
+        }
         @media (min-width: 640px) {
           .route-cards-mobile { display: none; }
           .route-table-desktop { display: block; overflow-x: auto; }
@@ -524,8 +533,10 @@ function RouteCard({
       >
         {href ? (
           <a
-            className="mono"
+            className="mono route-subdomain-link"
             href={href}
+            target="_blank"
+            rel="noreferrer noopener"
             style={{
               fontWeight: "700",
               fontSize: "0.9375rem",
@@ -533,7 +544,6 @@ function RouteCard({
               overflow: "hidden",
               textOverflow: "ellipsis",
               whiteSpace: "nowrap",
-              cursor: "pointer",
               textDecoration: "none",
             }}
             title={href}
@@ -759,12 +769,13 @@ function RouteRow({
       <td>
         {href ? (
           <a
-            className="mono"
+            className="mono route-subdomain-link"
             href={href}
+            target="_blank"
+            rel="noreferrer noopener"
             style={{
               fontWeight: "600",
               color: "var(--color-ink)",
-              cursor: "pointer",
             }}
             title={href}
             aria-label={`Open ${route.subdomain}`}
