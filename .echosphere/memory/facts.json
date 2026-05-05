@@ -1,5 +1,34 @@
 [
   {
+    "id": "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "kind": "fact",
+    "content": "Summary: Adjusted the router maintenance page so the entire 503 screen is centered in the viewport by moving centering behavior to the outer document/body layer and keeping the shell content unchanged. Verified the router package still builds and tests cleanly.\n\nFacts:\n1. [finished] The exact maintenance message 'This destination is temporarily unavailable.' lives in the router maintenance page template.\n2. [finished] The router maintenance page now uses body-level grid centering with viewport-height sizing to keep the full screen centered.\n3. [finished] The router package test suite passed after the layout change.\n\nAffected files:\n1. [modified] C:\\Users\\Administrator\\Desktop\\RouteGate\\router\\internal\\proxy\\maintenance_page.go — Updated the maintenance page template CSS so the full viewport page centers correctly. | Notes: Adjusted html/body sizing and centering, and moved the padding/min-height behavior to the outer layer.\n\nMemory links:\nGraph group: c4d03ad1-84eb-47cd-9f25-d9e79ea50b70\nRoot memory: c4d03ad1-84eb-47cd-9f25-d9e79ea50b70\nParent memories: none\nRelated memories: e1d15c90-65fd-47dc-bc34-5daa9370af70, 0db92d97-110d-4f88-8397-62ee1d42e9cc, d5818918-eb0c-4673-803a-1e6266597243, 5a54e627-5c31-4883-8748-0490fa35ef01, 1b006fa8-d33e-4fd8-9b5e-11b20eaeaaa7",
+    "createdAt": "2026-05-05T17:34:14.444Z",
+    "updatedAt": "2026-05-05T17:34:14.444Z",
+    "metadata": {
+      "summary": "Adjusted the router maintenance page so the entire 503 screen is centered in the viewport by moving centering behavior to the outer document/body layer and keeping the shell content unchanged. Verified the router package still builds and tests cleanly.",
+      "topics": [
+        "summary",
+        "facts",
+        "decisions",
+        "tasks",
+        "modified"
+      ],
+      "tags": [
+        "memory-graph",
+        "C:\\Users\\Administrator\\Desktop\\RouteGate\\router\\internal\\proxy\\maintenance_page.go",
+        "finished",
+        "finished",
+        "finished",
+        "finished",
+        "finished",
+        "finished"
+      ],
+      "status": "finished"
+    }
+  },
+  {
     "id": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
     "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
     "kind": "fact",

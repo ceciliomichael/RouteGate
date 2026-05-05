@@ -243,6 +243,95 @@
       ],
       "createdAt": "2026-05-05T16:55:50.463Z",
       "updatedAt": "2026-05-05T16:55:50.463Z"
+    },
+    {
+      "memoryId": "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+      "rootMemoryId": "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+      "parentMemoryIds": [],
+      "relatedMemoryIds": [
+        "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+        "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+        "d5818918-eb0c-4673-803a-1e6266597243",
+        "5a54e627-5c31-4883-8748-0490fa35ef01",
+        "1b006fa8-d33e-4fd8-9b5e-11b20eaeaaa7"
+      ],
+      "childMemoryIds": [
+        "b238b9b9-e139-414f-aa29-66edd17f22f9"
+      ],
+      "sectionKind": "fact",
+      "summary": "Adjusted the router maintenance page so the entire 503 screen is centered in the viewport by moving centering behavior to the outer document/body layer and keeping the shell content unchanged. Verified the router package still builds and tests cleanly.",
+      "affectedFiles": [
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\router\\internal\\proxy\\maintenance_page.go",
+          "action": "modified",
+          "reason": "Updated the maintenance page template CSS so the full viewport page centers correctly.",
+          "notes": "Adjusted html/body sizing and centering, and moved the padding/min-height behavior to the outer layer."
+        }
+      ],
+      "createdAt": "2026-05-05T17:34:14.446Z",
+      "updatedAt": "2026-05-05T17:34:14.446Z"
+    },
+    {
+      "memoryId": "b238b9b9-e139-414f-aa29-66edd17f22f9",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+      "rootMemoryId": "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+      "parentMemoryIds": [
+        "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70"
+      ],
+      "relatedMemoryIds": [
+        "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+        "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+        "d5818918-eb0c-4673-803a-1e6266597243",
+        "5a54e627-5c31-4883-8748-0490fa35ef01",
+        "1b006fa8-d33e-4fd8-9b5e-11b20eaeaaa7"
+      ],
+      "childMemoryIds": [
+        "f2685cdb-b84f-4b41-b1b1-d745febb8c0a"
+      ],
+      "sectionKind": "decision",
+      "summary": "Adjusted the router maintenance page so the entire 503 screen is centered in the viewport by moving centering behavior to the outer document/body layer and keeping the shell content unchanged. Verified the router package still builds and tests cleanly.",
+      "affectedFiles": [
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\router\\internal\\proxy\\maintenance_page.go",
+          "action": "modified",
+          "reason": "Updated the maintenance page template CSS so the full viewport page centers correctly.",
+          "notes": "Adjusted html/body sizing and centering, and moved the padding/min-height behavior to the outer layer."
+        }
+      ],
+      "createdAt": "2026-05-05T17:34:14.450Z",
+      "updatedAt": "2026-05-05T17:34:14.450Z"
+    },
+    {
+      "memoryId": "f2685cdb-b84f-4b41-b1b1-d745febb8c0a",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+      "rootMemoryId": "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+      "parentMemoryIds": [
+        "b238b9b9-e139-414f-aa29-66edd17f22f9"
+      ],
+      "relatedMemoryIds": [
+        "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+        "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+        "d5818918-eb0c-4673-803a-1e6266597243",
+        "5a54e627-5c31-4883-8748-0490fa35ef01",
+        "1b006fa8-d33e-4fd8-9b5e-11b20eaeaaa7"
+      ],
+      "childMemoryIds": [],
+      "sectionKind": "task",
+      "summary": "Adjusted the router maintenance page so the entire 503 screen is centered in the viewport by moving centering behavior to the outer document/body layer and keeping the shell content unchanged. Verified the router package still builds and tests cleanly.",
+      "affectedFiles": [
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\router\\internal\\proxy\\maintenance_page.go",
+          "action": "modified",
+          "reason": "Updated the maintenance page template CSS so the full viewport page centers correctly.",
+          "notes": "Adjusted html/body sizing and centering, and moved the padding/min-height behavior to the outer layer."
+        }
+      ],
+      "createdAt": "2026-05-05T17:34:14.454Z",
+      "updatedAt": "2026-05-05T17:34:14.454Z"
     }
   ],
   "edges": [
@@ -364,7 +453,140 @@
       "relation": "related",
       "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
       "createdAt": "2026-05-05T16:55:50.463Z"
+    },
+    {
+      "fromMemoryId": "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+      "toMemoryId": "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:34:14.446Z"
+    },
+    {
+      "fromMemoryId": "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+      "toMemoryId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:34:14.446Z"
+    },
+    {
+      "fromMemoryId": "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+      "toMemoryId": "d5818918-eb0c-4673-803a-1e6266597243",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:34:14.446Z"
+    },
+    {
+      "fromMemoryId": "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+      "toMemoryId": "5a54e627-5c31-4883-8748-0490fa35ef01",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:34:14.446Z"
+    },
+    {
+      "fromMemoryId": "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+      "toMemoryId": "1b006fa8-d33e-4fd8-9b5e-11b20eaeaaa7",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:34:14.446Z"
+    },
+    {
+      "fromMemoryId": "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+      "toMemoryId": "b238b9b9-e139-414f-aa29-66edd17f22f9",
+      "relation": "child",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:34:14.446Z"
+    },
+    {
+      "fromMemoryId": "b238b9b9-e139-414f-aa29-66edd17f22f9",
+      "toMemoryId": "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+      "relation": "parent",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:34:14.450Z"
+    },
+    {
+      "fromMemoryId": "b238b9b9-e139-414f-aa29-66edd17f22f9",
+      "toMemoryId": "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:34:14.450Z"
+    },
+    {
+      "fromMemoryId": "b238b9b9-e139-414f-aa29-66edd17f22f9",
+      "toMemoryId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:34:14.450Z"
+    },
+    {
+      "fromMemoryId": "b238b9b9-e139-414f-aa29-66edd17f22f9",
+      "toMemoryId": "d5818918-eb0c-4673-803a-1e6266597243",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:34:14.450Z"
+    },
+    {
+      "fromMemoryId": "b238b9b9-e139-414f-aa29-66edd17f22f9",
+      "toMemoryId": "5a54e627-5c31-4883-8748-0490fa35ef01",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:34:14.450Z"
+    },
+    {
+      "fromMemoryId": "b238b9b9-e139-414f-aa29-66edd17f22f9",
+      "toMemoryId": "1b006fa8-d33e-4fd8-9b5e-11b20eaeaaa7",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:34:14.450Z"
+    },
+    {
+      "fromMemoryId": "b238b9b9-e139-414f-aa29-66edd17f22f9",
+      "toMemoryId": "f2685cdb-b84f-4b41-b1b1-d745febb8c0a",
+      "relation": "child",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:34:14.450Z"
+    },
+    {
+      "fromMemoryId": "f2685cdb-b84f-4b41-b1b1-d745febb8c0a",
+      "toMemoryId": "b238b9b9-e139-414f-aa29-66edd17f22f9",
+      "relation": "parent",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:34:14.454Z"
+    },
+    {
+      "fromMemoryId": "f2685cdb-b84f-4b41-b1b1-d745febb8c0a",
+      "toMemoryId": "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:34:14.454Z"
+    },
+    {
+      "fromMemoryId": "f2685cdb-b84f-4b41-b1b1-d745febb8c0a",
+      "toMemoryId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:34:14.454Z"
+    },
+    {
+      "fromMemoryId": "f2685cdb-b84f-4b41-b1b1-d745febb8c0a",
+      "toMemoryId": "d5818918-eb0c-4673-803a-1e6266597243",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:34:14.454Z"
+    },
+    {
+      "fromMemoryId": "f2685cdb-b84f-4b41-b1b1-d745febb8c0a",
+      "toMemoryId": "5a54e627-5c31-4883-8748-0490fa35ef01",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:34:14.454Z"
+    },
+    {
+      "fromMemoryId": "f2685cdb-b84f-4b41-b1b1-d745febb8c0a",
+      "toMemoryId": "1b006fa8-d33e-4fd8-9b5e-11b20eaeaaa7",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:34:14.454Z"
     }
   ],
-  "updatedAt": "2026-05-05T16:55:50.465Z"
+  "updatedAt": "2026-05-05T17:34:14.455Z"
 }

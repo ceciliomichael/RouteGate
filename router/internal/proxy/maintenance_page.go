@@ -27,6 +27,10 @@ var maintenancePageTemplate = template.Must(template.New("maintenance-page").Par
 
     * { box-sizing: border-box; }
 
+    html {
+      height: 100%;
+    }
+
     html, body {
       margin: 0;
       min-height: 100%;
@@ -39,14 +43,17 @@ var maintenancePageTemplate = template.Must(template.New("maintenance-page").Par
         radial-gradient(circle at top, rgba(16, 16, 17, 0.08), transparent 32%),
         linear-gradient(180deg, var(--surface-muted) 0%, #fbfbfd 58%, #f6f7fa 100%);
       line-height: 1.5;
-    }
-
-    main {
-      min-height: 100svh;
       min-height: 100dvh;
       display: grid;
       place-items: center;
       padding: 16px;
+    }
+
+    main {
+      width: 100%;
+      min-height: calc(100dvh - 32px);
+      display: grid;
+      place-items: center;
       text-align: center;
     }
 
