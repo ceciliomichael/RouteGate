@@ -1,5 +1,35 @@
 [
   {
+    "id": "65ae1e60-454b-4db7-9573-61f1183b26a0",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "kind": "decision",
+    "content": "Summary: Restructured the router maintenance page centering after repeated right-alignment complaints. The template now uses a dedicated fixed .viewport wrapper with inset 0 and grid place-items center, while main is a bounded centered column and heading lines center independently. This keeps 'is temporarily unavailable.' on one line without letting it shift the whole screen right.\n\nDecisions:\n1. [finished] Use a dedicated fixed viewport wrapper instead of body-level centering to avoid layout drift from body sizing, padding, or nested centering conflicts.\n2. [finished] Keep 'is temporarily unavailable.' as a nowrap line but isolate it as its own centered heading line to prevent it from combining with preceding words and shifting right.\n\nAffected files:\n1. [modified] C:\\Users\\Administrator\\Desktop\\RouteGate\\router\\internal\\proxy\\maintenance_page.go — Restructured maintenance page HTML and CSS to fix persistent right-alignment/centering issues. | Notes: Added .viewport wrapper, changed body overflow/min-height behavior, bounded main, and centered heading lines independently.\n\nMemory links:\nGraph group: cb256391-a909-4ab8-b945-4288569730dd\nRoot memory: cb256391-a909-4ab8-b945-4288569730dd\nParent memories: cb256391-a909-4ab8-b945-4288569730dd\nRelated memories: 234961d7-b925-4cfe-b485-5a4042955c6c, c4d03ad1-84eb-47cd-9f25-d9e79ea50b70, 37be9179-2417-4131-9045-5def5f537b20, 436107bb-1a5c-4d34-a0de-401ab8fc8696, b238b9b9-e139-414f-aa29-66edd17f22f9",
+    "createdAt": "2026-05-05T17:44:52.438Z",
+    "updatedAt": "2026-05-05T17:44:52.438Z",
+    "metadata": {
+      "summary": "Restructured the router maintenance page centering after repeated right-alignment complaints. The template now uses a dedicated fixed .viewport wrapper with inset 0 and grid place-items center, while main is a bounded centered column and heading lines center independently. This keeps 'is temporarily unavailable.' on one line without letting it shift the whole screen right.",
+      "topics": [
+        "summary",
+        "facts",
+        "decisions",
+        "tasks",
+        "modified"
+      ],
+      "tags": [
+        "memory-graph",
+        "C:\\Users\\Administrator\\Desktop\\RouteGate\\router\\internal\\proxy\\maintenance_page.go",
+        "finished",
+        "finished",
+        "finished",
+        "finished",
+        "finished",
+        "finished",
+        "finished"
+      ],
+      "status": "finished"
+    }
+  },
+  {
     "id": "436107bb-1a5c-4d34-a0de-401ab8fc8696",
     "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
     "kind": "decision",

@@ -1,5 +1,35 @@
 [
   {
+    "id": "cb256391-a909-4ab8-b945-4288569730dd",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "kind": "fact",
+    "content": "Summary: Restructured the router maintenance page centering after repeated right-alignment complaints. The template now uses a dedicated fixed .viewport wrapper with inset 0 and grid place-items center, while main is a bounded centered column and heading lines center independently. This keeps 'is temporarily unavailable.' on one line without letting it shift the whole screen right.\n\nFacts:\n1. [finished] The router maintenance page now includes a fixed .viewport wrapper around main to own full-screen centering independently of body layout quirks.\n2. [finished] The maintenance heading is split into two explicit lines: 'This destination' and 'is temporarily unavailable.'.\n3. [finished] Each heading line uses width:max-content, max-width:100%, margin-inline:auto, and text-align:center so a nowrap line centers independently.\n4. [finished] The router test suite passed after the maintenance page viewport restructure.\n\nAffected files:\n1. [modified] C:\\Users\\Administrator\\Desktop\\RouteGate\\router\\internal\\proxy\\maintenance_page.go — Restructured maintenance page HTML and CSS to fix persistent right-alignment/centering issues. | Notes: Added .viewport wrapper, changed body overflow/min-height behavior, bounded main, and centered heading lines independently.\n\nMemory links:\nGraph group: cb256391-a909-4ab8-b945-4288569730dd\nRoot memory: cb256391-a909-4ab8-b945-4288569730dd\nParent memories: none\nRelated memories: 234961d7-b925-4cfe-b485-5a4042955c6c, c4d03ad1-84eb-47cd-9f25-d9e79ea50b70, 37be9179-2417-4131-9045-5def5f537b20, 436107bb-1a5c-4d34-a0de-401ab8fc8696, b238b9b9-e139-414f-aa29-66edd17f22f9",
+    "createdAt": "2026-05-05T17:44:52.427Z",
+    "updatedAt": "2026-05-05T17:44:52.427Z",
+    "metadata": {
+      "summary": "Restructured the router maintenance page centering after repeated right-alignment complaints. The template now uses a dedicated fixed .viewport wrapper with inset 0 and grid place-items center, while main is a bounded centered column and heading lines center independently. This keeps 'is temporarily unavailable.' on one line without letting it shift the whole screen right.",
+      "topics": [
+        "summary",
+        "facts",
+        "decisions",
+        "tasks",
+        "modified"
+      ],
+      "tags": [
+        "memory-graph",
+        "C:\\Users\\Administrator\\Desktop\\RouteGate\\router\\internal\\proxy\\maintenance_page.go",
+        "finished",
+        "finished",
+        "finished",
+        "finished",
+        "finished",
+        "finished",
+        "finished"
+      ],
+      "status": "finished"
+    }
+  },
+  {
     "id": "234961d7-b925-4cfe-b485-5a4042955c6c",
     "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
     "kind": "fact",

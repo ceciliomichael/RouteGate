@@ -421,6 +421,95 @@
       ],
       "createdAt": "2026-05-05T17:41:22.082Z",
       "updatedAt": "2026-05-05T17:41:22.082Z"
+    },
+    {
+      "memoryId": "cb256391-a909-4ab8-b945-4288569730dd",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "cb256391-a909-4ab8-b945-4288569730dd",
+      "rootMemoryId": "cb256391-a909-4ab8-b945-4288569730dd",
+      "parentMemoryIds": [],
+      "relatedMemoryIds": [
+        "234961d7-b925-4cfe-b485-5a4042955c6c",
+        "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+        "37be9179-2417-4131-9045-5def5f537b20",
+        "436107bb-1a5c-4d34-a0de-401ab8fc8696",
+        "b238b9b9-e139-414f-aa29-66edd17f22f9"
+      ],
+      "childMemoryIds": [
+        "65ae1e60-454b-4db7-9573-61f1183b26a0"
+      ],
+      "sectionKind": "fact",
+      "summary": "Restructured the router maintenance page centering after repeated right-alignment complaints. The template now uses a dedicated fixed .viewport wrapper with inset 0 and grid place-items center, while main is a bounded centered column and heading lines center independently. This keeps 'is temporarily unavailable.' on one line without letting it shift the whole screen right.",
+      "affectedFiles": [
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\router\\internal\\proxy\\maintenance_page.go",
+          "action": "modified",
+          "reason": "Restructured maintenance page HTML and CSS to fix persistent right-alignment/centering issues.",
+          "notes": "Added .viewport wrapper, changed body overflow/min-height behavior, bounded main, and centered heading lines independently."
+        }
+      ],
+      "createdAt": "2026-05-05T17:44:52.432Z",
+      "updatedAt": "2026-05-05T17:44:52.432Z"
+    },
+    {
+      "memoryId": "65ae1e60-454b-4db7-9573-61f1183b26a0",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "cb256391-a909-4ab8-b945-4288569730dd",
+      "rootMemoryId": "cb256391-a909-4ab8-b945-4288569730dd",
+      "parentMemoryIds": [
+        "cb256391-a909-4ab8-b945-4288569730dd"
+      ],
+      "relatedMemoryIds": [
+        "234961d7-b925-4cfe-b485-5a4042955c6c",
+        "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+        "37be9179-2417-4131-9045-5def5f537b20",
+        "436107bb-1a5c-4d34-a0de-401ab8fc8696",
+        "b238b9b9-e139-414f-aa29-66edd17f22f9"
+      ],
+      "childMemoryIds": [
+        "37a8f802-e41b-4c61-ab9c-26e559e3e450"
+      ],
+      "sectionKind": "decision",
+      "summary": "Restructured the router maintenance page centering after repeated right-alignment complaints. The template now uses a dedicated fixed .viewport wrapper with inset 0 and grid place-items center, while main is a bounded centered column and heading lines center independently. This keeps 'is temporarily unavailable.' on one line without letting it shift the whole screen right.",
+      "affectedFiles": [
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\router\\internal\\proxy\\maintenance_page.go",
+          "action": "modified",
+          "reason": "Restructured maintenance page HTML and CSS to fix persistent right-alignment/centering issues.",
+          "notes": "Added .viewport wrapper, changed body overflow/min-height behavior, bounded main, and centered heading lines independently."
+        }
+      ],
+      "createdAt": "2026-05-05T17:44:52.443Z",
+      "updatedAt": "2026-05-05T17:44:52.443Z"
+    },
+    {
+      "memoryId": "37a8f802-e41b-4c61-ab9c-26e559e3e450",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "cb256391-a909-4ab8-b945-4288569730dd",
+      "rootMemoryId": "cb256391-a909-4ab8-b945-4288569730dd",
+      "parentMemoryIds": [
+        "65ae1e60-454b-4db7-9573-61f1183b26a0"
+      ],
+      "relatedMemoryIds": [
+        "234961d7-b925-4cfe-b485-5a4042955c6c",
+        "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+        "37be9179-2417-4131-9045-5def5f537b20",
+        "436107bb-1a5c-4d34-a0de-401ab8fc8696",
+        "b238b9b9-e139-414f-aa29-66edd17f22f9"
+      ],
+      "childMemoryIds": [],
+      "sectionKind": "task",
+      "summary": "Restructured the router maintenance page centering after repeated right-alignment complaints. The template now uses a dedicated fixed .viewport wrapper with inset 0 and grid place-items center, while main is a bounded centered column and heading lines center independently. This keeps 'is temporarily unavailable.' on one line without letting it shift the whole screen right.",
+      "affectedFiles": [
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\router\\internal\\proxy\\maintenance_page.go",
+          "action": "modified",
+          "reason": "Restructured maintenance page HTML and CSS to fix persistent right-alignment/centering issues.",
+          "notes": "Added .viewport wrapper, changed body overflow/min-height behavior, bounded main, and centered heading lines independently."
+        }
+      ],
+      "createdAt": "2026-05-05T17:44:52.454Z",
+      "updatedAt": "2026-05-05T17:44:52.454Z"
     }
   ],
   "edges": [
@@ -808,7 +897,140 @@
       "relation": "related",
       "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
       "createdAt": "2026-05-05T17:41:22.082Z"
+    },
+    {
+      "fromMemoryId": "cb256391-a909-4ab8-b945-4288569730dd",
+      "toMemoryId": "234961d7-b925-4cfe-b485-5a4042955c6c",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:44:52.432Z"
+    },
+    {
+      "fromMemoryId": "cb256391-a909-4ab8-b945-4288569730dd",
+      "toMemoryId": "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:44:52.432Z"
+    },
+    {
+      "fromMemoryId": "cb256391-a909-4ab8-b945-4288569730dd",
+      "toMemoryId": "37be9179-2417-4131-9045-5def5f537b20",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:44:52.432Z"
+    },
+    {
+      "fromMemoryId": "cb256391-a909-4ab8-b945-4288569730dd",
+      "toMemoryId": "436107bb-1a5c-4d34-a0de-401ab8fc8696",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:44:52.432Z"
+    },
+    {
+      "fromMemoryId": "cb256391-a909-4ab8-b945-4288569730dd",
+      "toMemoryId": "b238b9b9-e139-414f-aa29-66edd17f22f9",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:44:52.432Z"
+    },
+    {
+      "fromMemoryId": "cb256391-a909-4ab8-b945-4288569730dd",
+      "toMemoryId": "65ae1e60-454b-4db7-9573-61f1183b26a0",
+      "relation": "child",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:44:52.432Z"
+    },
+    {
+      "fromMemoryId": "65ae1e60-454b-4db7-9573-61f1183b26a0",
+      "toMemoryId": "cb256391-a909-4ab8-b945-4288569730dd",
+      "relation": "parent",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:44:52.443Z"
+    },
+    {
+      "fromMemoryId": "65ae1e60-454b-4db7-9573-61f1183b26a0",
+      "toMemoryId": "234961d7-b925-4cfe-b485-5a4042955c6c",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:44:52.443Z"
+    },
+    {
+      "fromMemoryId": "65ae1e60-454b-4db7-9573-61f1183b26a0",
+      "toMemoryId": "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:44:52.443Z"
+    },
+    {
+      "fromMemoryId": "65ae1e60-454b-4db7-9573-61f1183b26a0",
+      "toMemoryId": "37be9179-2417-4131-9045-5def5f537b20",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:44:52.443Z"
+    },
+    {
+      "fromMemoryId": "65ae1e60-454b-4db7-9573-61f1183b26a0",
+      "toMemoryId": "436107bb-1a5c-4d34-a0de-401ab8fc8696",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:44:52.443Z"
+    },
+    {
+      "fromMemoryId": "65ae1e60-454b-4db7-9573-61f1183b26a0",
+      "toMemoryId": "b238b9b9-e139-414f-aa29-66edd17f22f9",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:44:52.443Z"
+    },
+    {
+      "fromMemoryId": "65ae1e60-454b-4db7-9573-61f1183b26a0",
+      "toMemoryId": "37a8f802-e41b-4c61-ab9c-26e559e3e450",
+      "relation": "child",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:44:52.443Z"
+    },
+    {
+      "fromMemoryId": "37a8f802-e41b-4c61-ab9c-26e559e3e450",
+      "toMemoryId": "65ae1e60-454b-4db7-9573-61f1183b26a0",
+      "relation": "parent",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:44:52.454Z"
+    },
+    {
+      "fromMemoryId": "37a8f802-e41b-4c61-ab9c-26e559e3e450",
+      "toMemoryId": "234961d7-b925-4cfe-b485-5a4042955c6c",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:44:52.454Z"
+    },
+    {
+      "fromMemoryId": "37a8f802-e41b-4c61-ab9c-26e559e3e450",
+      "toMemoryId": "c4d03ad1-84eb-47cd-9f25-d9e79ea50b70",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:44:52.454Z"
+    },
+    {
+      "fromMemoryId": "37a8f802-e41b-4c61-ab9c-26e559e3e450",
+      "toMemoryId": "37be9179-2417-4131-9045-5def5f537b20",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:44:52.454Z"
+    },
+    {
+      "fromMemoryId": "37a8f802-e41b-4c61-ab9c-26e559e3e450",
+      "toMemoryId": "436107bb-1a5c-4d34-a0de-401ab8fc8696",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:44:52.454Z"
+    },
+    {
+      "fromMemoryId": "37a8f802-e41b-4c61-ab9c-26e559e3e450",
+      "toMemoryId": "b238b9b9-e139-414f-aa29-66edd17f22f9",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T17:44:52.454Z"
     }
   ],
-  "updatedAt": "2026-05-05T17:41:22.084Z"
+  "updatedAt": "2026-05-05T17:44:52.455Z"
 }

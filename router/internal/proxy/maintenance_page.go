@@ -44,20 +44,29 @@ var maintenancePageTemplate = template.Must(template.New("maintenance-page").Par
         radial-gradient(circle at top, rgba(16, 16, 17, 0.08), transparent 32%),
         linear-gradient(180deg, var(--surface-muted) 0%, #fbfbfd 58%, #f6f7fa 100%);
       line-height: 1.5;
-      min-height: 100dvh;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .viewport {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
       display: grid;
       place-items: center;
       padding: 16px;
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
     main {
-      width: min(100%, 36rem);
+      width: 100%;
       max-width: calc(100vw - 32px);
+      margin-inline: auto;
       display: grid;
       justify-items: center;
       gap: 0.8rem;
-      place-items: center;
       text-align: center;
     }
 
@@ -84,10 +93,15 @@ var maintenancePageTemplate = template.Must(template.New("maintenance-page").Par
       line-height: 0.98;
       letter-spacing: -0.06em;
       text-align: center;
+      justify-self: center;
     }
 
     .heading-line {
       display: block;
+      width: max-content;
+      max-width: 100%;
+      margin-inline: auto;
+      text-align: center;
     }
 
     .nowrap {
@@ -118,21 +132,23 @@ var maintenancePageTemplate = template.Must(template.New("maintenance-page").Par
   </style>
 </head>
 <body>
-  <main>
-    <section class="shell" aria-labelledby="maintenance-title">
-      <p class="eyebrow">RouteGate</p>
-      <h1 id="maintenance-title">
-        <span class="heading-line">This destination</span>
-        <span class="heading-line nowrap">is temporarily unavailable.</span>
-      </h1>
-      <p>
-        We could not connect to the destination for <strong class="host">{{.RequestedHost}}</strong>.
-      </p>
-      <p class="note">
-        RouteGate will serve this subdomain again after the upstream is back online.
-      </p>
-    </section>
-  </main>
+  <div class="viewport">
+    <main>
+      <section class="shell" aria-labelledby="maintenance-title">
+        <p class="eyebrow">RouteGate</p>
+        <h1 id="maintenance-title">
+          <span class="heading-line">This destination</span>
+          <span class="heading-line nowrap">is temporarily unavailable.</span>
+        </h1>
+        <p>
+          We could not connect to the destination for <strong class="host">{{.RequestedHost}}</strong>.
+        </p>
+        <p class="note">
+          RouteGate will serve this subdomain again after the upstream is back online.
+        </p>
+      </section>
+    </main>
+  </div>
 </body>
 </html>`))
 
