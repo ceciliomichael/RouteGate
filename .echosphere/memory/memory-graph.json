@@ -106,6 +106,143 @@
       ],
       "createdAt": "2026-04-30T06:11:38.336Z",
       "updatedAt": "2026-04-30T06:11:38.336Z"
+    },
+    {
+      "memoryId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "rootMemoryId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "parentMemoryIds": [],
+      "relatedMemoryIds": [
+        "2ed74e93-5e7d-46f9-a2dc-6e1c04f952f6",
+        "5a54e627-5c31-4883-8748-0490fa35ef01",
+        "1b006fa8-d33e-4fd8-9b5e-11b20eaeaaa7"
+      ],
+      "childMemoryIds": [
+        "e1d15c90-65fd-47dc-bc34-5daa9370af70"
+      ],
+      "sectionKind": "fact",
+      "summary": "Converted the admin users timestamp from last-login to last-active semantics. The backend now stores and refreshes lastActiveAt whenever an authenticated request resolves a user session, while preserving lastLoginAt as a compatibility fallback for older records. The frontend admin users table and mobile user cards now show Last active instead of Last login.",
+      "affectedFiles": [
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\backend\\internal\\identity\\store.go",
+          "action": "modified",
+          "reason": "Added lastActiveAt persistence, compatibility fallback serialization, and the TouchLastActive storage method used by authenticated access.",
+          "notes": "Also kept lastLoginAt as a deprecated alias in the public JSON contract."
+        },
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\backend\\internal\\api\\handler.go",
+          "action": "modified",
+          "reason": "Refreshed the active timestamp on successful login, password-based session renewal, and every authenticated request that passes requireUser.",
+          "notes": "The handler now writes back the current active time into the in-memory user before returning auth responses."
+        },
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\features\\users\\types.ts",
+          "action": "modified",
+          "reason": "Renamed the managed user timestamp contract to lastActiveAt so the admin UI matches the new backend field.",
+          "notes": "The frontend type no longer depends on lastLoginAt."
+        },
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\features\\users\\UsersTable.tsx",
+          "action": "modified",
+          "reason": "Updated the admin users table and mobile cards to label and render Last active using the new timestamp field.",
+          "notes": "Kept the existing visual layout and added a neutral empty-state message for users with no activity yet."
+        }
+      ],
+      "createdAt": "2026-05-05T16:55:50.396Z",
+      "updatedAt": "2026-05-05T16:55:50.396Z"
+    },
+    {
+      "memoryId": "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "rootMemoryId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "parentMemoryIds": [
+        "0db92d97-110d-4f88-8397-62ee1d42e9cc"
+      ],
+      "relatedMemoryIds": [
+        "2ed74e93-5e7d-46f9-a2dc-6e1c04f952f6",
+        "5a54e627-5c31-4883-8748-0490fa35ef01",
+        "1b006fa8-d33e-4fd8-9b5e-11b20eaeaaa7"
+      ],
+      "childMemoryIds": [
+        "d5818918-eb0c-4673-803a-1e6266597243"
+      ],
+      "sectionKind": "decision",
+      "summary": "Converted the admin users timestamp from last-login to last-active semantics. The backend now stores and refreshes lastActiveAt whenever an authenticated request resolves a user session, while preserving lastLoginAt as a compatibility fallback for older records. The frontend admin users table and mobile user cards now show Last active instead of Last login.",
+      "affectedFiles": [
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\backend\\internal\\identity\\store.go",
+          "action": "modified",
+          "reason": "Added lastActiveAt persistence, compatibility fallback serialization, and the TouchLastActive storage method used by authenticated access.",
+          "notes": "Also kept lastLoginAt as a deprecated alias in the public JSON contract."
+        },
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\backend\\internal\\api\\handler.go",
+          "action": "modified",
+          "reason": "Refreshed the active timestamp on successful login, password-based session renewal, and every authenticated request that passes requireUser.",
+          "notes": "The handler now writes back the current active time into the in-memory user before returning auth responses."
+        },
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\features\\users\\types.ts",
+          "action": "modified",
+          "reason": "Renamed the managed user timestamp contract to lastActiveAt so the admin UI matches the new backend field.",
+          "notes": "The frontend type no longer depends on lastLoginAt."
+        },
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\features\\users\\UsersTable.tsx",
+          "action": "modified",
+          "reason": "Updated the admin users table and mobile cards to label and render Last active using the new timestamp field.",
+          "notes": "Kept the existing visual layout and added a neutral empty-state message for users with no activity yet."
+        }
+      ],
+      "createdAt": "2026-05-05T16:55:50.436Z",
+      "updatedAt": "2026-05-05T16:55:50.436Z"
+    },
+    {
+      "memoryId": "d5818918-eb0c-4673-803a-1e6266597243",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "rootMemoryId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "parentMemoryIds": [
+        "e1d15c90-65fd-47dc-bc34-5daa9370af70"
+      ],
+      "relatedMemoryIds": [
+        "2ed74e93-5e7d-46f9-a2dc-6e1c04f952f6",
+        "5a54e627-5c31-4883-8748-0490fa35ef01",
+        "1b006fa8-d33e-4fd8-9b5e-11b20eaeaaa7"
+      ],
+      "childMemoryIds": [],
+      "sectionKind": "task",
+      "summary": "Converted the admin users timestamp from last-login to last-active semantics. The backend now stores and refreshes lastActiveAt whenever an authenticated request resolves a user session, while preserving lastLoginAt as a compatibility fallback for older records. The frontend admin users table and mobile user cards now show Last active instead of Last login.",
+      "affectedFiles": [
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\backend\\internal\\identity\\store.go",
+          "action": "modified",
+          "reason": "Added lastActiveAt persistence, compatibility fallback serialization, and the TouchLastActive storage method used by authenticated access.",
+          "notes": "Also kept lastLoginAt as a deprecated alias in the public JSON contract."
+        },
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\backend\\internal\\api\\handler.go",
+          "action": "modified",
+          "reason": "Refreshed the active timestamp on successful login, password-based session renewal, and every authenticated request that passes requireUser.",
+          "notes": "The handler now writes back the current active time into the in-memory user before returning auth responses."
+        },
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\features\\users\\types.ts",
+          "action": "modified",
+          "reason": "Renamed the managed user timestamp contract to lastActiveAt so the admin UI matches the new backend field.",
+          "notes": "The frontend type no longer depends on lastLoginAt."
+        },
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\features\\users\\UsersTable.tsx",
+          "action": "modified",
+          "reason": "Updated the admin users table and mobile cards to label and render Last active using the new timestamp field.",
+          "notes": "Kept the existing visual layout and added a neutral empty-state message for users with no activity yet."
+        }
+      ],
+      "createdAt": "2026-05-05T16:55:50.463Z",
+      "updatedAt": "2026-05-05T16:55:50.463Z"
     }
   ],
   "edges": [
@@ -136,7 +273,98 @@
       "relation": "parent",
       "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
       "createdAt": "2026-04-30T06:11:38.336Z"
+    },
+    {
+      "fromMemoryId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "toMemoryId": "2ed74e93-5e7d-46f9-a2dc-6e1c04f952f6",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T16:55:50.396Z"
+    },
+    {
+      "fromMemoryId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "toMemoryId": "5a54e627-5c31-4883-8748-0490fa35ef01",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T16:55:50.396Z"
+    },
+    {
+      "fromMemoryId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "toMemoryId": "1b006fa8-d33e-4fd8-9b5e-11b20eaeaaa7",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T16:55:50.396Z"
+    },
+    {
+      "fromMemoryId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "toMemoryId": "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+      "relation": "child",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T16:55:50.396Z"
+    },
+    {
+      "fromMemoryId": "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+      "toMemoryId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "relation": "parent",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T16:55:50.436Z"
+    },
+    {
+      "fromMemoryId": "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+      "toMemoryId": "2ed74e93-5e7d-46f9-a2dc-6e1c04f952f6",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T16:55:50.436Z"
+    },
+    {
+      "fromMemoryId": "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+      "toMemoryId": "5a54e627-5c31-4883-8748-0490fa35ef01",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T16:55:50.436Z"
+    },
+    {
+      "fromMemoryId": "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+      "toMemoryId": "1b006fa8-d33e-4fd8-9b5e-11b20eaeaaa7",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T16:55:50.436Z"
+    },
+    {
+      "fromMemoryId": "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+      "toMemoryId": "d5818918-eb0c-4673-803a-1e6266597243",
+      "relation": "child",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T16:55:50.436Z"
+    },
+    {
+      "fromMemoryId": "d5818918-eb0c-4673-803a-1e6266597243",
+      "toMemoryId": "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+      "relation": "parent",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T16:55:50.463Z"
+    },
+    {
+      "fromMemoryId": "d5818918-eb0c-4673-803a-1e6266597243",
+      "toMemoryId": "2ed74e93-5e7d-46f9-a2dc-6e1c04f952f6",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T16:55:50.463Z"
+    },
+    {
+      "fromMemoryId": "d5818918-eb0c-4673-803a-1e6266597243",
+      "toMemoryId": "5a54e627-5c31-4883-8748-0490fa35ef01",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T16:55:50.463Z"
+    },
+    {
+      "fromMemoryId": "d5818918-eb0c-4673-803a-1e6266597243",
+      "toMemoryId": "1b006fa8-d33e-4fd8-9b5e-11b20eaeaaa7",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-05T16:55:50.463Z"
     }
   ],
-  "updatedAt": "2026-04-30T06:11:38.337Z"
+  "updatedAt": "2026-05-05T16:55:50.465Z"
 }

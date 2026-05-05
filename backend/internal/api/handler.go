@@ -83,11 +83,12 @@ func (h *Handler) handleLogin(writer http.ResponseWriter, request *http.Request)
 		h.writeError(writer, http.StatusInternalServerError, "failed to start session")
 		return
 	}
-	lastLoginAt := time.Now().UTC()
-	if err := h.identity.TouchLastLogin(ctx, user.ID, lastLoginAt); err != nil {
-		h.logger.Printf("touch last login failed: %v", err)
+	lastActiveAt := time.Now().UTC()
+	if err := h.identity.TouchLastActive(ctx, user.ID, lastActiveAt); err != nil {
+		h.logger.Printf("touch last active failed: %v", err)
 	}
-	user.LastLoginAt = lastLoginAt.Format(time.RFC3339Nano)
+	user.LastActiveAt = lastActiveAt.Format(time.RFC3339Nano)
+	user.LastLoginAt = user.LastActiveAt
 
 	http.SetCookie(writer, h.buildSessionCookie(sessionToken, expiresAt))
 	h.writeJSON(writer, http.StatusOK, map[string]any{"user": user})
@@ -362,11 +363,12 @@ func (h *Handler) handleCurrentUserSettings(
 			h.writeError(writer, http.StatusInternalServerError, "failed to start session")
 			return
 		}
-		lastLoginAt := time.Now().UTC()
-		if err := h.identity.TouchLastLogin(ctx, updated.ID, lastLoginAt); err != nil {
-			h.logger.Printf("touch last login failed after password change: %v", err)
+		lastActiveAt := time.Now().UTC()
+		if err := h.identity.TouchLastActive(ctx, updated.ID, lastActiveAt); err != nil {
+			h.logger.Printf("touch last active failed after password change: %v", err)
 		}
-		updated.LastLoginAt = lastLoginAt.Format(time.RFC3339Nano)
+		updated.LastActiveAt = lastActiveAt.Format(time.RFC3339Nano)
+		updated.LastLoginAt = updated.LastActiveAt
 
 		http.SetCookie(writer, h.buildSessionCookie(sessionToken, expiresAt))
 		h.writeJSON(writer, http.StatusOK, map[string]any{"user": updated})
@@ -559,6 +561,14 @@ func (h *Handler) requireUser(writer http.ResponseWriter, request *http.Request)
 		http.SetCookie(writer, h.buildExpiredSessionCookie())
 		h.writeError(writer, http.StatusUnauthorized, "unauthorized")
 		return identity.User{}, false
+	}
+
+	now := time.Now().UTC()
+	if err := h.identity.TouchLastActive(ctx, user.ID, now); err != nil {
+		h.logger.Printf("touch last active failed: %v", err)
+	} else {
+		user.LastActiveAt = now.Format(time.RFC3339Nano)
+		user.LastLoginAt = user.LastActiveAt
 	}
 
 	return user, true

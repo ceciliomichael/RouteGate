@@ -8,7 +8,7 @@ export interface ManagedUser {
   isBootstrap: boolean;
   createdAt: string;
   updatedAt: string;
-  lastLoginAt: string;
+  lastActiveAt: string;
 }
 
 export interface CreateUserPayload {

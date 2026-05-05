@@ -46,15 +46,15 @@ function formatRelative(iso: string): string {
   }
 }
 
-function formatLastLogin(iso: string): string {
+function formatLastActive(iso: string): string {
   if (!iso.trim()) {
-    return "Never logged in";
+    return "Never active";
   }
 
   try {
     const value = new Date(iso);
     if (Number.isNaN(value.getTime())) {
-      return "Never logged in";
+      return "Never active";
     }
 
     return new Intl.DateTimeFormat(undefined, {
@@ -62,7 +62,7 @@ function formatLastLogin(iso: string): string {
       timeStyle: "short",
     }).format(value);
   } catch {
-    return "Never logged in";
+    return "Never active";
   }
 }
 
@@ -290,7 +290,7 @@ export function UsersTable({
                     <th>Username</th>
                     <th>Role</th>
                     <th>Created</th>
-                    <th>Last login</th>
+                    <th>Last active</th>
                     <th>Updated</th>
                     <th style={{ textAlign: "right" }}>Actions</th>
                   </tr>
@@ -420,7 +420,7 @@ function UserCard({
           fontSize: "0.75rem",
         }}
       >
-        <span style={{ color: "var(--color-ink-muted)" }}>Last login</span>
+        <span style={{ color: "var(--color-ink-muted)" }}>Last active</span>
         <span
           style={{
             color: "var(--color-ink-secondary)",
@@ -429,7 +429,7 @@ function UserCard({
             whiteSpace: "nowrap",
           }}
         >
-          {formatLastLogin(user.lastLoginAt)}
+          {formatLastActive(user.lastActiveAt)}
         </span>
       </div>
 
@@ -574,7 +574,7 @@ function UserRow({
         )}
       </td>
       <td style={{ whiteSpace: "nowrap", color: "var(--color-ink-muted)" }}>
-        {formatLastLogin(user.lastLoginAt)}
+        {formatLastActive(user.lastActiveAt)}
       </td>
       <td style={{ whiteSpace: "nowrap", color: "var(--color-ink-muted)" }}>
         {formatRelative(user.updatedAt)}

@@ -41,7 +41,8 @@ type User struct {
 	IsBootstrap bool   `json:"isBootstrap"`
 	CreatedAt   string `json:"createdAt"`
 	UpdatedAt   string `json:"updatedAt"`
-	LastLoginAt string `json:"lastLoginAt"`
+	LastActiveAt string `json:"lastActiveAt"`
+	LastLoginAt  string `json:"lastLoginAt,omitempty"`
 }
 
 func (u User) IsAdmin() bool {
@@ -75,6 +76,7 @@ type userRecord struct {
 	IsBootstrap        bool               `bson:"isBootstrap,omitempty"`
 	CreatedAt          time.Time          `bson:"createdAt"`
 	UpdatedAt          time.Time          `bson:"updatedAt"`
+	LastActiveAt       time.Time          `bson:"lastActiveAt,omitempty"`
 	LastLoginAt        time.Time          `bson:"lastLoginAt,omitempty"`
 }
 
@@ -282,7 +284,7 @@ func (s *Store) CreateSession(ctx context.Context, userID string, ttl time.Durat
 	return token, expiresAt, nil
 }
 
-func (s *Store) TouchLastLogin(ctx context.Context, userID string, when time.Time) error {
+func (s *Store) TouchLastActive(ctx context.Context, userID string, when time.Time) error {
 	parsedUserID, err := primitive.ObjectIDFromHex(strings.TrimSpace(userID))
 	if err != nil {
 		return fmt.Errorf("invalid user id: %w", err)
@@ -293,12 +295,12 @@ func (s *Store) TouchLastLogin(ctx context.Context, userID string, when time.Tim
 		bson.M{"_id": parsedUserID},
 		bson.M{
 			"$set": bson.M{
-				"lastLoginAt": when.UTC(),
+				"lastActiveAt": when.UTC(),
 			},
 		},
 	)
 	if err != nil {
-		return fmt.Errorf("update last login: %w", err)
+		return fmt.Errorf("update last active: %w", err)
 	}
 
 	return nil
@@ -776,6 +778,11 @@ func (s *Store) deleteSessionsByUserID(ctx context.Context, userID primitive.Obj
 }
 
 func (u userRecord) toPublic() User {
+	lastActiveAt := u.LastActiveAt
+	if lastActiveAt.IsZero() {
+		lastActiveAt = u.LastLoginAt
+	}
+
 	return User{
 		ID:          u.ID.Hex(),
 		Name:        u.Name,
@@ -784,7 +791,8 @@ func (u userRecord) toPublic() User {
 		IsBootstrap: u.IsBootstrap,
 		CreatedAt:   u.CreatedAt.UTC().Format(time.RFC3339Nano),
 		UpdatedAt:   u.UpdatedAt.UTC().Format(time.RFC3339Nano),
-		LastLoginAt: formatOptionalTime(u.LastLoginAt),
+		LastActiveAt: formatOptionalTime(lastActiveAt),
+		LastLoginAt:  formatOptionalTime(lastActiveAt),
 	}
 }
 
