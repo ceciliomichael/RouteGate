@@ -44,15 +44,16 @@ var maintenancePageTemplate = template.Must(template.New("maintenance-page").Par
         linear-gradient(180deg, var(--surface-muted) 0%, #fbfbfd 58%, #f6f7fa 100%);
       line-height: 1.5;
       min-height: 100dvh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: grid;
+      place-items: center;
       padding: 16px;
     }
 
     main {
       width: min(100%, 36rem);
       display: grid;
+      justify-items: center;
+      gap: 0.8rem;
       place-items: center;
       text-align: center;
     }
@@ -102,10 +103,6 @@ var maintenancePageTemplate = template.Must(template.New("maintenance-page").Par
     }
 
     @media (min-width: 640px) {
-      main {
-        padding: 24px;
-      }
-
       .shell {
         gap: 0.9rem;
       }
