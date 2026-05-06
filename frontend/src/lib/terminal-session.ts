@@ -42,6 +42,7 @@ interface TerminalSession {
   listeners: Set<TerminalOutputListener>;
   cleanupTimer: ReturnType<typeof setTimeout> | null;
   lastActivityAt: number;
+  outputBuffer: string;
 }
 
 export interface TerminalSessionCookieOptions {
@@ -57,6 +58,10 @@ export const TERMINAL_SESSION_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 12;
 export const DEFAULT_TERMINAL_COLUMNS = 120;
 export const DEFAULT_TERMINAL_ROWS = 30;
 export const TERMINAL_IDLE_TIMEOUT_MS = 30 * 60 * 1000;
+export const TERMINAL_OUTPUT_REPLAY_BUFFER_MAX_LENGTH = 1_000_000;
+
+const TERMINAL_SSE_FRAME_MAX_LENGTH = 64 * 1024;
+const TERMINAL_SSE_FLUSH_DELAY_MS = 8;
 
 const textEncoder = new TextEncoder();
 const terminalSessions = new Map<string, TerminalSession>();
@@ -226,6 +231,56 @@ function createSseComment(comment: string): Uint8Array {
   return textEncoder.encode(`: ${comment}\n\n`);
 }
 
+function appendTerminalOutputBuffer(
+  session: TerminalSession,
+  chunk: string,
+): void {
+  if (chunk.length === 0) {
+    return;
+  }
+
+  session.outputBuffer += chunk;
+  if (session.outputBuffer.length <= TERMINAL_OUTPUT_REPLAY_BUFFER_MAX_LENGTH) {
+    return;
+  }
+
+  session.outputBuffer = session.outputBuffer.slice(
+    session.outputBuffer.length - TERMINAL_OUTPUT_REPLAY_BUFFER_MAX_LENGTH,
+  );
+}
+
+function enqueueSseFrame(
+  controller: ReadableStreamDefaultController<Uint8Array>,
+  frame: Uint8Array,
+): boolean {
+  try {
+    controller.enqueue(frame);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function enqueueTerminalOutput(
+  controller: ReadableStreamDefaultController<Uint8Array>,
+  chunk: string,
+): boolean {
+  for (
+    let index = 0;
+    index < chunk.length;
+    index += TERMINAL_SSE_FRAME_MAX_LENGTH
+  ) {
+    const frame = createSseFrame(
+      chunk.slice(index, index + TERMINAL_SSE_FRAME_MAX_LENGTH),
+    );
+    if (!enqueueSseFrame(controller, frame)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 function notifyTerminalSessionExit(session: TerminalSession): void {
   for (const listener of session.exitListeners) {
     listener();
@@ -276,11 +331,13 @@ function createTerminalSession(
     listeners: new Set<TerminalOutputListener>(),
     cleanupTimer: null,
     lastActivityAt: Date.now(),
+    outputBuffer: "",
     process,
   };
 
   session.process.onData((chunk) => {
     touchSession(session);
+    appendTerminalOutputBuffer(session, chunk);
     for (const listener of session.listeners) {
       listener(chunk);
     }
@@ -339,26 +396,95 @@ export function createTerminalEventStream(
   session: TerminalSession,
 ): ReadableStream<Uint8Array> {
   let heartbeat: ReturnType<typeof setInterval> | null = null;
+  let pendingOutput = "";
+  let outputFlushTimer: ReturnType<typeof setTimeout> | null = null;
   let streamController: ReadableStreamDefaultController<Uint8Array> | null =
     null;
 
+  const clearHeartbeat = (): void => {
+    if (!heartbeat) {
+      return;
+    }
+
+    clearInterval(heartbeat);
+    heartbeat = null;
+  };
+
+  const clearOutputFlushTimer = (): void => {
+    if (!outputFlushTimer) {
+      return;
+    }
+
+    clearTimeout(outputFlushTimer);
+    outputFlushTimer = null;
+  };
+
+  function detachStream(shouldScheduleCleanup: boolean): void {
+    clearHeartbeat();
+    clearOutputFlushTimer();
+    streamController = null;
+    pendingOutput = "";
+    session.listeners.delete(forwardOutput);
+    session.exitListeners.delete(forwardExit);
+
+    if (shouldScheduleCleanup) {
+      scheduleSessionCleanup(session);
+    }
+  }
+
+  const flushOutput = (): void => {
+    outputFlushTimer = null;
+    if (!streamController || pendingOutput.length === 0) {
+      return;
+    }
+
+    const output = pendingOutput;
+    pendingOutput = "";
+    if (!enqueueTerminalOutput(streamController, output)) {
+      detachStream(true);
+    }
+  };
+
+  const scheduleOutputFlush = (): void => {
+    if (outputFlushTimer || !streamController) {
+      return;
+    }
+
+    outputFlushTimer = setTimeout(flushOutput, TERMINAL_SSE_FLUSH_DELAY_MS);
+  };
+
   const forwardOutput: TerminalOutputListener = (chunk) => {
-    streamController?.enqueue(createSseFrame(chunk));
+    if (!streamController) {
+      return;
+    }
+
+    pendingOutput += chunk;
+    if (pendingOutput.length >= TERMINAL_SSE_FRAME_MAX_LENGTH) {
+      flushOutput();
+      return;
+    }
+
+    scheduleOutputFlush();
   };
   const forwardExit: TerminalExitListener = () => {
     if (!streamController) {
       return;
     }
 
-    streamController.enqueue(createSseEvent("terminal-exit", "exit"));
-
-    if (heartbeat) {
-      clearInterval(heartbeat);
-      heartbeat = null;
+    flushOutput();
+    const controller = streamController;
+    if (!controller) {
+      return;
     }
 
-    streamController.close();
-    streamController = null;
+    enqueueSseFrame(controller, createSseEvent("terminal-exit", "exit"));
+
+    detachStream(false);
+    try {
+      controller.close();
+    } catch {
+      // Ignore close races with an already closed stream.
+    }
   };
 
   return new ReadableStream<Uint8Array>({
@@ -369,21 +495,29 @@ export function createTerminalEventStream(
       touchSession(session);
 
       controller.enqueue(createSseComment("connected"));
+      if (
+        session.outputBuffer.length > 0 &&
+        !enqueueTerminalOutput(controller, session.outputBuffer)
+      ) {
+        detachStream(true);
+        return;
+      }
 
       heartbeat = setInterval(() => {
-        controller.enqueue(createSseComment("keep-alive"));
+        if (!streamController) {
+          clearHeartbeat();
+          return;
+        }
+
+        if (
+          !enqueueSseFrame(streamController, createSseComment("keep-alive"))
+        ) {
+          detachStream(true);
+        }
       }, 15_000);
     },
     cancel() {
-      if (heartbeat) {
-        clearInterval(heartbeat);
-        heartbeat = null;
-      }
-
-      streamController = null;
-      session.listeners.delete(forwardOutput);
-      session.exitListeners.delete(forwardExit);
-      scheduleSessionCleanup(session);
+      detachStream(true);
     },
   });
 }

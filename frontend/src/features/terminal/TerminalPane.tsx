@@ -4,7 +4,9 @@ import { FitAddon } from "@xterm/addon-fit";
 import { Terminal } from "@xterm/xterm";
 import "@xterm/xterm/css/xterm.css";
 import { useEffect, useRef } from "react";
+import { activateTerminalRenderer } from "./terminal-renderer";
 import { acquireTerminalRuntime } from "./terminal-runtime";
+import { createTerminalWriteBuffer } from "./terminal-write-buffer";
 
 interface TerminalSize {
   cols: number;
@@ -79,20 +81,28 @@ export function TerminalPane({
 
     const terminal = new Terminal({
       allowTransparency: false,
-      convertEol: true,
+      convertEol: false,
       cols: DEFAULT_TERMINAL_SIZE.cols,
       cursorBlink: true,
+      drawBoldTextInBrightColors: true,
       fontFamily:
         'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
       fontSize: 14,
+      fontWeight: 400,
+      fontWeightBold: 700,
       lineHeight: 1.25,
+      rightClickSelectsWord: true,
       rows: DEFAULT_TERMINAL_SIZE.rows,
-      scrollback: 5000,
+      scrollOnUserInput: true,
+      scrollback: 10000,
+      smoothScrollDuration: 0,
       theme: TERMINAL_THEME,
     });
     const fitAddon = new FitAddon();
     terminal.loadAddon(fitAddon);
     terminal.open(container);
+    const rendererActivation = activateTerminalRenderer(terminal);
+    const outputWriter = createTerminalWriteBuffer(terminal);
 
     terminalRef.current = terminal;
     fitAddonRef.current = fitAddon;
@@ -148,10 +158,10 @@ export function TerminalPane({
     scheduleFit();
 
     const outputAttachment = runtime.attachOutput((chunk) => {
-      terminal.write(chunk);
+      outputWriter.write(chunk);
     });
     if (outputAttachment.snapshot.length > 0) {
-      terminal.write(outputAttachment.snapshot);
+      outputWriter.write(outputAttachment.snapshot);
     }
 
     const unsubscribeConnection = runtime.subscribeConnection((connected) => {
@@ -187,7 +197,9 @@ export function TerminalPane({
       unsubscribeExit();
       unsubscribeConnection();
       outputAttachment.detach();
+      outputWriter.dispose();
       runtime.release();
+      rendererActivation.dispose();
       terminal.dispose();
       fitAddonRef.current = null;
       terminalRef.current = null;

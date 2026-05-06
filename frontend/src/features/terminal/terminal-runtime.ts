@@ -40,36 +40,17 @@ export interface TerminalRuntimeHandle {
 const DEFAULT_TERMINAL_SIZE: TerminalSize = { cols: 120, rows: 30 };
 const MAX_INPUT_CHUNK_LENGTH = 8_192;
 const MAX_BUFFER_LENGTH = 1_000_000;
-const TERMINAL_BUFFER_STORAGE_PREFIX = "wc_terminal_buffer:";
+const LEGACY_TERMINAL_BUFFER_STORAGE_PREFIX = "wc_terminal_buffer:";
 
 const runtimesBySessionId = new Map<string, TerminalRuntime>();
 
-function getBufferStorageKey(sessionId: string): string {
-  return `${TERMINAL_BUFFER_STORAGE_PREFIX}${sessionId}`;
-}
-
-function readStoredBuffer(sessionId: string): string {
+function clearLegacyStoredBuffer(sessionId: string): void {
   try {
-    const raw = window.localStorage.getItem(getBufferStorageKey(sessionId));
-    return typeof raw === "string" ? raw : "";
+    window.localStorage.removeItem(
+      `${LEGACY_TERMINAL_BUFFER_STORAGE_PREFIX}${sessionId}`,
+    );
   } catch {
-    return "";
-  }
-}
-
-function storeBuffer(sessionId: string, value: string): void {
-  try {
-    window.localStorage.setItem(getBufferStorageKey(sessionId), value);
-  } catch {
-    // Ignore storage write failures.
-  }
-}
-
-function clearStoredBuffer(sessionId: string): void {
-  try {
-    window.localStorage.removeItem(getBufferStorageKey(sessionId));
-  } catch {
-    // Ignore storage delete failures.
+    // Ignore cleanup failures for stale browser-persisted terminal output.
   }
 }
 
@@ -98,14 +79,12 @@ function decodeBase64Payload(payload: string): string {
 function appendToRuntimeBuffer(runtime: TerminalRuntime, chunk: string): void {
   runtime.buffer += chunk;
   if (runtime.buffer.length <= MAX_BUFFER_LENGTH) {
-    storeBuffer(runtime.sessionId, runtime.buffer);
     return;
   }
 
   runtime.buffer = runtime.buffer.slice(
     runtime.buffer.length - MAX_BUFFER_LENGTH,
   );
-  storeBuffer(runtime.sessionId, runtime.buffer);
 }
 
 function emitConnection(runtime: TerminalRuntime, isConnected: boolean): void {
@@ -177,6 +156,9 @@ async function flushPendingInput(runtime: TerminalRuntime): Promise<void> {
         });
 
         if (!response.ok) {
+          if (shouldDropPendingInput(response.status)) {
+            runtime.pendingInput.length = 0;
+          }
           break;
         }
 
@@ -195,7 +177,7 @@ async function flushPendingInput(runtime: TerminalRuntime): Promise<void> {
 }
 
 function queueTerminalInput(runtime: TerminalRuntime, data: string): void {
-  if (data.length === 0) {
+  if (runtime.hasExited || data.length === 0) {
     return;
   }
 
@@ -247,6 +229,8 @@ function createRuntime(
   sessionId: string,
   initialSize: TerminalSize,
 ): TerminalRuntime {
+  clearLegacyStoredBuffer(sessionId);
+
   const runtime: TerminalRuntime = {
     sessionId,
     refCount: 0,
@@ -258,7 +242,7 @@ function createRuntime(
     outputListeners: new Set<OutputListener>(),
     connectionListeners: new Set<ConnectionListener>(),
     isConnected: false,
-    buffer: readStoredBuffer(sessionId),
+    buffer: "",
   };
 
   openRuntimeStream(runtime, initialSize);
@@ -273,6 +257,10 @@ function fetchJson(pathname: string, body: unknown): Promise<Response> {
     },
     method: "POST",
   });
+}
+
+function shouldDropPendingInput(status: number): boolean {
+  return status >= 400 && status < 500;
 }
 
 export function acquireTerminalRuntime(
@@ -337,6 +325,6 @@ export function disposeTerminalRuntime(sessionId: string): void {
   runtime.exitListeners.clear();
   runtime.pendingInput.length = 0;
   runtime.buffer = "";
-  clearStoredBuffer(sessionId);
+  clearLegacyStoredBuffer(sessionId);
   runtimesBySessionId.delete(sessionId);
 }
