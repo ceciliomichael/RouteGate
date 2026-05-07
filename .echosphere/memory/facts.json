@@ -1,5 +1,36 @@
 [
   {
+    "id": "3eec47b8-83ce-4de3-ae64-f0865a48ba14",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "kind": "fact",
+    "content": "Summary: Adjusted the settings sidebar separators to be lighter and thinner. The sidebar rows now use 0.5px neutral top and bottom borders, and the active row no longer introduces a darker border color, keeping the treatment soft and non-black.\n\nFacts:\n1. [finished] The user asked for the settings sidebar borders to avoid black-looking divider treatment and to make the top and bottom borders thinner.\n2. [finished] The current implementation uses 0.5px neutral borders for the sidebar navigation rows and does not apply a darker active border color.\n3. [finished] The work remains localized to `frontend/src/app/globals.css` and the existing settings shell composition was not changed in this pass.\n\nAffected files:\n1. [modified] frontend/src/app/globals.css — Refined the settings sidebar row separators to be thinner and lighter, removing the dark active border treatment. | Notes: Adjusted nav and row border thickness to 0.5px and kept the active state neutral.\n2. [inspected] frontend/src/features/settings/SettingsWorkspace.tsx — Verified the layout shell remained stable while only the separator styling changed. | Notes: No markup changes were needed.\n\nMemory links:\nGraph group: 3eec47b8-83ce-4de3-ae64-f0865a48ba14\nRoot memory: 3eec47b8-83ce-4de3-ae64-f0865a48ba14\nParent memories: none\nRelated memories: 44d53c95-e1e2-42ca-810b-131c982854b9, 17f9a3e2-4844-4b62-810a-36656b7dd990, d21ff3e0-06c7-452b-bf7f-ea3b23da0db2, 8975e376-4e98-403f-a701-916c692c35f4, c9389279-1afd-4cd1-a192-ba64cae2c62e",
+    "createdAt": "2026-05-07T02:48:40.165Z",
+    "updatedAt": "2026-05-07T02:48:40.165Z",
+    "metadata": {
+      "summary": "Adjusted the settings sidebar separators to be lighter and thinner. The sidebar rows now use 0.5px neutral top and bottom borders, and the active row no longer introduces a darker border color, keeping the treatment soft and non-black.",
+      "topics": [
+        "summary",
+        "facts",
+        "decisions",
+        "tasks",
+        "modified",
+        "inspected"
+      ],
+      "tags": [
+        "memory-graph",
+        "frontend/src/app/globals.css",
+        "frontend/src/features/settings/SettingsWorkspace.tsx",
+        "finished",
+        "finished",
+        "finished",
+        "finished",
+        "finished",
+        "ongoing"
+      ],
+      "status": "finished"
+    }
+  },
+  {
     "id": "44d53c95-e1e2-42ca-810b-131c982854b9",
     "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
     "kind": "fact",

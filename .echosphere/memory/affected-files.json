@@ -1,5 +1,77 @@
 [
   {
+    "id": "46afd1ec-7927-425d-97b9-cf0971cf095a",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "3eec47b8-83ce-4de3-ae64-f0865a48ba14",
+    "sectionKind": "fact",
+    "path": "frontend/src/app/globals.css",
+    "action": "modified",
+    "reason": "Refined the settings sidebar row separators to be thinner and lighter, removing the dark active border treatment.",
+    "notes": "Adjusted nav and row border thickness to 0.5px and kept the active state neutral.",
+    "createdAt": "2026-05-07T02:48:40.169Z",
+    "updatedAt": "2026-05-07T02:48:40.169Z"
+  },
+  {
+    "id": "b89d9e19-6cad-420f-b56e-e2c21be304c5",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "3eec47b8-83ce-4de3-ae64-f0865a48ba14",
+    "sectionKind": "fact",
+    "path": "frontend/src/features/settings/SettingsWorkspace.tsx",
+    "action": "inspected",
+    "reason": "Verified the layout shell remained stable while only the separator styling changed.",
+    "notes": "No markup changes were needed.",
+    "createdAt": "2026-05-07T02:48:40.169Z",
+    "updatedAt": "2026-05-07T02:48:40.169Z"
+  },
+  {
+    "id": "49787dad-fdd7-4ee4-9d2f-64fa7e5d2a65",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "fdbad90b-e31b-4250-890e-230530e4c9f7",
+    "sectionKind": "decision",
+    "path": "frontend/src/app/globals.css",
+    "action": "modified",
+    "reason": "Refined the settings sidebar row separators to be thinner and lighter, removing the dark active border treatment.",
+    "notes": "Adjusted nav and row border thickness to 0.5px and kept the active state neutral.",
+    "createdAt": "2026-05-07T02:48:40.176Z",
+    "updatedAt": "2026-05-07T02:48:40.176Z"
+  },
+  {
+    "id": "968e1080-b004-4ee7-88a6-eff6245363f8",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "fdbad90b-e31b-4250-890e-230530e4c9f7",
+    "sectionKind": "decision",
+    "path": "frontend/src/features/settings/SettingsWorkspace.tsx",
+    "action": "inspected",
+    "reason": "Verified the layout shell remained stable while only the separator styling changed.",
+    "notes": "No markup changes were needed.",
+    "createdAt": "2026-05-07T02:48:40.176Z",
+    "updatedAt": "2026-05-07T02:48:40.176Z"
+  },
+  {
+    "id": "48ee6046-ccdf-4b2f-bc78-abdbd83e98d8",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "13edfad7-f0b9-4ae3-950e-853137de3a3f",
+    "sectionKind": "task",
+    "path": "frontend/src/app/globals.css",
+    "action": "modified",
+    "reason": "Refined the settings sidebar row separators to be thinner and lighter, removing the dark active border treatment.",
+    "notes": "Adjusted nav and row border thickness to 0.5px and kept the active state neutral.",
+    "createdAt": "2026-05-07T02:48:40.183Z",
+    "updatedAt": "2026-05-07T02:48:40.183Z"
+  },
+  {
+    "id": "f7ececa9-8731-4185-8490-305809718ad4",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "13edfad7-f0b9-4ae3-950e-853137de3a3f",
+    "sectionKind": "task",
+    "path": "frontend/src/features/settings/SettingsWorkspace.tsx",
+    "action": "inspected",
+    "reason": "Verified the layout shell remained stable while only the separator styling changed.",
+    "notes": "No markup changes were needed.",
+    "createdAt": "2026-05-07T02:48:40.183Z",
+    "updatedAt": "2026-05-07T02:48:40.183Z"
+  },
+  {
     "id": "e75b9ff7-a7be-41ef-81f8-611236f4c7ab",
     "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
     "memoryId": "44d53c95-e1e2-42ca-810b-131c982854b9",

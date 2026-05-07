@@ -956,6 +956,113 @@
       ],
       "createdAt": "2026-05-07T02:39:47.554Z",
       "updatedAt": "2026-05-07T02:39:47.554Z"
+    },
+    {
+      "memoryId": "3eec47b8-83ce-4de3-ae64-f0865a48ba14",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "3eec47b8-83ce-4de3-ae64-f0865a48ba14",
+      "rootMemoryId": "3eec47b8-83ce-4de3-ae64-f0865a48ba14",
+      "parentMemoryIds": [],
+      "relatedMemoryIds": [
+        "44d53c95-e1e2-42ca-810b-131c982854b9",
+        "17f9a3e2-4844-4b62-810a-36656b7dd990",
+        "d21ff3e0-06c7-452b-bf7f-ea3b23da0db2",
+        "8975e376-4e98-403f-a701-916c692c35f4",
+        "c9389279-1afd-4cd1-a192-ba64cae2c62e"
+      ],
+      "childMemoryIds": [
+        "fdbad90b-e31b-4250-890e-230530e4c9f7"
+      ],
+      "sectionKind": "fact",
+      "summary": "Adjusted the settings sidebar separators to be lighter and thinner. The sidebar rows now use 0.5px neutral top and bottom borders, and the active row no longer introduces a darker border color, keeping the treatment soft and non-black.",
+      "affectedFiles": [
+        {
+          "path": "frontend/src/app/globals.css",
+          "action": "modified",
+          "reason": "Refined the settings sidebar row separators to be thinner and lighter, removing the dark active border treatment.",
+          "notes": "Adjusted nav and row border thickness to 0.5px and kept the active state neutral."
+        },
+        {
+          "path": "frontend/src/features/settings/SettingsWorkspace.tsx",
+          "action": "inspected",
+          "reason": "Verified the layout shell remained stable while only the separator styling changed.",
+          "notes": "No markup changes were needed."
+        }
+      ],
+      "createdAt": "2026-05-07T02:48:40.169Z",
+      "updatedAt": "2026-05-07T02:48:40.169Z"
+    },
+    {
+      "memoryId": "fdbad90b-e31b-4250-890e-230530e4c9f7",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "3eec47b8-83ce-4de3-ae64-f0865a48ba14",
+      "rootMemoryId": "3eec47b8-83ce-4de3-ae64-f0865a48ba14",
+      "parentMemoryIds": [
+        "3eec47b8-83ce-4de3-ae64-f0865a48ba14"
+      ],
+      "relatedMemoryIds": [
+        "44d53c95-e1e2-42ca-810b-131c982854b9",
+        "17f9a3e2-4844-4b62-810a-36656b7dd990",
+        "d21ff3e0-06c7-452b-bf7f-ea3b23da0db2",
+        "8975e376-4e98-403f-a701-916c692c35f4",
+        "c9389279-1afd-4cd1-a192-ba64cae2c62e"
+      ],
+      "childMemoryIds": [
+        "13edfad7-f0b9-4ae3-950e-853137de3a3f"
+      ],
+      "sectionKind": "decision",
+      "summary": "Adjusted the settings sidebar separators to be lighter and thinner. The sidebar rows now use 0.5px neutral top and bottom borders, and the active row no longer introduces a darker border color, keeping the treatment soft and non-black.",
+      "affectedFiles": [
+        {
+          "path": "frontend/src/app/globals.css",
+          "action": "modified",
+          "reason": "Refined the settings sidebar row separators to be thinner and lighter, removing the dark active border treatment.",
+          "notes": "Adjusted nav and row border thickness to 0.5px and kept the active state neutral."
+        },
+        {
+          "path": "frontend/src/features/settings/SettingsWorkspace.tsx",
+          "action": "inspected",
+          "reason": "Verified the layout shell remained stable while only the separator styling changed.",
+          "notes": "No markup changes were needed."
+        }
+      ],
+      "createdAt": "2026-05-07T02:48:40.176Z",
+      "updatedAt": "2026-05-07T02:48:40.176Z"
+    },
+    {
+      "memoryId": "13edfad7-f0b9-4ae3-950e-853137de3a3f",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "3eec47b8-83ce-4de3-ae64-f0865a48ba14",
+      "rootMemoryId": "3eec47b8-83ce-4de3-ae64-f0865a48ba14",
+      "parentMemoryIds": [
+        "fdbad90b-e31b-4250-890e-230530e4c9f7"
+      ],
+      "relatedMemoryIds": [
+        "44d53c95-e1e2-42ca-810b-131c982854b9",
+        "17f9a3e2-4844-4b62-810a-36656b7dd990",
+        "d21ff3e0-06c7-452b-bf7f-ea3b23da0db2",
+        "8975e376-4e98-403f-a701-916c692c35f4",
+        "c9389279-1afd-4cd1-a192-ba64cae2c62e"
+      ],
+      "childMemoryIds": [],
+      "sectionKind": "task",
+      "summary": "Adjusted the settings sidebar separators to be lighter and thinner. The sidebar rows now use 0.5px neutral top and bottom borders, and the active row no longer introduces a darker border color, keeping the treatment soft and non-black.",
+      "affectedFiles": [
+        {
+          "path": "frontend/src/app/globals.css",
+          "action": "modified",
+          "reason": "Refined the settings sidebar row separators to be thinner and lighter, removing the dark active border treatment.",
+          "notes": "Adjusted nav and row border thickness to 0.5px and kept the active state neutral."
+        },
+        {
+          "path": "frontend/src/features/settings/SettingsWorkspace.tsx",
+          "action": "inspected",
+          "reason": "Verified the layout shell remained stable while only the separator styling changed.",
+          "notes": "No markup changes were needed."
+        }
+      ],
+      "createdAt": "2026-05-07T02:48:40.182Z",
+      "updatedAt": "2026-05-07T02:48:40.182Z"
     }
   ],
   "edges": [
@@ -2008,7 +2115,140 @@
       "relation": "related",
       "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
       "createdAt": "2026-05-07T02:39:47.554Z"
+    },
+    {
+      "fromMemoryId": "3eec47b8-83ce-4de3-ae64-f0865a48ba14",
+      "toMemoryId": "44d53c95-e1e2-42ca-810b-131c982854b9",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:48:40.169Z"
+    },
+    {
+      "fromMemoryId": "3eec47b8-83ce-4de3-ae64-f0865a48ba14",
+      "toMemoryId": "17f9a3e2-4844-4b62-810a-36656b7dd990",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:48:40.169Z"
+    },
+    {
+      "fromMemoryId": "3eec47b8-83ce-4de3-ae64-f0865a48ba14",
+      "toMemoryId": "d21ff3e0-06c7-452b-bf7f-ea3b23da0db2",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:48:40.169Z"
+    },
+    {
+      "fromMemoryId": "3eec47b8-83ce-4de3-ae64-f0865a48ba14",
+      "toMemoryId": "8975e376-4e98-403f-a701-916c692c35f4",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:48:40.169Z"
+    },
+    {
+      "fromMemoryId": "3eec47b8-83ce-4de3-ae64-f0865a48ba14",
+      "toMemoryId": "c9389279-1afd-4cd1-a192-ba64cae2c62e",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:48:40.169Z"
+    },
+    {
+      "fromMemoryId": "3eec47b8-83ce-4de3-ae64-f0865a48ba14",
+      "toMemoryId": "fdbad90b-e31b-4250-890e-230530e4c9f7",
+      "relation": "child",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:48:40.169Z"
+    },
+    {
+      "fromMemoryId": "fdbad90b-e31b-4250-890e-230530e4c9f7",
+      "toMemoryId": "3eec47b8-83ce-4de3-ae64-f0865a48ba14",
+      "relation": "parent",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:48:40.176Z"
+    },
+    {
+      "fromMemoryId": "fdbad90b-e31b-4250-890e-230530e4c9f7",
+      "toMemoryId": "44d53c95-e1e2-42ca-810b-131c982854b9",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:48:40.176Z"
+    },
+    {
+      "fromMemoryId": "fdbad90b-e31b-4250-890e-230530e4c9f7",
+      "toMemoryId": "17f9a3e2-4844-4b62-810a-36656b7dd990",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:48:40.176Z"
+    },
+    {
+      "fromMemoryId": "fdbad90b-e31b-4250-890e-230530e4c9f7",
+      "toMemoryId": "d21ff3e0-06c7-452b-bf7f-ea3b23da0db2",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:48:40.176Z"
+    },
+    {
+      "fromMemoryId": "fdbad90b-e31b-4250-890e-230530e4c9f7",
+      "toMemoryId": "8975e376-4e98-403f-a701-916c692c35f4",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:48:40.176Z"
+    },
+    {
+      "fromMemoryId": "fdbad90b-e31b-4250-890e-230530e4c9f7",
+      "toMemoryId": "c9389279-1afd-4cd1-a192-ba64cae2c62e",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:48:40.176Z"
+    },
+    {
+      "fromMemoryId": "fdbad90b-e31b-4250-890e-230530e4c9f7",
+      "toMemoryId": "13edfad7-f0b9-4ae3-950e-853137de3a3f",
+      "relation": "child",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:48:40.176Z"
+    },
+    {
+      "fromMemoryId": "13edfad7-f0b9-4ae3-950e-853137de3a3f",
+      "toMemoryId": "fdbad90b-e31b-4250-890e-230530e4c9f7",
+      "relation": "parent",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:48:40.182Z"
+    },
+    {
+      "fromMemoryId": "13edfad7-f0b9-4ae3-950e-853137de3a3f",
+      "toMemoryId": "44d53c95-e1e2-42ca-810b-131c982854b9",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:48:40.183Z"
+    },
+    {
+      "fromMemoryId": "13edfad7-f0b9-4ae3-950e-853137de3a3f",
+      "toMemoryId": "17f9a3e2-4844-4b62-810a-36656b7dd990",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:48:40.183Z"
+    },
+    {
+      "fromMemoryId": "13edfad7-f0b9-4ae3-950e-853137de3a3f",
+      "toMemoryId": "d21ff3e0-06c7-452b-bf7f-ea3b23da0db2",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:48:40.183Z"
+    },
+    {
+      "fromMemoryId": "13edfad7-f0b9-4ae3-950e-853137de3a3f",
+      "toMemoryId": "8975e376-4e98-403f-a701-916c692c35f4",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:48:40.183Z"
+    },
+    {
+      "fromMemoryId": "13edfad7-f0b9-4ae3-950e-853137de3a3f",
+      "toMemoryId": "c9389279-1afd-4cd1-a192-ba64cae2c62e",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:48:40.183Z"
     }
   ],
-  "updatedAt": "2026-05-07T02:39:47.556Z"
+  "updatedAt": "2026-05-07T02:48:40.184Z"
 }
