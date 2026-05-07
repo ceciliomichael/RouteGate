@@ -1864,6 +1864,113 @@
       ],
       "createdAt": "2026-05-07T03:30:25.678Z",
       "updatedAt": "2026-05-07T03:30:25.678Z"
+    },
+    {
+      "memoryId": "36021f38-a585-49c6-9645-7f537753de4d",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "36021f38-a585-49c6-9645-7f537753de4d",
+      "rootMemoryId": "36021f38-a585-49c6-9645-7f537753de4d",
+      "parentMemoryIds": [],
+      "relatedMemoryIds": [
+        "9039b37c-f87a-4372-98fa-e7941865f7e4",
+        "b13803f7-2403-45d0-b24b-c8d4123efd13",
+        "32c93e80-78fb-4108-8a03-4b84a8da7895",
+        "d5818918-eb0c-4673-803a-1e6266597243",
+        "0db92d97-110d-4f88-8397-62ee1d42e9cc"
+      ],
+      "childMemoryIds": [
+        "d01098ce-3f33-4aa2-a67a-809b0d477599"
+      ],
+      "sectionKind": "fact",
+      "summary": "Fixed the frontend production build failure caused by the new /api/events route. The issue was an invalid relative import path to backendProxy; changing it from '../../../../server/backendProxy' to '../../../server/backendProxy' allowed Next.js production build to succeed. This was a narrow build-only correction after the earlier realtime refresh feature landed.",
+      "affectedFiles": [
+        {
+          "path": "frontend/src/app/api/events/route.ts",
+          "action": "modified",
+          "reason": "Corrected the relative import so Next.js can resolve backendProxy during production build of the app route.",
+          "notes": "Changed '../../../../server/backendProxy' to '../../../server/backendProxy'."
+        },
+        {
+          "path": "frontend/src/server/backendProxy.ts",
+          "action": "inspected",
+          "reason": "Confirmed the target module path and existing proxy helper used by the new events route.",
+          "notes": "No code changes were needed here."
+        }
+      ],
+      "createdAt": "2026-05-07T03:35:28.208Z",
+      "updatedAt": "2026-05-07T03:35:28.208Z"
+    },
+    {
+      "memoryId": "d01098ce-3f33-4aa2-a67a-809b0d477599",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "36021f38-a585-49c6-9645-7f537753de4d",
+      "rootMemoryId": "36021f38-a585-49c6-9645-7f537753de4d",
+      "parentMemoryIds": [
+        "36021f38-a585-49c6-9645-7f537753de4d"
+      ],
+      "relatedMemoryIds": [
+        "9039b37c-f87a-4372-98fa-e7941865f7e4",
+        "b13803f7-2403-45d0-b24b-c8d4123efd13",
+        "32c93e80-78fb-4108-8a03-4b84a8da7895",
+        "d5818918-eb0c-4673-803a-1e6266597243",
+        "0db92d97-110d-4f88-8397-62ee1d42e9cc"
+      ],
+      "childMemoryIds": [
+        "3f6bec69-52bc-44ad-be3d-48d78627083a"
+      ],
+      "sectionKind": "decision",
+      "summary": "Fixed the frontend production build failure caused by the new /api/events route. The issue was an invalid relative import path to backendProxy; changing it from '../../../../server/backendProxy' to '../../../server/backendProxy' allowed Next.js production build to succeed. This was a narrow build-only correction after the earlier realtime refresh feature landed.",
+      "affectedFiles": [
+        {
+          "path": "frontend/src/app/api/events/route.ts",
+          "action": "modified",
+          "reason": "Corrected the relative import so Next.js can resolve backendProxy during production build of the app route.",
+          "notes": "Changed '../../../../server/backendProxy' to '../../../server/backendProxy'."
+        },
+        {
+          "path": "frontend/src/server/backendProxy.ts",
+          "action": "inspected",
+          "reason": "Confirmed the target module path and existing proxy helper used by the new events route.",
+          "notes": "No code changes were needed here."
+        }
+      ],
+      "createdAt": "2026-05-07T03:35:28.235Z",
+      "updatedAt": "2026-05-07T03:35:28.235Z"
+    },
+    {
+      "memoryId": "3f6bec69-52bc-44ad-be3d-48d78627083a",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "36021f38-a585-49c6-9645-7f537753de4d",
+      "rootMemoryId": "36021f38-a585-49c6-9645-7f537753de4d",
+      "parentMemoryIds": [
+        "d01098ce-3f33-4aa2-a67a-809b0d477599"
+      ],
+      "relatedMemoryIds": [
+        "9039b37c-f87a-4372-98fa-e7941865f7e4",
+        "b13803f7-2403-45d0-b24b-c8d4123efd13",
+        "32c93e80-78fb-4108-8a03-4b84a8da7895",
+        "d5818918-eb0c-4673-803a-1e6266597243",
+        "0db92d97-110d-4f88-8397-62ee1d42e9cc"
+      ],
+      "childMemoryIds": [],
+      "sectionKind": "task",
+      "summary": "Fixed the frontend production build failure caused by the new /api/events route. The issue was an invalid relative import path to backendProxy; changing it from '../../../../server/backendProxy' to '../../../server/backendProxy' allowed Next.js production build to succeed. This was a narrow build-only correction after the earlier realtime refresh feature landed.",
+      "affectedFiles": [
+        {
+          "path": "frontend/src/app/api/events/route.ts",
+          "action": "modified",
+          "reason": "Corrected the relative import so Next.js can resolve backendProxy during production build of the app route.",
+          "notes": "Changed '../../../../server/backendProxy' to '../../../server/backendProxy'."
+        },
+        {
+          "path": "frontend/src/server/backendProxy.ts",
+          "action": "inspected",
+          "reason": "Confirmed the target module path and existing proxy helper used by the new events route.",
+          "notes": "No code changes were needed here."
+        }
+      ],
+      "createdAt": "2026-05-07T03:35:28.262Z",
+      "updatedAt": "2026-05-07T03:35:28.262Z"
     }
   ],
   "edges": [
@@ -3805,7 +3912,140 @@
       "relation": "related",
       "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
       "createdAt": "2026-05-07T03:30:25.678Z"
+    },
+    {
+      "fromMemoryId": "36021f38-a585-49c6-9645-7f537753de4d",
+      "toMemoryId": "9039b37c-f87a-4372-98fa-e7941865f7e4",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:35:28.208Z"
+    },
+    {
+      "fromMemoryId": "36021f38-a585-49c6-9645-7f537753de4d",
+      "toMemoryId": "b13803f7-2403-45d0-b24b-c8d4123efd13",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:35:28.208Z"
+    },
+    {
+      "fromMemoryId": "36021f38-a585-49c6-9645-7f537753de4d",
+      "toMemoryId": "32c93e80-78fb-4108-8a03-4b84a8da7895",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:35:28.208Z"
+    },
+    {
+      "fromMemoryId": "36021f38-a585-49c6-9645-7f537753de4d",
+      "toMemoryId": "d5818918-eb0c-4673-803a-1e6266597243",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:35:28.208Z"
+    },
+    {
+      "fromMemoryId": "36021f38-a585-49c6-9645-7f537753de4d",
+      "toMemoryId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:35:28.208Z"
+    },
+    {
+      "fromMemoryId": "36021f38-a585-49c6-9645-7f537753de4d",
+      "toMemoryId": "d01098ce-3f33-4aa2-a67a-809b0d477599",
+      "relation": "child",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:35:28.208Z"
+    },
+    {
+      "fromMemoryId": "d01098ce-3f33-4aa2-a67a-809b0d477599",
+      "toMemoryId": "36021f38-a585-49c6-9645-7f537753de4d",
+      "relation": "parent",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:35:28.235Z"
+    },
+    {
+      "fromMemoryId": "d01098ce-3f33-4aa2-a67a-809b0d477599",
+      "toMemoryId": "9039b37c-f87a-4372-98fa-e7941865f7e4",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:35:28.235Z"
+    },
+    {
+      "fromMemoryId": "d01098ce-3f33-4aa2-a67a-809b0d477599",
+      "toMemoryId": "b13803f7-2403-45d0-b24b-c8d4123efd13",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:35:28.235Z"
+    },
+    {
+      "fromMemoryId": "d01098ce-3f33-4aa2-a67a-809b0d477599",
+      "toMemoryId": "32c93e80-78fb-4108-8a03-4b84a8da7895",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:35:28.235Z"
+    },
+    {
+      "fromMemoryId": "d01098ce-3f33-4aa2-a67a-809b0d477599",
+      "toMemoryId": "d5818918-eb0c-4673-803a-1e6266597243",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:35:28.235Z"
+    },
+    {
+      "fromMemoryId": "d01098ce-3f33-4aa2-a67a-809b0d477599",
+      "toMemoryId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:35:28.235Z"
+    },
+    {
+      "fromMemoryId": "d01098ce-3f33-4aa2-a67a-809b0d477599",
+      "toMemoryId": "3f6bec69-52bc-44ad-be3d-48d78627083a",
+      "relation": "child",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:35:28.235Z"
+    },
+    {
+      "fromMemoryId": "3f6bec69-52bc-44ad-be3d-48d78627083a",
+      "toMemoryId": "d01098ce-3f33-4aa2-a67a-809b0d477599",
+      "relation": "parent",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:35:28.262Z"
+    },
+    {
+      "fromMemoryId": "3f6bec69-52bc-44ad-be3d-48d78627083a",
+      "toMemoryId": "9039b37c-f87a-4372-98fa-e7941865f7e4",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:35:28.262Z"
+    },
+    {
+      "fromMemoryId": "3f6bec69-52bc-44ad-be3d-48d78627083a",
+      "toMemoryId": "b13803f7-2403-45d0-b24b-c8d4123efd13",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:35:28.262Z"
+    },
+    {
+      "fromMemoryId": "3f6bec69-52bc-44ad-be3d-48d78627083a",
+      "toMemoryId": "32c93e80-78fb-4108-8a03-4b84a8da7895",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:35:28.262Z"
+    },
+    {
+      "fromMemoryId": "3f6bec69-52bc-44ad-be3d-48d78627083a",
+      "toMemoryId": "d5818918-eb0c-4673-803a-1e6266597243",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:35:28.262Z"
+    },
+    {
+      "fromMemoryId": "3f6bec69-52bc-44ad-be3d-48d78627083a",
+      "toMemoryId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:35:28.262Z"
     }
   ],
-  "updatedAt": "2026-05-07T03:30:25.679Z"
+  "updatedAt": "2026-05-07T03:35:28.263Z"
 }

@@ -1,4 +1,4 @@
-import { forwardToBackendApi } from "../../../../server/backendProxy";
+import { forwardToBackendApi } from "../../../server/backendProxy";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
