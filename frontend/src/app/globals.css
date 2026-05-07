@@ -590,15 +590,9 @@
   .settings-workspace {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 1rem;
+    gap: 0;
     min-height: 0;
-  }
-
-  .settings-sidebar,
-  .settings-content {
-    border-radius: 1rem;
-    border: 1px solid var(--color-border);
-    background: var(--color-surface);
+    overflow: hidden;
   }
 
   .settings-sidebar {
@@ -606,6 +600,8 @@
     display: grid;
     gap: 0.75rem;
     align-content: start;
+    background: var(--color-surface-subtle);
+    border-bottom: 1px solid var(--color-border);
   }
 
   .settings-sidebar__title {
@@ -658,6 +654,7 @@
     display: grid;
     gap: 1rem;
     min-height: 0;
+    background: var(--color-surface);
   }
 
   .settings-content__header {
@@ -740,6 +737,11 @@
     .settings-workspace {
       grid-template-columns: 17.5rem minmax(0, 1fr);
       align-items: start;
+    }
+
+    .settings-sidebar {
+      border-bottom: 0;
+      border-right: 1px solid var(--color-border);
     }
 
     .settings-content {

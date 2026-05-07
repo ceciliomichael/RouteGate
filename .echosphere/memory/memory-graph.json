@@ -635,6 +635,113 @@
       ],
       "createdAt": "2026-05-07T02:21:13.614Z",
       "updatedAt": "2026-05-07T02:21:13.614Z"
+    },
+    {
+      "memoryId": "637c220d-f4f7-4274-ad70-6ac978154e52",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "637c220d-f4f7-4274-ad70-6ac978154e52",
+      "rootMemoryId": "637c220d-f4f7-4274-ad70-6ac978154e52",
+      "parentMemoryIds": [],
+      "relatedMemoryIds": [
+        "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+        "d5818918-eb0c-4673-803a-1e6266597243",
+        "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+        "b238b9b9-e139-414f-aa29-66edd17f22f9",
+        "cb256391-a909-4ab8-b945-4288569730dd"
+      ],
+      "childMemoryIds": [
+        "9a211c76-56dd-4247-b79f-8f049a1b0fea"
+      ],
+      "sectionKind": "fact",
+      "summary": "Unified the settings sidebar and main content into a single connected shell in the RouteGate frontend. The settings workspace now uses one shared card container with an internal divider and full-width overflow clipping so the panels visually read as one integrated layout rather than separate cards.",
+      "affectedFiles": [
+        {
+          "path": "frontend/src/features/settings/SettingsWorkspace.tsx",
+          "action": "modified",
+          "reason": "Adjusted the settings shell markup so the sidebar and content area share one card container instead of separate cards.",
+          "notes": "Removed per-panel card styling and kept the section content intact."
+        },
+        {
+          "path": "frontend/src/app/globals.css",
+          "action": "modified",
+          "reason": "Updated the settings workspace styles to remove the visual gap between panels and add an internal divider for the unified shell.",
+          "notes": "Made the sidebar/content relationship feel connected while preserving responsiveness."
+        }
+      ],
+      "createdAt": "2026-05-07T02:30:21.975Z",
+      "updatedAt": "2026-05-07T02:30:21.975Z"
+    },
+    {
+      "memoryId": "9a211c76-56dd-4247-b79f-8f049a1b0fea",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "637c220d-f4f7-4274-ad70-6ac978154e52",
+      "rootMemoryId": "637c220d-f4f7-4274-ad70-6ac978154e52",
+      "parentMemoryIds": [
+        "637c220d-f4f7-4274-ad70-6ac978154e52"
+      ],
+      "relatedMemoryIds": [
+        "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+        "d5818918-eb0c-4673-803a-1e6266597243",
+        "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+        "b238b9b9-e139-414f-aa29-66edd17f22f9",
+        "cb256391-a909-4ab8-b945-4288569730dd"
+      ],
+      "childMemoryIds": [
+        "e1b45f70-0d0f-401f-b259-2e4baaf3bc0a"
+      ],
+      "sectionKind": "decision",
+      "summary": "Unified the settings sidebar and main content into a single connected shell in the RouteGate frontend. The settings workspace now uses one shared card container with an internal divider and full-width overflow clipping so the panels visually read as one integrated layout rather than separate cards.",
+      "affectedFiles": [
+        {
+          "path": "frontend/src/features/settings/SettingsWorkspace.tsx",
+          "action": "modified",
+          "reason": "Adjusted the settings shell markup so the sidebar and content area share one card container instead of separate cards.",
+          "notes": "Removed per-panel card styling and kept the section content intact."
+        },
+        {
+          "path": "frontend/src/app/globals.css",
+          "action": "modified",
+          "reason": "Updated the settings workspace styles to remove the visual gap between panels and add an internal divider for the unified shell.",
+          "notes": "Made the sidebar/content relationship feel connected while preserving responsiveness."
+        }
+      ],
+      "createdAt": "2026-05-07T02:30:21.981Z",
+      "updatedAt": "2026-05-07T02:30:21.981Z"
+    },
+    {
+      "memoryId": "e1b45f70-0d0f-401f-b259-2e4baaf3bc0a",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "637c220d-f4f7-4274-ad70-6ac978154e52",
+      "rootMemoryId": "637c220d-f4f7-4274-ad70-6ac978154e52",
+      "parentMemoryIds": [
+        "9a211c76-56dd-4247-b79f-8f049a1b0fea"
+      ],
+      "relatedMemoryIds": [
+        "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+        "d5818918-eb0c-4673-803a-1e6266597243",
+        "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+        "b238b9b9-e139-414f-aa29-66edd17f22f9",
+        "cb256391-a909-4ab8-b945-4288569730dd"
+      ],
+      "childMemoryIds": [],
+      "sectionKind": "task",
+      "summary": "Unified the settings sidebar and main content into a single connected shell in the RouteGate frontend. The settings workspace now uses one shared card container with an internal divider and full-width overflow clipping so the panels visually read as one integrated layout rather than separate cards.",
+      "affectedFiles": [
+        {
+          "path": "frontend/src/features/settings/SettingsWorkspace.tsx",
+          "action": "modified",
+          "reason": "Adjusted the settings shell markup so the sidebar and content area share one card container instead of separate cards.",
+          "notes": "Removed per-panel card styling and kept the section content intact."
+        },
+        {
+          "path": "frontend/src/app/globals.css",
+          "action": "modified",
+          "reason": "Updated the settings workspace styles to remove the visual gap between panels and add an internal divider for the unified shell.",
+          "notes": "Made the sidebar/content relationship feel connected while preserving responsiveness."
+        }
+      ],
+      "createdAt": "2026-05-07T02:30:21.986Z",
+      "updatedAt": "2026-05-07T02:30:21.986Z"
     }
   ],
   "edges": [
@@ -1288,7 +1395,140 @@
       "relation": "related",
       "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
       "createdAt": "2026-05-07T02:21:13.614Z"
+    },
+    {
+      "fromMemoryId": "637c220d-f4f7-4274-ad70-6ac978154e52",
+      "toMemoryId": "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:30:21.976Z"
+    },
+    {
+      "fromMemoryId": "637c220d-f4f7-4274-ad70-6ac978154e52",
+      "toMemoryId": "d5818918-eb0c-4673-803a-1e6266597243",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:30:21.976Z"
+    },
+    {
+      "fromMemoryId": "637c220d-f4f7-4274-ad70-6ac978154e52",
+      "toMemoryId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:30:21.976Z"
+    },
+    {
+      "fromMemoryId": "637c220d-f4f7-4274-ad70-6ac978154e52",
+      "toMemoryId": "b238b9b9-e139-414f-aa29-66edd17f22f9",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:30:21.976Z"
+    },
+    {
+      "fromMemoryId": "637c220d-f4f7-4274-ad70-6ac978154e52",
+      "toMemoryId": "cb256391-a909-4ab8-b945-4288569730dd",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:30:21.976Z"
+    },
+    {
+      "fromMemoryId": "637c220d-f4f7-4274-ad70-6ac978154e52",
+      "toMemoryId": "9a211c76-56dd-4247-b79f-8f049a1b0fea",
+      "relation": "child",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:30:21.976Z"
+    },
+    {
+      "fromMemoryId": "9a211c76-56dd-4247-b79f-8f049a1b0fea",
+      "toMemoryId": "637c220d-f4f7-4274-ad70-6ac978154e52",
+      "relation": "parent",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:30:21.981Z"
+    },
+    {
+      "fromMemoryId": "9a211c76-56dd-4247-b79f-8f049a1b0fea",
+      "toMemoryId": "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:30:21.981Z"
+    },
+    {
+      "fromMemoryId": "9a211c76-56dd-4247-b79f-8f049a1b0fea",
+      "toMemoryId": "d5818918-eb0c-4673-803a-1e6266597243",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:30:21.981Z"
+    },
+    {
+      "fromMemoryId": "9a211c76-56dd-4247-b79f-8f049a1b0fea",
+      "toMemoryId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:30:21.981Z"
+    },
+    {
+      "fromMemoryId": "9a211c76-56dd-4247-b79f-8f049a1b0fea",
+      "toMemoryId": "b238b9b9-e139-414f-aa29-66edd17f22f9",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:30:21.981Z"
+    },
+    {
+      "fromMemoryId": "9a211c76-56dd-4247-b79f-8f049a1b0fea",
+      "toMemoryId": "cb256391-a909-4ab8-b945-4288569730dd",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:30:21.981Z"
+    },
+    {
+      "fromMemoryId": "9a211c76-56dd-4247-b79f-8f049a1b0fea",
+      "toMemoryId": "e1b45f70-0d0f-401f-b259-2e4baaf3bc0a",
+      "relation": "child",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:30:21.981Z"
+    },
+    {
+      "fromMemoryId": "e1b45f70-0d0f-401f-b259-2e4baaf3bc0a",
+      "toMemoryId": "9a211c76-56dd-4247-b79f-8f049a1b0fea",
+      "relation": "parent",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:30:21.986Z"
+    },
+    {
+      "fromMemoryId": "e1b45f70-0d0f-401f-b259-2e4baaf3bc0a",
+      "toMemoryId": "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:30:21.986Z"
+    },
+    {
+      "fromMemoryId": "e1b45f70-0d0f-401f-b259-2e4baaf3bc0a",
+      "toMemoryId": "d5818918-eb0c-4673-803a-1e6266597243",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:30:21.986Z"
+    },
+    {
+      "fromMemoryId": "e1b45f70-0d0f-401f-b259-2e4baaf3bc0a",
+      "toMemoryId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:30:21.986Z"
+    },
+    {
+      "fromMemoryId": "e1b45f70-0d0f-401f-b259-2e4baaf3bc0a",
+      "toMemoryId": "b238b9b9-e139-414f-aa29-66edd17f22f9",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:30:21.986Z"
+    },
+    {
+      "fromMemoryId": "e1b45f70-0d0f-401f-b259-2e4baaf3bc0a",
+      "toMemoryId": "cb256391-a909-4ab8-b945-4288569730dd",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:30:21.986Z"
     }
   ],
-  "updatedAt": "2026-05-07T02:21:13.615Z"
+  "updatedAt": "2026-05-07T02:30:21.988Z"
 }

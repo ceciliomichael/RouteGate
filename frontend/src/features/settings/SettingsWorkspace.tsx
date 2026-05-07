@@ -42,8 +42,8 @@ export function SettingsWorkspace({ auth }: SettingsWorkspaceProps) {
   };
 
   return (
-    <section className="settings-workspace">
-      <aside className="settings-sidebar card">
+    <section className="settings-workspace card">
+      <aside className="settings-sidebar">
         <h1 className="settings-sidebar__title">Settings</h1>
         <p className="settings-sidebar__description">
           Configure your account and terminal access.
@@ -66,7 +66,7 @@ export function SettingsWorkspace({ auth }: SettingsWorkspaceProps) {
         </nav>
       </aside>
 
-      <div className="settings-content card">
+      <div className="settings-content">
         <header className="settings-content__header">
           <h1 className="settings-content__title">
             {getSectionTitle(section)}
