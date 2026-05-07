@@ -120,14 +120,6 @@ export function TerminalSettingsPanel() {
 
   return (
     <section className="settings-section">
-      <header className="settings-section__header">
-        <h2 className="settings-section__title">Terminal</h2>
-        <p className="settings-section__description">
-          Save SSH credentials once. Terminal sessions will reconnect using this
-          target.
-        </p>
-      </header>
-
       <div className="settings-form-grid">
         <label className="field">
           <span className="field-label">SSH Username</span>

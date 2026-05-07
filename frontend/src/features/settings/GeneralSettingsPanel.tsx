@@ -104,13 +104,6 @@ export function GeneralSettingsPanel({
 
   return (
     <section className="settings-section">
-      <header className="settings-section__header">
-        <h2 className="settings-section__title">General</h2>
-        <p className="settings-section__description">
-          Update your display name and sign-in password.
-        </p>
-      </header>
-
       <fieldset
         className="settings-fieldset"
         disabled={isBootstrapAdmin || isSavingProfile}
