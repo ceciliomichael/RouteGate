@@ -754,6 +754,14 @@
     }
 
     .settings-content {
+      padding: 0;
+    }
+
+    .settings-content__header {
+      padding: 0.95rem 1.15rem 0.7rem;
+    }
+
+    .settings-content__body {
       padding: 1.15rem;
     }
   }
