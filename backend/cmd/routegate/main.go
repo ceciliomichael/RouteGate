@@ -14,6 +14,7 @@ import (
 	"routegate/internal/config"
 	"routegate/internal/envfile"
 	"routegate/internal/identity"
+	"routegate/internal/realtime"
 	"routegate/internal/registry"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -44,6 +45,7 @@ func main() {
 	db := client.Database(cfg.MongoDatabase)
 	routeStore := registry.NewStore(db, cfg.FrontendRouteSubdomain)
 	identityStore := identity.NewStore(db)
+	events := realtime.NewHub()
 
 	if err := identityStore.EnsureIndexes(ctx); err != nil {
 		log.Fatalf("ensure identity indexes: %v", err)
@@ -63,7 +65,7 @@ func main() {
 		log.Fatalf("bootstrap admin error: %v", err)
 	}
 
-	apiHandler := api.NewHandler(routeStore, identityStore, log.Default(), cfg)
+	apiHandler := api.NewHandler(routeStore, identityStore, events, log.Default(), cfg)
 
 	httpServer := &http.Server{
 		Addr:              cfg.ListenAddress(),

@@ -4,6 +4,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ConfirmDialog } from "../../components/ConfirmDialog";
 import type { AuthState } from "../auth/useAuth";
 import {
+  REALTIME_EVENT_TYPES,
+  useRealtimeRefresh,
+} from "../realtime/useRealtimeRefresh";
+import {
   createUser,
   deleteUser,
   listUsers,
@@ -84,6 +88,12 @@ export function UsersWorkspace({ auth }: UsersWorkspaceProps) {
     },
     [handleUnauthorized],
   );
+
+  useRealtimeRefresh({
+    enabled: Boolean(auth.user),
+    eventType: REALTIME_EVENT_TYPES.usersChanged,
+    onRefresh: () => void fetchUsers(true),
+  });
 
   useEffect(() => {
     if (!auth.user || hasFetchedRef.current) {

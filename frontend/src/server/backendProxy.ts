@@ -18,6 +18,7 @@ const RESPONSE_HEADERS = [
   "etag",
   "last-modified",
   "set-cookie",
+  "x-accel-buffering",
 ] as const;
 
 function copyRequestHeaders(request: Request): Headers {

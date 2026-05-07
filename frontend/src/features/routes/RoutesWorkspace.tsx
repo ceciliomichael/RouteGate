@@ -3,6 +3,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ConfirmDialog } from "../../components/ConfirmDialog";
 import type { AuthState } from "../auth/useAuth";
+import {
+  REALTIME_EVENT_TYPES,
+  useRealtimeRefresh,
+} from "../realtime/useRealtimeRefresh";
 import { createRoute, deleteRoute, listRoutes, updateRoute } from "./api";
 import { StatusBanner } from "./components/StatusBanner";
 import { SummaryStrip } from "./components/SummaryStrip";
@@ -73,6 +77,12 @@ export function RoutesWorkspace({ auth, showOwner }: RoutesWorkspaceProps) {
     },
     [handleUnauthorized],
   );
+
+  useRealtimeRefresh({
+    enabled: Boolean(auth.user),
+    eventType: REALTIME_EVENT_TYPES.routesChanged,
+    onRefresh: () => void fetchRoutes(true),
+  });
 
   useEffect(() => {
     if (!auth.user || hasFetchedRef.current) {

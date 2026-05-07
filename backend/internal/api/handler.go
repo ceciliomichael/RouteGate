@@ -12,12 +12,14 @@ import (
 
 	"routegate/internal/config"
 	"routegate/internal/identity"
+	"routegate/internal/realtime"
 	"routegate/internal/registry"
 )
 
 type Handler struct {
 	routes   *registry.Store
 	identity *identity.Store
+	events   *realtime.Hub
 	logger   *log.Logger
 	cfg      config.Config
 }
@@ -25,12 +27,14 @@ type Handler struct {
 func NewHandler(
 	routes *registry.Store,
 	identityStore *identity.Store,
+	events *realtime.Hub,
 	logger *log.Logger,
 	cfg config.Config,
 ) http.Handler {
 	handler := &Handler{
 		routes:   routes,
 		identity: identityStore,
+		events:   events,
 		logger:   logger,
 		cfg:      cfg,
 	}
@@ -39,6 +43,7 @@ func NewHandler(
 	mux.HandleFunc("/api/auth/login", handler.handleLogin)
 	mux.HandleFunc("/api/auth/logout", handler.handleLogout)
 	mux.HandleFunc("/api/auth/me", handler.handleMe)
+	mux.HandleFunc("/api/events", handler.handleEvents)
 	mux.HandleFunc("/api/users", handler.handleUsers)
 	mux.HandleFunc("/api/users/", handler.handleUsersItem)
 	mux.HandleFunc("/api/routes", handler.handleRoutesCollection)
@@ -126,6 +131,64 @@ func (h *Handler) handleMe(writer http.ResponseWriter, request *http.Request) {
 	h.writeJSON(writer, http.StatusOK, map[string]any{"user": user})
 }
 
+func (h *Handler) handleEvents(writer http.ResponseWriter, request *http.Request) {
+	if request.Method != http.MethodGet {
+		h.writeMethodNotAllowed(writer, http.MethodGet)
+		return
+	}
+	if h.events == nil {
+		h.writeError(writer, http.StatusServiceUnavailable, "realtime events are unavailable")
+		return
+	}
+
+	_, ok := h.requireUser(writer, request)
+	if !ok {
+		return
+	}
+
+	flusher, ok := writer.(http.Flusher)
+	if !ok {
+		h.writeError(writer, http.StatusInternalServerError, "streaming is unsupported")
+		return
+	}
+
+	writer.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	writer.Header().Set("Connection", "keep-alive")
+	writer.Header().Set("Content-Type", "text/event-stream")
+	writer.Header().Set("X-Accel-Buffering", "no")
+	writer.WriteHeader(http.StatusOK)
+
+	events, unsubscribe := h.events.Subscribe()
+	defer unsubscribe()
+
+	heartbeat := time.NewTicker(25 * time.Second)
+	defer heartbeat.Stop()
+
+	if _, err := fmt.Fprint(writer, ": connected\n\n"); err != nil {
+		return
+	}
+	flusher.Flush()
+
+	for {
+		select {
+		case <-request.Context().Done():
+			return
+		case event, ok := <-events:
+			if !ok {
+				return
+			}
+			if err := h.writeRealtimeEvent(writer, flusher, event); err != nil {
+				return
+			}
+		case <-heartbeat.C:
+			if _, err := fmt.Fprint(writer, ": keep-alive\n\n"); err != nil {
+				return
+			}
+			flusher.Flush()
+		}
+	}
+}
+
 func (h *Handler) handleUsers(writer http.ResponseWriter, request *http.Request) {
 	user, ok := h.requireUser(writer, request)
 	if !ok {
@@ -166,6 +229,7 @@ func (h *Handler) handleUsers(writer http.ResponseWriter, request *http.Request)
 			return
 		}
 
+		h.publishChange(realtime.EventUsersChanged)
 		h.writeJSON(writer, http.StatusCreated, map[string]any{
 			"user":              created,
 			"generatedPassword": generatedPassword,
@@ -232,6 +296,7 @@ func (h *Handler) handleUsersItem(writer http.ResponseWriter, request *http.Requ
 			return
 		}
 
+		h.publishChange(realtime.EventUsersChanged)
 		writer.WriteHeader(http.StatusNoContent)
 	case http.MethodPatch:
 		var payload identity.UpdateUserInput
@@ -255,6 +320,7 @@ func (h *Handler) handleUsersItem(writer http.ResponseWriter, request *http.Requ
 			return
 		}
 
+		h.publishChange(realtime.EventUsersChanged)
 		h.writeJSON(writer, http.StatusOK, map[string]any{"user": updated})
 	case http.MethodPost:
 		if len(segments) != 2 || segments[1] != "password" {
@@ -273,6 +339,7 @@ func (h *Handler) handleUsersItem(writer http.ResponseWriter, request *http.Requ
 			return
 		}
 
+		h.publishChange(realtime.EventUsersChanged)
 		h.writeJSON(writer, http.StatusOK, map[string]any{
 			"user":              updated,
 			"generatedPassword": generatedPassword,
@@ -318,6 +385,7 @@ func (h *Handler) handleCurrentUserSettings(
 			return
 		}
 
+		h.publishChange(realtime.EventUsersChanged)
 		h.writeJSON(writer, http.StatusOK, map[string]any{"user": updated})
 		return
 	}
@@ -371,6 +439,7 @@ func (h *Handler) handleCurrentUserSettings(
 		updated.LastLoginAt = updated.LastActiveAt
 
 		http.SetCookie(writer, h.buildSessionCookie(sessionToken, expiresAt))
+		h.publishChange(realtime.EventUsersChanged)
 		h.writeJSON(writer, http.StatusOK, map[string]any{"user": updated})
 		return
 	}
@@ -429,6 +498,7 @@ func (h *Handler) handleRoutesCollection(writer http.ResponseWriter, request *ht
 			return
 		}
 
+		h.publishChange(realtime.EventRoutesChanged)
 		h.writeJSON(writer, http.StatusCreated, route)
 	default:
 		h.writeMethodNotAllowed(writer, http.MethodGet, http.MethodPost)
@@ -486,6 +556,7 @@ func (h *Handler) handleRoutesItem(writer http.ResponseWriter, request *http.Req
 			return
 		}
 
+		h.publishChange(realtime.EventRoutesChanged)
 		h.writeJSON(writer, http.StatusOK, route)
 	case http.MethodDelete:
 		err := h.routes.Delete(ctx, scope, id)
@@ -501,6 +572,7 @@ func (h *Handler) handleRoutesItem(writer http.ResponseWriter, request *http.Req
 			return
 		}
 
+		h.publishChange(realtime.EventRoutesChanged)
 		writer.WriteHeader(http.StatusNoContent)
 	default:
 		h.writeMethodNotAllowed(writer, http.MethodPut, http.MethodDelete)
@@ -539,6 +611,37 @@ func (h *Handler) handleRouteSubdomainAvailability(
 
 func normalizeSubdomainForResponse(raw string) string {
 	return strings.ToLower(strings.TrimSpace(raw))
+}
+
+func (h *Handler) publishChange(eventType realtime.EventType) {
+	if h.events == nil {
+		return
+	}
+
+	h.events.Publish(realtime.Event{
+		Type:      eventType,
+		Timestamp: time.Now().UTC(),
+	})
+}
+
+func (h *Handler) writeRealtimeEvent(
+	writer http.ResponseWriter,
+	flusher http.Flusher,
+	event realtime.Event,
+) error {
+	payload, err := json.Marshal(event)
+	if err != nil {
+		return err
+	}
+
+	if _, err := fmt.Fprintf(writer, "event: %s\n", event.Type); err != nil {
+		return err
+	}
+	if _, err := fmt.Fprintf(writer, "data: %s\n\n", payload); err != nil {
+		return err
+	}
+	flusher.Flush()
+	return nil
 }
 
 func (h *Handler) requireUser(writer http.ResponseWriter, request *http.Request) (identity.User, bool) {
