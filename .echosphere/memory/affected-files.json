@@ -1,5 +1,77 @@
 [
   {
+    "id": "5b65321b-bcbf-469b-a19f-ca4c0c87251b",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "5e398d32-aab1-4856-9007-5b31b8241c1b",
+    "sectionKind": "fact",
+    "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\features\\routes\\RouteTable.tsx",
+    "action": "modified",
+    "reason": "Changed the table card overflow behavior to preserve rounded border clipping on the routes page.",
+    "notes": "Set overflow to hidden on the card wrapper.",
+    "createdAt": "2026-05-07T10:44:16.267Z",
+    "updatedAt": "2026-05-07T10:44:16.267Z"
+  },
+  {
+    "id": "f2ffadd5-c66b-4ded-95d8-dada9db92e3f",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "5e398d32-aab1-4856-9007-5b31b8241c1b",
+    "sectionKind": "fact",
+    "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\components\\CustomDropdown.tsx",
+    "action": "modified",
+    "reason": "Moved the dropdown menu into a portal and added viewport-based positioning so the menu renders above clipped containers.",
+    "notes": "Also updated outside-click handling to include the portaled menu.",
+    "createdAt": "2026-05-07T10:44:16.267Z",
+    "updatedAt": "2026-05-07T10:44:16.267Z"
+  },
+  {
+    "id": "6a6113b2-e548-4c8b-b752-ec5f98d203a5",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "e34f8d37-c76e-4ac9-afd4-a084746000fc",
+    "sectionKind": "decision",
+    "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\features\\routes\\RouteTable.tsx",
+    "action": "modified",
+    "reason": "Changed the table card overflow behavior to preserve rounded border clipping on the routes page.",
+    "notes": "Set overflow to hidden on the card wrapper.",
+    "createdAt": "2026-05-07T10:44:16.297Z",
+    "updatedAt": "2026-05-07T10:44:16.297Z"
+  },
+  {
+    "id": "a3589b91-a0a8-4456-9899-9aaa20655910",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "e34f8d37-c76e-4ac9-afd4-a084746000fc",
+    "sectionKind": "decision",
+    "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\components\\CustomDropdown.tsx",
+    "action": "modified",
+    "reason": "Moved the dropdown menu into a portal and added viewport-based positioning so the menu renders above clipped containers.",
+    "notes": "Also updated outside-click handling to include the portaled menu.",
+    "createdAt": "2026-05-07T10:44:16.297Z",
+    "updatedAt": "2026-05-07T10:44:16.297Z"
+  },
+  {
+    "id": "b1c5e507-cd93-4375-bbe2-d888cf6d22d3",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "71e44e27-49c3-44cd-92f8-03db1ff864f9",
+    "sectionKind": "task",
+    "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\features\\routes\\RouteTable.tsx",
+    "action": "modified",
+    "reason": "Changed the table card overflow behavior to preserve rounded border clipping on the routes page.",
+    "notes": "Set overflow to hidden on the card wrapper.",
+    "createdAt": "2026-05-07T10:44:16.324Z",
+    "updatedAt": "2026-05-07T10:44:16.324Z"
+  },
+  {
+    "id": "e1f88ce7-7770-467c-8688-318e7476018f",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "71e44e27-49c3-44cd-92f8-03db1ff864f9",
+    "sectionKind": "task",
+    "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\components\\CustomDropdown.tsx",
+    "action": "modified",
+    "reason": "Moved the dropdown menu into a portal and added viewport-based positioning so the menu renders above clipped containers.",
+    "notes": "Also updated outside-click handling to include the portaled menu.",
+    "createdAt": "2026-05-07T10:44:16.324Z",
+    "updatedAt": "2026-05-07T10:44:16.324Z"
+  },
+  {
     "id": "bc743623-5428-4a61-a4f0-26bd20e4eb2d",
     "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
     "memoryId": "36021f38-a585-49c6-9645-7f537753de4d",

@@ -1971,6 +1971,113 @@
       ],
       "createdAt": "2026-05-07T03:35:28.262Z",
       "updatedAt": "2026-05-07T03:35:28.262Z"
+    },
+    {
+      "memoryId": "5e398d32-aab1-4856-9007-5b31b8241c1b",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "5e398d32-aab1-4856-9007-5b31b8241c1b",
+      "rootMemoryId": "5e398d32-aab1-4856-9007-5b31b8241c1b",
+      "parentMemoryIds": [],
+      "relatedMemoryIds": [
+        "2ed74e93-5e7d-46f9-a2dc-6e1c04f952f6",
+        "5a54e627-5c31-4883-8748-0490fa35ef01",
+        "9039b37c-f87a-4372-98fa-e7941865f7e4",
+        "b13803f7-2403-45d0-b24b-c8d4123efd13",
+        "32c93e80-78fb-4108-8a03-4b84a8da7895"
+      ],
+      "childMemoryIds": [
+        "e34f8d37-c76e-4ac9-afd4-a084746000fc"
+      ],
+      "sectionKind": "fact",
+      "summary": "Fixed the routes page table border clipping issue and then restored dropdown overlay behavior by portaling the custom dropdown menu to document.body with viewport-based positioning. The table card keeps rounded borders clipped correctly while the 'All accounts' dropdown now renders above the card and surrounding content. Validation passed with targeted Biome lint on the touched files.",
+      "affectedFiles": [
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\features\\routes\\RouteTable.tsx",
+          "action": "modified",
+          "reason": "Changed the table card overflow behavior to preserve rounded border clipping on the routes page.",
+          "notes": "Set overflow to hidden on the card wrapper."
+        },
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\components\\CustomDropdown.tsx",
+          "action": "modified",
+          "reason": "Moved the dropdown menu into a portal and added viewport-based positioning so the menu renders above clipped containers.",
+          "notes": "Also updated outside-click handling to include the portaled menu."
+        }
+      ],
+      "createdAt": "2026-05-07T10:44:16.267Z",
+      "updatedAt": "2026-05-07T10:44:16.267Z"
+    },
+    {
+      "memoryId": "e34f8d37-c76e-4ac9-afd4-a084746000fc",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "5e398d32-aab1-4856-9007-5b31b8241c1b",
+      "rootMemoryId": "5e398d32-aab1-4856-9007-5b31b8241c1b",
+      "parentMemoryIds": [
+        "5e398d32-aab1-4856-9007-5b31b8241c1b"
+      ],
+      "relatedMemoryIds": [
+        "2ed74e93-5e7d-46f9-a2dc-6e1c04f952f6",
+        "5a54e627-5c31-4883-8748-0490fa35ef01",
+        "9039b37c-f87a-4372-98fa-e7941865f7e4",
+        "b13803f7-2403-45d0-b24b-c8d4123efd13",
+        "32c93e80-78fb-4108-8a03-4b84a8da7895"
+      ],
+      "childMemoryIds": [
+        "71e44e27-49c3-44cd-92f8-03db1ff864f9"
+      ],
+      "sectionKind": "decision",
+      "summary": "Fixed the routes page table border clipping issue and then restored dropdown overlay behavior by portaling the custom dropdown menu to document.body with viewport-based positioning. The table card keeps rounded borders clipped correctly while the 'All accounts' dropdown now renders above the card and surrounding content. Validation passed with targeted Biome lint on the touched files.",
+      "affectedFiles": [
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\features\\routes\\RouteTable.tsx",
+          "action": "modified",
+          "reason": "Changed the table card overflow behavior to preserve rounded border clipping on the routes page.",
+          "notes": "Set overflow to hidden on the card wrapper."
+        },
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\components\\CustomDropdown.tsx",
+          "action": "modified",
+          "reason": "Moved the dropdown menu into a portal and added viewport-based positioning so the menu renders above clipped containers.",
+          "notes": "Also updated outside-click handling to include the portaled menu."
+        }
+      ],
+      "createdAt": "2026-05-07T10:44:16.297Z",
+      "updatedAt": "2026-05-07T10:44:16.297Z"
+    },
+    {
+      "memoryId": "71e44e27-49c3-44cd-92f8-03db1ff864f9",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "5e398d32-aab1-4856-9007-5b31b8241c1b",
+      "rootMemoryId": "5e398d32-aab1-4856-9007-5b31b8241c1b",
+      "parentMemoryIds": [
+        "e34f8d37-c76e-4ac9-afd4-a084746000fc"
+      ],
+      "relatedMemoryIds": [
+        "2ed74e93-5e7d-46f9-a2dc-6e1c04f952f6",
+        "5a54e627-5c31-4883-8748-0490fa35ef01",
+        "9039b37c-f87a-4372-98fa-e7941865f7e4",
+        "b13803f7-2403-45d0-b24b-c8d4123efd13",
+        "32c93e80-78fb-4108-8a03-4b84a8da7895"
+      ],
+      "childMemoryIds": [],
+      "sectionKind": "task",
+      "summary": "Fixed the routes page table border clipping issue and then restored dropdown overlay behavior by portaling the custom dropdown menu to document.body with viewport-based positioning. The table card keeps rounded borders clipped correctly while the 'All accounts' dropdown now renders above the card and surrounding content. Validation passed with targeted Biome lint on the touched files.",
+      "affectedFiles": [
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\features\\routes\\RouteTable.tsx",
+          "action": "modified",
+          "reason": "Changed the table card overflow behavior to preserve rounded border clipping on the routes page.",
+          "notes": "Set overflow to hidden on the card wrapper."
+        },
+        {
+          "path": "C:\\Users\\Administrator\\Desktop\\RouteGate\\frontend\\src\\components\\CustomDropdown.tsx",
+          "action": "modified",
+          "reason": "Moved the dropdown menu into a portal and added viewport-based positioning so the menu renders above clipped containers.",
+          "notes": "Also updated outside-click handling to include the portaled menu."
+        }
+      ],
+      "createdAt": "2026-05-07T10:44:16.324Z",
+      "updatedAt": "2026-05-07T10:44:16.324Z"
     }
   ],
   "edges": [
@@ -4045,7 +4152,140 @@
       "relation": "related",
       "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
       "createdAt": "2026-05-07T03:35:28.262Z"
+    },
+    {
+      "fromMemoryId": "5e398d32-aab1-4856-9007-5b31b8241c1b",
+      "toMemoryId": "2ed74e93-5e7d-46f9-a2dc-6e1c04f952f6",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T10:44:16.267Z"
+    },
+    {
+      "fromMemoryId": "5e398d32-aab1-4856-9007-5b31b8241c1b",
+      "toMemoryId": "5a54e627-5c31-4883-8748-0490fa35ef01",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T10:44:16.267Z"
+    },
+    {
+      "fromMemoryId": "5e398d32-aab1-4856-9007-5b31b8241c1b",
+      "toMemoryId": "9039b37c-f87a-4372-98fa-e7941865f7e4",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T10:44:16.267Z"
+    },
+    {
+      "fromMemoryId": "5e398d32-aab1-4856-9007-5b31b8241c1b",
+      "toMemoryId": "b13803f7-2403-45d0-b24b-c8d4123efd13",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T10:44:16.267Z"
+    },
+    {
+      "fromMemoryId": "5e398d32-aab1-4856-9007-5b31b8241c1b",
+      "toMemoryId": "32c93e80-78fb-4108-8a03-4b84a8da7895",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T10:44:16.267Z"
+    },
+    {
+      "fromMemoryId": "5e398d32-aab1-4856-9007-5b31b8241c1b",
+      "toMemoryId": "e34f8d37-c76e-4ac9-afd4-a084746000fc",
+      "relation": "child",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T10:44:16.267Z"
+    },
+    {
+      "fromMemoryId": "e34f8d37-c76e-4ac9-afd4-a084746000fc",
+      "toMemoryId": "5e398d32-aab1-4856-9007-5b31b8241c1b",
+      "relation": "parent",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T10:44:16.297Z"
+    },
+    {
+      "fromMemoryId": "e34f8d37-c76e-4ac9-afd4-a084746000fc",
+      "toMemoryId": "2ed74e93-5e7d-46f9-a2dc-6e1c04f952f6",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T10:44:16.297Z"
+    },
+    {
+      "fromMemoryId": "e34f8d37-c76e-4ac9-afd4-a084746000fc",
+      "toMemoryId": "5a54e627-5c31-4883-8748-0490fa35ef01",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T10:44:16.297Z"
+    },
+    {
+      "fromMemoryId": "e34f8d37-c76e-4ac9-afd4-a084746000fc",
+      "toMemoryId": "9039b37c-f87a-4372-98fa-e7941865f7e4",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T10:44:16.297Z"
+    },
+    {
+      "fromMemoryId": "e34f8d37-c76e-4ac9-afd4-a084746000fc",
+      "toMemoryId": "b13803f7-2403-45d0-b24b-c8d4123efd13",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T10:44:16.297Z"
+    },
+    {
+      "fromMemoryId": "e34f8d37-c76e-4ac9-afd4-a084746000fc",
+      "toMemoryId": "32c93e80-78fb-4108-8a03-4b84a8da7895",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T10:44:16.297Z"
+    },
+    {
+      "fromMemoryId": "e34f8d37-c76e-4ac9-afd4-a084746000fc",
+      "toMemoryId": "71e44e27-49c3-44cd-92f8-03db1ff864f9",
+      "relation": "child",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T10:44:16.297Z"
+    },
+    {
+      "fromMemoryId": "71e44e27-49c3-44cd-92f8-03db1ff864f9",
+      "toMemoryId": "e34f8d37-c76e-4ac9-afd4-a084746000fc",
+      "relation": "parent",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T10:44:16.324Z"
+    },
+    {
+      "fromMemoryId": "71e44e27-49c3-44cd-92f8-03db1ff864f9",
+      "toMemoryId": "2ed74e93-5e7d-46f9-a2dc-6e1c04f952f6",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T10:44:16.324Z"
+    },
+    {
+      "fromMemoryId": "71e44e27-49c3-44cd-92f8-03db1ff864f9",
+      "toMemoryId": "5a54e627-5c31-4883-8748-0490fa35ef01",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T10:44:16.324Z"
+    },
+    {
+      "fromMemoryId": "71e44e27-49c3-44cd-92f8-03db1ff864f9",
+      "toMemoryId": "9039b37c-f87a-4372-98fa-e7941865f7e4",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T10:44:16.324Z"
+    },
+    {
+      "fromMemoryId": "71e44e27-49c3-44cd-92f8-03db1ff864f9",
+      "toMemoryId": "b13803f7-2403-45d0-b24b-c8d4123efd13",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T10:44:16.324Z"
+    },
+    {
+      "fromMemoryId": "71e44e27-49c3-44cd-92f8-03db1ff864f9",
+      "toMemoryId": "32c93e80-78fb-4108-8a03-4b84a8da7895",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T10:44:16.324Z"
     }
   ],
-  "updatedAt": "2026-05-07T03:35:28.263Z"
+  "updatedAt": "2026-05-07T10:44:16.326Z"
 }
