@@ -24,10 +24,19 @@ interface UserUpsertDialogProps {
   submitLabel: string;
   busyLabel: string;
   initialValues: UserFormValues;
+  existingUsernames?: string[];
+  checkUsernameAvailability?: (username: string) => Promise<boolean>;
   isLoading: boolean;
   onClose: () => void;
   onSubmit: (values: UserFormValues) => Promise<void>;
 }
+
+type UsernameAvailabilityStatus =
+  | "idle"
+  | "checking"
+  | "available"
+  | "unavailable"
+  | "error";
 
 export function UserUpsertDialog({
   title,
@@ -35,6 +44,8 @@ export function UserUpsertDialog({
   submitLabel,
   busyLabel,
   initialValues,
+  existingUsernames = [],
+  checkUsernameAvailability,
   isLoading,
   onClose,
   onSubmit,
@@ -56,6 +67,10 @@ export function UserUpsertDialog({
   const [username, setUsername] = useState(initialValues.username);
   const [role, setRole] = useState<UserRole>(initialValues.role);
   const [error, setError] = useState<string | null>(null);
+  const [usernameAvailabilityStatus, setUsernameAvailabilityStatus] =
+    useState<UsernameAvailabilityStatus>("idle");
+  const [touchedName, setTouchedName] = useState(false);
+  const [touchedUsername, setTouchedUsername] = useState(false);
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
@@ -68,6 +83,88 @@ export function UserUpsertDialog({
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [onClose]);
 
+  const normalizedUsername = username.trim().toLowerCase();
+  const hasUsernameInput = normalizedUsername.length > 0;
+  const usernameExistsLocally =
+    checkUsernameAvailability != null &&
+    existingUsernames.some(
+      (existingUsername) =>
+        existingUsername.trim().toLowerCase() === normalizedUsername,
+    );
+  const shouldBlockSubmitForUsername =
+    checkUsernameAvailability != null &&
+    (usernameExistsLocally || usernameAvailabilityStatus !== "available");
+  const isUsernameUnavailable =
+    usernameExistsLocally || usernameAvailabilityStatus === "unavailable";
+
+  useEffect(() => {
+    if (checkUsernameAvailability == null || !hasUsernameInput) {
+      setUsernameAvailabilityStatus("idle");
+      return;
+    }
+
+    let isCanceled = false;
+    setUsernameAvailabilityStatus("checking");
+
+    const timeoutId = window.setTimeout(() => {
+      void (async () => {
+        try {
+          const available = await checkUsernameAvailability(normalizedUsername);
+          if (isCanceled) {
+            return;
+          }
+          setUsernameAvailabilityStatus(
+            available ? "available" : "unavailable",
+          );
+        } catch {
+          if (isCanceled) {
+            return;
+          }
+          setUsernameAvailabilityStatus("error");
+        }
+      })();
+    }, 250);
+
+    return () => {
+      isCanceled = true;
+      window.clearTimeout(timeoutId);
+    };
+  }, [checkUsernameAvailability, hasUsernameInput, normalizedUsername]);
+
+  const nameError = touchedName && !name.trim() ? "Name is required." : null;
+  const usernameError = touchedUsername
+    ? !hasUsernameInput
+      ? "Username is required."
+      : isUsernameUnavailable
+        ? "Username already exists."
+        : null
+    : null;
+  const usernameAvailability = hasUsernameInput
+    ? usernameAvailabilityStatus === "available"
+      ? "• Available"
+      : isUsernameUnavailable
+        ? "• Not available"
+        : usernameAvailabilityStatus === "checking"
+          ? "Checking availability..."
+          : usernameAvailabilityStatus === "error"
+            ? "Unable to check availability right now."
+            : null
+    : null;
+  const usernameSubmitError =
+    checkUsernameAvailability != null
+      ? !hasUsernameInput
+        ? "Username is required."
+        : usernameExistsLocally
+          ? "Username already exists."
+          : usernameAvailabilityStatus === "available"
+            ? null
+            : usernameAvailabilityStatus === "checking"
+              ? "Please wait until username availability finishes checking."
+              : usernameAvailabilityStatus === "error"
+                ? "Unable to confirm username availability right now."
+                : "Username must be available before creating the user."
+      : null;
+
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
 
@@ -76,6 +173,10 @@ export function UserUpsertDialog({
 
     if (!trimmedName || !trimmedUsername) {
       setError("Name and username are required.");
+      return;
+    }
+    if (usernameSubmitError) {
+      setError(usernameSubmitError);
       return;
     }
 
@@ -201,12 +302,14 @@ export function UserUpsertDialog({
             </label>
             <input
               id="user-name"
-              className="field-input"
+              className={`field-input ${nameError ? "error" : ""}`}
               value={name}
               onChange={(event) => setName(event.target.value)}
               placeholder="Jane Admin"
               disabled={isLoading}
+              onBlur={() => setTouchedName(true)}
             />
+            {nameError ? <p className="field-error">{nameError}</p> : null}
           </div>
 
           <div>
@@ -215,12 +318,37 @@ export function UserUpsertDialog({
             </label>
             <input
               id="user-username"
-              className="field-input"
+              className={`field-input mono ${usernameError ? "error" : ""}`}
               value={username}
               onChange={(event) => setUsername(event.target.value)}
               placeholder="jane-admin"
               disabled={isLoading}
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
+              onBlur={() => setTouchedUsername(true)}
             />
+            {usernameError ? (
+              <p className="field-error">{usernameError}</p>
+            ) : null}
+            {!usernameError && usernameAvailability ? (
+              <p
+                className="field-hint"
+                style={{
+                  color: (() => {
+                    if (usernameAvailability === "• Available") {
+                      return "var(--color-success)";
+                    }
+                    if (usernameAvailability === "• Not available") {
+                      return "var(--color-error)";
+                    }
+                    return "var(--color-ink-muted)";
+                  })(),
+                }}
+              >
+                {usernameAvailability}
+              </p>
+            ) : null}
           </div>
 
           <div>
@@ -253,7 +381,13 @@ export function UserUpsertDialog({
             <button
               type="submit"
               className="btn btn-primary"
-              disabled={isLoading}
+              disabled={
+                isLoading ||
+                !name.trim() ||
+                !hasUsernameInput ||
+                shouldBlockSubmitForUsername ||
+                usernameAvailabilityStatus === "checking"
+              }
             >
               {isLoading ? busyLabel : submitLabel}
             </button>

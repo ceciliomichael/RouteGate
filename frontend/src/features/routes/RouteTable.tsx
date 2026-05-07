@@ -395,7 +395,7 @@ export function RouteTable({
         border: "1px solid var(--color-border)",
         borderRadius: "1rem",
         boxShadow: "var(--shadow-card)",
-        overflow: "hidden",
+        overflow: "visible",
         display: "flex",
         flexDirection: "column",
       }}

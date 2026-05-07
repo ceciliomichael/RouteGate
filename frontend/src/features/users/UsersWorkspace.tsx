@@ -331,6 +331,7 @@ export function UsersWorkspace({ auth }: UsersWorkspaceProps) {
 
       {creatingOpen ? (
         <CreateUserDialog
+          existingUsernames={users.map((user) => user.username)}
           isLoading={isCreatingUser}
           onClose={() => setCreatingOpen(false)}
           onSubmit={handleCreateUser}

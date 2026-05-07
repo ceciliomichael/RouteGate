@@ -46,6 +46,7 @@ func NewHandler(
 	mux.HandleFunc("/api/events", handler.handleEvents)
 	mux.HandleFunc("/api/users", handler.handleUsers)
 	mux.HandleFunc("/api/users/", handler.handleUsersItem)
+	mux.HandleFunc("/api/users/availability", handler.handleUserUsernameAvailability)
 	mux.HandleFunc("/api/routes", handler.handleRoutesCollection)
 	mux.HandleFunc("/api/routes/availability", handler.handleRouteSubdomainAvailability)
 	mux.HandleFunc("/api/routes/", handler.handleRoutesItem)
@@ -237,6 +238,37 @@ func (h *Handler) handleUsers(writer http.ResponseWriter, request *http.Request)
 	default:
 		h.writeMethodNotAllowed(writer, http.MethodGet, http.MethodPost)
 	}
+}
+
+func (h *Handler) handleUserUsernameAvailability(writer http.ResponseWriter, request *http.Request) {
+	user, ok := h.requireUser(writer, request)
+	if !ok {
+		return
+	}
+	if !user.IsAdmin() {
+		h.writeError(writer, http.StatusForbidden, "forbidden")
+		return
+	}
+	if request.Method != http.MethodGet {
+		h.writeMethodNotAllowed(writer, http.MethodGet)
+		return
+	}
+
+	username := strings.TrimSpace(request.URL.Query().Get("username"))
+
+	ctx, cancel := context.WithTimeout(request.Context(), 5*time.Second)
+	defer cancel()
+
+	available, err := h.identity.IsUsernameAvailable(ctx, username)
+	if err != nil {
+		h.writeError(writer, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	h.writeJSON(writer, http.StatusOK, map[string]any{
+		"username":  normalizeUsernameForResponse(username),
+		"available": available,
+	})
 }
 
 func (h *Handler) handleUsersItem(writer http.ResponseWriter, request *http.Request) {
@@ -610,6 +642,10 @@ func (h *Handler) handleRouteSubdomainAvailability(
 }
 
 func normalizeSubdomainForResponse(raw string) string {
+	return strings.ToLower(strings.TrimSpace(raw))
+}
+
+func normalizeUsernameForResponse(raw string) string {
 	return strings.ToLower(strings.TrimSpace(raw))
 }
 

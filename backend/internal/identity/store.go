@@ -371,6 +371,25 @@ func (s *Store) ListUsers(ctx context.Context) ([]User, error) {
 	return users, nil
 }
 
+func (s *Store) IsUsernameAvailable(ctx context.Context, username string) (bool, error) {
+	normalizedUsername := normalizeUsername(username)
+	if normalizedUsername == "" {
+		return false, fmt.Errorf("username is required")
+	}
+
+	err := s.users.FindOne(ctx, bson.M{
+		"normalizedUsername": normalizedUsername,
+	}).Err()
+	if err == nil {
+		return false, nil
+	}
+	if errors.Is(err, mongo.ErrNoDocuments) {
+		return true, nil
+	}
+
+	return false, fmt.Errorf("check username availability: %w", err)
+}
+
 func (s *Store) CreateUser(ctx context.Context, input CreateUserInput) (User, string, error) {
 	username := strings.TrimSpace(input.Username)
 	if username == "" {

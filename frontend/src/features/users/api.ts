@@ -63,6 +63,22 @@ export async function createUser(
   return (await res.json()) as CreateUserResponse;
 }
 
+export async function checkUsernameAvailability(
+  username: string,
+): Promise<boolean> {
+  const params = new URLSearchParams({ username });
+  const res = await fetch(
+    `${USERS_API_PATH}/availability?${params.toString()}`,
+    {
+      cache: "no-store",
+      credentials: "include",
+    },
+  );
+  if (!res.ok) throw await parseError(res);
+  const data = (await res.json()) as { available?: unknown } | null;
+  return data?.available === true;
+}
+
 export async function updateUser(
   userId: string,
   payload: UpdateUserPayload,
