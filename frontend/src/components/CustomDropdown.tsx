@@ -1,6 +1,13 @@
 "use client";
 
-import { type ReactNode, useEffect, useRef, useState } from "react";
+import {
+  type ReactNode,
+  useEffect,
+  useRef,
+  useState,
+  createElement,
+} from "react";
+import { createPortal } from "react-dom";
 
 export interface DropdownOption<T extends string> {
   label: string;
@@ -30,10 +37,45 @@ export function CustomDropdown<T extends string>({
 }: CustomDropdownProps<T>) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const [menuPosition, setMenuPosition] = useState<{
+    top: number;
+    left?: number;
+    right?: number;
+  } | null>(null);
+
+  function updateMenuPosition() {
+    const root = rootRef.current;
+    if (!root) {
+      return;
+    }
+
+    const rect = root.getBoundingClientRect();
+    const gap = 6;
+    const viewportPadding = 8;
+    const top = rect.bottom + gap;
+
+    if (menuAlign === "left") {
+      setMenuPosition({
+        top,
+        left: Math.max(viewportPadding, rect.left),
+      });
+      return;
+    }
+
+    setMenuPosition({
+      top,
+      right: Math.max(viewportPadding, window.innerWidth - rect.right),
+    });
+  }
 
   useEffect(() => {
     function handlePointerDown(event: MouseEvent) {
-      if (!rootRef.current?.contains(event.target as Node)) {
+      const target = event.target as Node;
+      if (
+        !rootRef.current?.contains(target) &&
+        !menuRef.current?.contains(target)
+      ) {
         setOpen(false);
       }
     }
@@ -52,6 +94,27 @@ export function CustomDropdown<T extends string>({
       window.removeEventListener("keydown", handleEscape);
     };
   }, []);
+
+  useEffect(() => {
+    if (!open) {
+      setMenuPosition(null);
+      return;
+    }
+
+    updateMenuPosition();
+
+    function handlePositionUpdate() {
+      updateMenuPosition();
+    }
+
+    window.addEventListener("resize", handlePositionUpdate);
+    window.addEventListener("scroll", handlePositionUpdate, true);
+
+    return () => {
+      window.removeEventListener("resize", handlePositionUpdate);
+      window.removeEventListener("scroll", handlePositionUpdate, true);
+    };
+  }, [open, menuAlign, minMenuWidth]);
 
   const selected =
     options.find((option) => option.value === value) ?? options[0];
@@ -87,52 +150,62 @@ export function CustomDropdown<T extends string>({
         </svg>
       </button>
 
-      {open ? (
-        <div
-          className="custom-dropdown__menu"
-          role="listbox"
-          aria-label={ariaLabel}
-          style={{
-            left: menuAlign === "left" ? 0 : "auto",
-            right: menuAlign === "right" ? 0 : "auto",
-            minWidth: minMenuWidth,
-          }}
-        >
-          {options.map((option) => {
-            const isActive = option.value === value;
-            return (
-              <button
-                key={option.value}
-                type="button"
-                role="option"
-                aria-selected={isActive}
-                className={
-                  isActive
-                    ? option.tone === "danger"
-                      ? "custom-dropdown__item active danger"
-                      : "custom-dropdown__item active"
-                    : option.tone === "danger"
-                      ? "custom-dropdown__item danger"
-                      : "custom-dropdown__item"
-                }
-                onClick={() => {
-                  onChange(option.value);
-                  setOpen(false);
-                }}
-              >
-                <span className="custom-dropdown__item-label">
-                  {option.label}
-                </span>
-                {option.description ? (
-                  <span className="custom-dropdown__item-description">
-                    {option.description}
-                  </span>
-                ) : null}
-              </button>
-            );
-          })}
-        </div>
-      ) : null}
+      {open && menuPosition
+        ? createPortal(
+            <div
+              ref={menuRef}
+              className="custom-dropdown__menu"
+              role="listbox"
+              aria-label={ariaLabel}
+              style={{
+                position: "fixed",
+                top: `${menuPosition.top}px`,
+                left: menuPosition.left !== undefined ? `${menuPosition.left}px` : "auto",
+                right:
+                  menuPosition.right !== undefined
+                    ? `${menuPosition.right}px`
+                    : "auto",
+                minWidth: minMenuWidth,
+                zIndex: 1200,
+              }}
+            >
+              {options.map((option) => {
+                const isActive = option.value === value;
+                return (
+                  <button
+                    key={option.value}
+                    type="button"
+                    role="option"
+                    aria-selected={isActive}
+                    className={
+                      isActive
+                        ? option.tone === "danger"
+                          ? "custom-dropdown__item active danger"
+                          : "custom-dropdown__item active"
+                        : option.tone === "danger"
+                          ? "custom-dropdown__item danger"
+                          : "custom-dropdown__item"
+                    }
+                    onClick={() => {
+                      onChange(option.value);
+                      setOpen(false);
+                    }}
+                  >
+                    <span className="custom-dropdown__item-label">
+                      {option.label}
+                    </span>
+                    {option.description ? (
+                      <span className="custom-dropdown__item-description">
+                        {option.description}
+                      </span>
+                    ) : null}
+                  </button>
+                );
+              })}
+            </div>,
+            document.body,
+          )
+        : null}
     </div>
   );
 }
