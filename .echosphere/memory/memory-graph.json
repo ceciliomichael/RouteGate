@@ -510,6 +510,131 @@
       ],
       "createdAt": "2026-05-05T17:44:52.454Z",
       "updatedAt": "2026-05-05T17:44:52.454Z"
+    },
+    {
+      "memoryId": "132e8976-0cfd-432b-adb7-4b40c23f6e84",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "132e8976-0cfd-432b-adb7-4b40c23f6e84",
+      "rootMemoryId": "132e8976-0cfd-432b-adb7-4b40c23f6e84",
+      "parentMemoryIds": [],
+      "relatedMemoryIds": [
+        "d5818918-eb0c-4673-803a-1e6266597243",
+        "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+        "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+        "5a54e627-5c31-4883-8748-0490fa35ef01",
+        "1b006fa8-d33e-4fd8-9b5e-11b20eaeaaa7"
+      ],
+      "childMemoryIds": [
+        "e7cced4f-a8c9-4938-907c-7866fff8358a"
+      ],
+      "sectionKind": "fact",
+      "summary": "Investigated a Routes admin-page name mismatch where admin saw WAH4H/WAH4P drift. Root cause was a denormalized route.ownerName snapshot in MongoDB; the backend Routes list previously returned the stored snapshot directly. I changed the registry list path to re-resolve current owner names from the users collection on read, with stored ownerName as fallback. Added a unit test for owner-name fallback and documented the behavior in the backend README. Targeted backend tests for registry and api passed; full `go test ./...` still has a separate pre-existing registry test failure in destination tests.",
+      "affectedFiles": [
+        {
+          "path": "backend/internal/registry/store.go",
+          "action": "modified",
+          "reason": "Added user-based owner-name resolution in the route list path and preserved snapshot fallback logic.",
+          "notes": "Introduced a users collection reference, owner-name lookup helper, and display-name override conversion."
+        },
+        {
+          "path": "backend/internal/registry/store_test.go",
+          "action": "modified",
+          "reason": "Added coverage for the owner-name override/fallback behavior used by route listing.",
+          "notes": "Pure unit test for the public conversion helper."
+        },
+        {
+          "path": "backend/README.md",
+          "action": "modified",
+          "reason": "Documented that route list responses resolve current owner names from the users collection.",
+          "notes": "Clarifies denormalized snapshot behavior for future maintainers."
+        }
+      ],
+      "createdAt": "2026-05-07T02:21:13.601Z",
+      "updatedAt": "2026-05-07T02:21:13.601Z"
+    },
+    {
+      "memoryId": "e7cced4f-a8c9-4938-907c-7866fff8358a",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "132e8976-0cfd-432b-adb7-4b40c23f6e84",
+      "rootMemoryId": "132e8976-0cfd-432b-adb7-4b40c23f6e84",
+      "parentMemoryIds": [
+        "132e8976-0cfd-432b-adb7-4b40c23f6e84"
+      ],
+      "relatedMemoryIds": [
+        "d5818918-eb0c-4673-803a-1e6266597243",
+        "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+        "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+        "5a54e627-5c31-4883-8748-0490fa35ef01",
+        "1b006fa8-d33e-4fd8-9b5e-11b20eaeaaa7"
+      ],
+      "childMemoryIds": [
+        "041de316-ce29-4491-900b-0e80f9fba6e7"
+      ],
+      "sectionKind": "decision",
+      "summary": "Investigated a Routes admin-page name mismatch where admin saw WAH4H/WAH4P drift. Root cause was a denormalized route.ownerName snapshot in MongoDB; the backend Routes list previously returned the stored snapshot directly. I changed the registry list path to re-resolve current owner names from the users collection on read, with stored ownerName as fallback. Added a unit test for owner-name fallback and documented the behavior in the backend README. Targeted backend tests for registry and api passed; full `go test ./...` still has a separate pre-existing registry test failure in destination tests.",
+      "affectedFiles": [
+        {
+          "path": "backend/internal/registry/store.go",
+          "action": "modified",
+          "reason": "Added user-based owner-name resolution in the route list path and preserved snapshot fallback logic.",
+          "notes": "Introduced a users collection reference, owner-name lookup helper, and display-name override conversion."
+        },
+        {
+          "path": "backend/internal/registry/store_test.go",
+          "action": "modified",
+          "reason": "Added coverage for the owner-name override/fallback behavior used by route listing.",
+          "notes": "Pure unit test for the public conversion helper."
+        },
+        {
+          "path": "backend/README.md",
+          "action": "modified",
+          "reason": "Documented that route list responses resolve current owner names from the users collection.",
+          "notes": "Clarifies denormalized snapshot behavior for future maintainers."
+        }
+      ],
+      "createdAt": "2026-05-07T02:21:13.607Z",
+      "updatedAt": "2026-05-07T02:21:13.607Z"
+    },
+    {
+      "memoryId": "041de316-ce29-4491-900b-0e80f9fba6e7",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "132e8976-0cfd-432b-adb7-4b40c23f6e84",
+      "rootMemoryId": "132e8976-0cfd-432b-adb7-4b40c23f6e84",
+      "parentMemoryIds": [
+        "e7cced4f-a8c9-4938-907c-7866fff8358a"
+      ],
+      "relatedMemoryIds": [
+        "d5818918-eb0c-4673-803a-1e6266597243",
+        "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+        "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+        "5a54e627-5c31-4883-8748-0490fa35ef01",
+        "1b006fa8-d33e-4fd8-9b5e-11b20eaeaaa7"
+      ],
+      "childMemoryIds": [],
+      "sectionKind": "task",
+      "summary": "Investigated a Routes admin-page name mismatch where admin saw WAH4H/WAH4P drift. Root cause was a denormalized route.ownerName snapshot in MongoDB; the backend Routes list previously returned the stored snapshot directly. I changed the registry list path to re-resolve current owner names from the users collection on read, with stored ownerName as fallback. Added a unit test for owner-name fallback and documented the behavior in the backend README. Targeted backend tests for registry and api passed; full `go test ./...` still has a separate pre-existing registry test failure in destination tests.",
+      "affectedFiles": [
+        {
+          "path": "backend/internal/registry/store.go",
+          "action": "modified",
+          "reason": "Added user-based owner-name resolution in the route list path and preserved snapshot fallback logic.",
+          "notes": "Introduced a users collection reference, owner-name lookup helper, and display-name override conversion."
+        },
+        {
+          "path": "backend/internal/registry/store_test.go",
+          "action": "modified",
+          "reason": "Added coverage for the owner-name override/fallback behavior used by route listing.",
+          "notes": "Pure unit test for the public conversion helper."
+        },
+        {
+          "path": "backend/README.md",
+          "action": "modified",
+          "reason": "Documented that route list responses resolve current owner names from the users collection.",
+          "notes": "Clarifies denormalized snapshot behavior for future maintainers."
+        }
+      ],
+      "createdAt": "2026-05-07T02:21:13.614Z",
+      "updatedAt": "2026-05-07T02:21:13.614Z"
     }
   ],
   "edges": [
@@ -1030,7 +1155,140 @@
       "relation": "related",
       "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
       "createdAt": "2026-05-05T17:44:52.454Z"
+    },
+    {
+      "fromMemoryId": "132e8976-0cfd-432b-adb7-4b40c23f6e84",
+      "toMemoryId": "d5818918-eb0c-4673-803a-1e6266597243",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:21:13.601Z"
+    },
+    {
+      "fromMemoryId": "132e8976-0cfd-432b-adb7-4b40c23f6e84",
+      "toMemoryId": "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:21:13.601Z"
+    },
+    {
+      "fromMemoryId": "132e8976-0cfd-432b-adb7-4b40c23f6e84",
+      "toMemoryId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:21:13.601Z"
+    },
+    {
+      "fromMemoryId": "132e8976-0cfd-432b-adb7-4b40c23f6e84",
+      "toMemoryId": "5a54e627-5c31-4883-8748-0490fa35ef01",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:21:13.601Z"
+    },
+    {
+      "fromMemoryId": "132e8976-0cfd-432b-adb7-4b40c23f6e84",
+      "toMemoryId": "1b006fa8-d33e-4fd8-9b5e-11b20eaeaaa7",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:21:13.601Z"
+    },
+    {
+      "fromMemoryId": "132e8976-0cfd-432b-adb7-4b40c23f6e84",
+      "toMemoryId": "e7cced4f-a8c9-4938-907c-7866fff8358a",
+      "relation": "child",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:21:13.601Z"
+    },
+    {
+      "fromMemoryId": "e7cced4f-a8c9-4938-907c-7866fff8358a",
+      "toMemoryId": "132e8976-0cfd-432b-adb7-4b40c23f6e84",
+      "relation": "parent",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:21:13.607Z"
+    },
+    {
+      "fromMemoryId": "e7cced4f-a8c9-4938-907c-7866fff8358a",
+      "toMemoryId": "d5818918-eb0c-4673-803a-1e6266597243",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:21:13.607Z"
+    },
+    {
+      "fromMemoryId": "e7cced4f-a8c9-4938-907c-7866fff8358a",
+      "toMemoryId": "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:21:13.607Z"
+    },
+    {
+      "fromMemoryId": "e7cced4f-a8c9-4938-907c-7866fff8358a",
+      "toMemoryId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:21:13.607Z"
+    },
+    {
+      "fromMemoryId": "e7cced4f-a8c9-4938-907c-7866fff8358a",
+      "toMemoryId": "5a54e627-5c31-4883-8748-0490fa35ef01",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:21:13.607Z"
+    },
+    {
+      "fromMemoryId": "e7cced4f-a8c9-4938-907c-7866fff8358a",
+      "toMemoryId": "1b006fa8-d33e-4fd8-9b5e-11b20eaeaaa7",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:21:13.607Z"
+    },
+    {
+      "fromMemoryId": "e7cced4f-a8c9-4938-907c-7866fff8358a",
+      "toMemoryId": "041de316-ce29-4491-900b-0e80f9fba6e7",
+      "relation": "child",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:21:13.607Z"
+    },
+    {
+      "fromMemoryId": "041de316-ce29-4491-900b-0e80f9fba6e7",
+      "toMemoryId": "e7cced4f-a8c9-4938-907c-7866fff8358a",
+      "relation": "parent",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:21:13.614Z"
+    },
+    {
+      "fromMemoryId": "041de316-ce29-4491-900b-0e80f9fba6e7",
+      "toMemoryId": "d5818918-eb0c-4673-803a-1e6266597243",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:21:13.614Z"
+    },
+    {
+      "fromMemoryId": "041de316-ce29-4491-900b-0e80f9fba6e7",
+      "toMemoryId": "e1d15c90-65fd-47dc-bc34-5daa9370af70",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:21:13.614Z"
+    },
+    {
+      "fromMemoryId": "041de316-ce29-4491-900b-0e80f9fba6e7",
+      "toMemoryId": "0db92d97-110d-4f88-8397-62ee1d42e9cc",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:21:13.614Z"
+    },
+    {
+      "fromMemoryId": "041de316-ce29-4491-900b-0e80f9fba6e7",
+      "toMemoryId": "5a54e627-5c31-4883-8748-0490fa35ef01",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:21:13.614Z"
+    },
+    {
+      "fromMemoryId": "041de316-ce29-4491-900b-0e80f9fba6e7",
+      "toMemoryId": "1b006fa8-d33e-4fd8-9b5e-11b20eaeaaa7",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:21:13.614Z"
     }
   ],
-  "updatedAt": "2026-05-05T17:44:52.455Z"
+  "updatedAt": "2026-05-07T02:21:13.615Z"
 }

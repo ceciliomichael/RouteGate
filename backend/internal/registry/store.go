@@ -65,6 +65,7 @@ type OwnerInfo struct {
 
 type Store struct {
 	collection        *mongo.Collection
+	users             *mongo.Collection
 	reservedSubdomain string
 }
 
@@ -85,6 +86,7 @@ type routeRecord struct {
 func NewStore(db *mongo.Database, reservedSubdomain string) *Store {
 	return &Store{
 		collection:        db.Collection("routes"),
+		users:             db.Collection("users"),
 		reservedSubdomain: normalizeSubdomain(reservedSubdomain),
 	}
 }
@@ -143,16 +145,26 @@ func (s *Store) List(ctx context.Context, scope AccessScope) ([]Route, error) {
 	}
 	defer cursor.Close(ctx)
 
-	routes := make([]Route, 0)
+	records := make([]routeRecord, 0)
 	for cursor.Next(ctx) {
 		var record routeRecord
 		if err := cursor.Decode(&record); err != nil {
 			return nil, fmt.Errorf("decode route: %w", err)
 		}
-		routes = append(routes, record.toPublic())
+		records = append(records, record)
 	}
 	if err := cursor.Err(); err != nil {
 		return nil, fmt.Errorf("iterate routes: %w", err)
+	}
+
+	ownerNames, err := s.resolveOwnerNames(ctx, records)
+	if err != nil {
+		return nil, err
+	}
+
+	routes := make([]Route, 0, len(records))
+	for _, record := range records {
+		routes = append(routes, record.toPublicWithOwnerName(ownerNames[record.OwnerID.Hex()]))
 	}
 
 	return routes, nil
@@ -311,10 +323,19 @@ func buildScopeFilter(scope AccessScope) (bson.M, error) {
 }
 
 func (r routeRecord) toPublic() Route {
+	return r.toPublicWithOwnerName("")
+}
+
+func (r routeRecord) toPublicWithOwnerName(ownerName string) Route {
+	displayName := strings.TrimSpace(ownerName)
+	if displayName == "" {
+		displayName = strings.TrimSpace(r.OwnerName)
+	}
+
 	return Route{
 		ID:                    r.ID.Hex(),
 		OwnerID:               r.OwnerID.Hex(),
-		OwnerName:             r.OwnerName,
+		OwnerName:             displayName,
 		Subdomain:             r.Subdomain,
 		Destination:           r.Destination,
 		Enabled:               r.Enabled,
@@ -323,6 +344,53 @@ func (r routeRecord) toPublic() Route {
 		CreatedAt:             r.CreatedAt.UTC().Format(time.RFC3339Nano),
 		UpdatedAt:             r.UpdatedAt.UTC().Format(time.RFC3339Nano),
 	}
+}
+
+func (s *Store) resolveOwnerNames(ctx context.Context, records []routeRecord) (map[string]string, error) {
+	if len(records) == 0 {
+		return map[string]string{}, nil
+	}
+
+	ownerIDs := make([]primitive.ObjectID, 0, len(records))
+	seen := make(map[primitive.ObjectID]struct{}, len(records))
+	for _, record := range records {
+		if _, ok := seen[record.OwnerID]; ok {
+			continue
+		}
+		seen[record.OwnerID] = struct{}{}
+		ownerIDs = append(ownerIDs, record.OwnerID)
+	}
+
+	if len(ownerIDs) == 0 {
+		return map[string]string{}, nil
+	}
+
+	cursor, err := s.users.Find(ctx, bson.M{"_id": bson.M{"$in": ownerIDs}}, options.Find().SetProjection(bson.M{
+		"name": 1,
+	}))
+	if err != nil {
+		return nil, fmt.Errorf("find route owners: %w", err)
+	}
+	defer cursor.Close(ctx)
+
+	type userNameRecord struct {
+		ID   primitive.ObjectID `bson:"_id"`
+		Name string             `bson:"name"`
+	}
+
+	ownerNames := make(map[string]string, len(ownerIDs))
+	for cursor.Next(ctx) {
+		var user userNameRecord
+		if err := cursor.Decode(&user); err != nil {
+			return nil, fmt.Errorf("decode route owner: %w", err)
+		}
+		ownerNames[user.ID.Hex()] = strings.TrimSpace(user.Name)
+	}
+	if err := cursor.Err(); err != nil {
+		return nil, fmt.Errorf("iterate route owners: %w", err)
+	}
+
+	return ownerNames, nil
 }
 
 func normalizeSubdomain(value string) string {

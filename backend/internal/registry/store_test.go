@@ -37,3 +37,19 @@ func TestStoreReservedSubdomainMatchesConfiguredValue(t *testing.T) {
 		t.Fatalf("expected docs not to be reserved")
 	}
 }
+
+func TestRouteRecordToPublicWithOwnerNameUsesResolvedName(t *testing.T) {
+	t.Parallel()
+
+	record := routeRecord{
+		OwnerName: "stale snapshot",
+	}
+
+	if got := record.toPublicWithOwnerName("Fresh Name").OwnerName; got != "Fresh Name" {
+		t.Fatalf("expected resolved owner name to win, got %q", got)
+	}
+
+	if got := record.toPublicWithOwnerName("").OwnerName; got != "stale snapshot" {
+		t.Fatalf("expected stored owner name fallback, got %q", got)
+	}
+}

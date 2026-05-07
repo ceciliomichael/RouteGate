@@ -1,5 +1,41 @@
 [
   {
+    "id": "e7cced4f-a8c9-4938-907c-7866fff8358a",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "kind": "decision",
+    "content": "Summary: Investigated a Routes admin-page name mismatch where admin saw WAH4H/WAH4P drift. Root cause was a denormalized route.ownerName snapshot in MongoDB; the backend Routes list previously returned the stored snapshot directly. I changed the registry list path to re-resolve current owner names from the users collection on read, with stored ownerName as fallback. Added a unit test for owner-name fallback and documented the behavior in the backend README. Targeted backend tests for registry and api passed; full `go test ./...` still has a separate pre-existing registry test failure in destination tests.\n\nDecisions:\n1. [finished] Use a backend read-time name resolution strategy for route listings so admin routes always reflect the current user profile name while preserving the stored snapshot as fallback.\n2. [finished] Keep `ownerName` persisted on route records as a historical fallback rather than removing the field, to preserve backward compatibility and avoid a breaking data migration.\n3. [finished] Document the route owner-name sync behavior in the backend README so the denormalized field behavior is explicit for future maintenance.\n\nAffected files:\n1. [modified] backend/internal/registry/store.go — Added user-based owner-name resolution in the route list path and preserved snapshot fallback logic. | Notes: Introduced a users collection reference, owner-name lookup helper, and display-name override conversion.\n2. [modified] backend/internal/registry/store_test.go — Added coverage for the owner-name override/fallback behavior used by route listing. | Notes: Pure unit test for the public conversion helper.\n3. [modified] backend/README.md — Documented that route list responses resolve current owner names from the users collection. | Notes: Clarifies denormalized snapshot behavior for future maintainers.\n\nMemory links:\nGraph group: 132e8976-0cfd-432b-adb7-4b40c23f6e84\nRoot memory: 132e8976-0cfd-432b-adb7-4b40c23f6e84\nParent memories: 132e8976-0cfd-432b-adb7-4b40c23f6e84\nRelated memories: d5818918-eb0c-4673-803a-1e6266597243, e1d15c90-65fd-47dc-bc34-5daa9370af70, 0db92d97-110d-4f88-8397-62ee1d42e9cc, 5a54e627-5c31-4883-8748-0490fa35ef01, 1b006fa8-d33e-4fd8-9b5e-11b20eaeaaa7",
+    "createdAt": "2026-05-07T02:21:13.604Z",
+    "updatedAt": "2026-05-07T02:21:13.604Z",
+    "metadata": {
+      "summary": "Investigated a Routes admin-page name mismatch where admin saw WAH4H/WAH4P drift. Root cause was a denormalized route.ownerName snapshot in MongoDB; the backend Routes list previously returned the stored snapshot directly. I changed the registry list path to re-resolve current owner names from the users collection on read, with stored ownerName as fallback. Added a unit test for owner-name fallback and documented the behavior in the backend README. Targeted backend tests for registry and api passed; full `go test ./...` still has a separate pre-existing registry test failure in destination tests.",
+      "topics": [
+        "summary",
+        "facts",
+        "decisions",
+        "tasks",
+        "modified",
+        "modified",
+        "modified"
+      ],
+      "tags": [
+        "memory-graph",
+        "backend/internal/registry/store.go",
+        "backend/internal/registry/store_test.go",
+        "backend/README.md",
+        "finished",
+        "finished",
+        "finished",
+        "finished",
+        "finished",
+        "finished",
+        "finished",
+        "finished",
+        "finished"
+      ],
+      "status": "finished"
+    }
+  },
+  {
     "id": "65ae1e60-454b-4db7-9573-61f1183b26a0",
     "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
     "kind": "decision",

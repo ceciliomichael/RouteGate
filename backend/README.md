@@ -59,6 +59,7 @@ MongoDB collections:
 - `routes`
 
 `routes` are globally unique by subdomain. Admins can view all routes. Standard users can only manage routes they own.
+Route responses store an owner-name snapshot, but the list endpoint resolves the current user name from `users` so admin views stay in sync after profile updates.
 
 ## API
 
