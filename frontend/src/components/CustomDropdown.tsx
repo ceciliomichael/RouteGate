@@ -2,6 +2,7 @@
 
 import {
   type ReactNode,
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -43,7 +44,7 @@ export function CustomDropdown<T extends string>({
     right?: number;
   } | null>(null);
 
-  function updateMenuPosition() {
+  const updateMenuPosition = useCallback(() => {
     const root = rootRef.current;
     if (!root) {
       return;
@@ -66,7 +67,7 @@ export function CustomDropdown<T extends string>({
       top,
       right: Math.max(viewportPadding, window.innerWidth - rect.right),
     });
-  }
+  }, [menuAlign]);
 
   useEffect(() => {
     function handlePointerDown(event: MouseEvent) {
@@ -113,7 +114,7 @@ export function CustomDropdown<T extends string>({
       window.removeEventListener("resize", handlePositionUpdate);
       window.removeEventListener("scroll", handlePositionUpdate, true);
     };
-  }, [open, menuAlign, minMenuWidth]);
+  }, [open, updateMenuPosition]);
 
   const selected =
     options.find((option) => option.value === value) ?? options[0];
@@ -159,7 +160,10 @@ export function CustomDropdown<T extends string>({
               style={{
                 position: "fixed",
                 top: `${menuPosition.top}px`,
-                left: menuPosition.left !== undefined ? `${menuPosition.left}px` : "auto",
+                left:
+                  menuPosition.left !== undefined
+                    ? `${menuPosition.left}px`
+                    : "auto",
                 right:
                   menuPosition.right !== undefined
                     ? `${menuPosition.right}px`
