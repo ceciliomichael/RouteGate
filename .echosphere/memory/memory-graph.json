@@ -1063,6 +1063,113 @@
       ],
       "createdAt": "2026-05-07T02:48:40.182Z",
       "updatedAt": "2026-05-07T02:48:40.182Z"
+    },
+    {
+      "memoryId": "7a6b23df-bf79-46f7-b672-a2e74ad8da70",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "7a6b23df-bf79-46f7-b672-a2e74ad8da70",
+      "rootMemoryId": "7a6b23df-bf79-46f7-b672-a2e74ad8da70",
+      "parentMemoryIds": [],
+      "relatedMemoryIds": [
+        "fdbad90b-e31b-4250-890e-230530e4c9f7",
+        "3eec47b8-83ce-4de3-ae64-f0865a48ba14",
+        "13edfad7-f0b9-4ae3-950e-853137de3a3f",
+        "44d53c95-e1e2-42ca-810b-131c982854b9",
+        "17f9a3e2-4844-4b62-810a-36656b7dd990"
+      ],
+      "childMemoryIds": [
+        "547724a8-f7c1-4e11-b7c6-a0cb2a63328a"
+      ],
+      "sectionKind": "fact",
+      "summary": "Fixed the settings sidebar border overlap so the General and Terminal separators render as single thin lines instead of doubled/thick borders. The sidebar now relies on the nav top border plus each row's bottom border, with the per-item top border removed to prevent overlap.",
+      "affectedFiles": [
+        {
+          "path": "frontend/src/app/globals.css",
+          "action": "modified",
+          "reason": "Removed the item top border in the settings sidebar so adjacent rows no longer render doubled separators.",
+          "notes": "The nav retains a single top border and each item keeps its bottom border."
+        },
+        {
+          "path": "frontend/src/features/settings/SettingsWorkspace.tsx",
+          "action": "inspected",
+          "reason": "Verified the sidebar structure that the CSS selectors target, ensuring the fix stayed isolated to styling.",
+          "notes": "No markup changes were required."
+        }
+      ],
+      "createdAt": "2026-05-07T02:54:17.744Z",
+      "updatedAt": "2026-05-07T02:54:17.744Z"
+    },
+    {
+      "memoryId": "547724a8-f7c1-4e11-b7c6-a0cb2a63328a",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "7a6b23df-bf79-46f7-b672-a2e74ad8da70",
+      "rootMemoryId": "7a6b23df-bf79-46f7-b672-a2e74ad8da70",
+      "parentMemoryIds": [
+        "7a6b23df-bf79-46f7-b672-a2e74ad8da70"
+      ],
+      "relatedMemoryIds": [
+        "fdbad90b-e31b-4250-890e-230530e4c9f7",
+        "3eec47b8-83ce-4de3-ae64-f0865a48ba14",
+        "13edfad7-f0b9-4ae3-950e-853137de3a3f",
+        "44d53c95-e1e2-42ca-810b-131c982854b9",
+        "17f9a3e2-4844-4b62-810a-36656b7dd990"
+      ],
+      "childMemoryIds": [
+        "187b00cd-9642-4e1d-a64f-7c56c8555c4a"
+      ],
+      "sectionKind": "decision",
+      "summary": "Fixed the settings sidebar border overlap so the General and Terminal separators render as single thin lines instead of doubled/thick borders. The sidebar now relies on the nav top border plus each row's bottom border, with the per-item top border removed to prevent overlap.",
+      "affectedFiles": [
+        {
+          "path": "frontend/src/app/globals.css",
+          "action": "modified",
+          "reason": "Removed the item top border in the settings sidebar so adjacent rows no longer render doubled separators.",
+          "notes": "The nav retains a single top border and each item keeps its bottom border."
+        },
+        {
+          "path": "frontend/src/features/settings/SettingsWorkspace.tsx",
+          "action": "inspected",
+          "reason": "Verified the sidebar structure that the CSS selectors target, ensuring the fix stayed isolated to styling.",
+          "notes": "No markup changes were required."
+        }
+      ],
+      "createdAt": "2026-05-07T02:54:17.751Z",
+      "updatedAt": "2026-05-07T02:54:17.751Z"
+    },
+    {
+      "memoryId": "187b00cd-9642-4e1d-a64f-7c56c8555c4a",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "7a6b23df-bf79-46f7-b672-a2e74ad8da70",
+      "rootMemoryId": "7a6b23df-bf79-46f7-b672-a2e74ad8da70",
+      "parentMemoryIds": [
+        "547724a8-f7c1-4e11-b7c6-a0cb2a63328a"
+      ],
+      "relatedMemoryIds": [
+        "fdbad90b-e31b-4250-890e-230530e4c9f7",
+        "3eec47b8-83ce-4de3-ae64-f0865a48ba14",
+        "13edfad7-f0b9-4ae3-950e-853137de3a3f",
+        "44d53c95-e1e2-42ca-810b-131c982854b9",
+        "17f9a3e2-4844-4b62-810a-36656b7dd990"
+      ],
+      "childMemoryIds": [],
+      "sectionKind": "task",
+      "summary": "Fixed the settings sidebar border overlap so the General and Terminal separators render as single thin lines instead of doubled/thick borders. The sidebar now relies on the nav top border plus each row's bottom border, with the per-item top border removed to prevent overlap.",
+      "affectedFiles": [
+        {
+          "path": "frontend/src/app/globals.css",
+          "action": "modified",
+          "reason": "Removed the item top border in the settings sidebar so adjacent rows no longer render doubled separators.",
+          "notes": "The nav retains a single top border and each item keeps its bottom border."
+        },
+        {
+          "path": "frontend/src/features/settings/SettingsWorkspace.tsx",
+          "action": "inspected",
+          "reason": "Verified the sidebar structure that the CSS selectors target, ensuring the fix stayed isolated to styling.",
+          "notes": "No markup changes were required."
+        }
+      ],
+      "createdAt": "2026-05-07T02:54:17.758Z",
+      "updatedAt": "2026-05-07T02:54:17.758Z"
     }
   ],
   "edges": [
@@ -2248,7 +2355,140 @@
       "relation": "related",
       "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
       "createdAt": "2026-05-07T02:48:40.183Z"
+    },
+    {
+      "fromMemoryId": "7a6b23df-bf79-46f7-b672-a2e74ad8da70",
+      "toMemoryId": "fdbad90b-e31b-4250-890e-230530e4c9f7",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:54:17.744Z"
+    },
+    {
+      "fromMemoryId": "7a6b23df-bf79-46f7-b672-a2e74ad8da70",
+      "toMemoryId": "3eec47b8-83ce-4de3-ae64-f0865a48ba14",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:54:17.744Z"
+    },
+    {
+      "fromMemoryId": "7a6b23df-bf79-46f7-b672-a2e74ad8da70",
+      "toMemoryId": "13edfad7-f0b9-4ae3-950e-853137de3a3f",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:54:17.744Z"
+    },
+    {
+      "fromMemoryId": "7a6b23df-bf79-46f7-b672-a2e74ad8da70",
+      "toMemoryId": "44d53c95-e1e2-42ca-810b-131c982854b9",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:54:17.744Z"
+    },
+    {
+      "fromMemoryId": "7a6b23df-bf79-46f7-b672-a2e74ad8da70",
+      "toMemoryId": "17f9a3e2-4844-4b62-810a-36656b7dd990",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:54:17.744Z"
+    },
+    {
+      "fromMemoryId": "7a6b23df-bf79-46f7-b672-a2e74ad8da70",
+      "toMemoryId": "547724a8-f7c1-4e11-b7c6-a0cb2a63328a",
+      "relation": "child",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:54:17.744Z"
+    },
+    {
+      "fromMemoryId": "547724a8-f7c1-4e11-b7c6-a0cb2a63328a",
+      "toMemoryId": "7a6b23df-bf79-46f7-b672-a2e74ad8da70",
+      "relation": "parent",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:54:17.751Z"
+    },
+    {
+      "fromMemoryId": "547724a8-f7c1-4e11-b7c6-a0cb2a63328a",
+      "toMemoryId": "fdbad90b-e31b-4250-890e-230530e4c9f7",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:54:17.751Z"
+    },
+    {
+      "fromMemoryId": "547724a8-f7c1-4e11-b7c6-a0cb2a63328a",
+      "toMemoryId": "3eec47b8-83ce-4de3-ae64-f0865a48ba14",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:54:17.751Z"
+    },
+    {
+      "fromMemoryId": "547724a8-f7c1-4e11-b7c6-a0cb2a63328a",
+      "toMemoryId": "13edfad7-f0b9-4ae3-950e-853137de3a3f",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:54:17.751Z"
+    },
+    {
+      "fromMemoryId": "547724a8-f7c1-4e11-b7c6-a0cb2a63328a",
+      "toMemoryId": "44d53c95-e1e2-42ca-810b-131c982854b9",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:54:17.751Z"
+    },
+    {
+      "fromMemoryId": "547724a8-f7c1-4e11-b7c6-a0cb2a63328a",
+      "toMemoryId": "17f9a3e2-4844-4b62-810a-36656b7dd990",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:54:17.751Z"
+    },
+    {
+      "fromMemoryId": "547724a8-f7c1-4e11-b7c6-a0cb2a63328a",
+      "toMemoryId": "187b00cd-9642-4e1d-a64f-7c56c8555c4a",
+      "relation": "child",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:54:17.751Z"
+    },
+    {
+      "fromMemoryId": "187b00cd-9642-4e1d-a64f-7c56c8555c4a",
+      "toMemoryId": "547724a8-f7c1-4e11-b7c6-a0cb2a63328a",
+      "relation": "parent",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:54:17.758Z"
+    },
+    {
+      "fromMemoryId": "187b00cd-9642-4e1d-a64f-7c56c8555c4a",
+      "toMemoryId": "fdbad90b-e31b-4250-890e-230530e4c9f7",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:54:17.758Z"
+    },
+    {
+      "fromMemoryId": "187b00cd-9642-4e1d-a64f-7c56c8555c4a",
+      "toMemoryId": "3eec47b8-83ce-4de3-ae64-f0865a48ba14",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:54:17.758Z"
+    },
+    {
+      "fromMemoryId": "187b00cd-9642-4e1d-a64f-7c56c8555c4a",
+      "toMemoryId": "13edfad7-f0b9-4ae3-950e-853137de3a3f",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:54:17.758Z"
+    },
+    {
+      "fromMemoryId": "187b00cd-9642-4e1d-a64f-7c56c8555c4a",
+      "toMemoryId": "44d53c95-e1e2-42ca-810b-131c982854b9",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:54:17.758Z"
+    },
+    {
+      "fromMemoryId": "187b00cd-9642-4e1d-a64f-7c56c8555c4a",
+      "toMemoryId": "17f9a3e2-4844-4b62-810a-36656b7dd990",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T02:54:17.758Z"
     }
   ],
-  "updatedAt": "2026-05-07T02:48:40.184Z"
+  "updatedAt": "2026-05-07T02:54:17.759Z"
 }

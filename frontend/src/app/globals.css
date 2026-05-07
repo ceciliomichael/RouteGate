@@ -632,7 +632,6 @@
     width: 100%;
     min-height: 3rem;
     border: 0;
-    border-top: 0.5px solid var(--color-border);
     border-bottom: 0.5px solid var(--color-border);
     border-radius: 0;
     background: transparent;

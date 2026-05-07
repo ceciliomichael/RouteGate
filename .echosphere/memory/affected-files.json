@@ -1,5 +1,77 @@
 [
   {
+    "id": "d66c6e4c-3559-4739-bacb-f2ba5e6b22bb",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "7a6b23df-bf79-46f7-b672-a2e74ad8da70",
+    "sectionKind": "fact",
+    "path": "frontend/src/app/globals.css",
+    "action": "modified",
+    "reason": "Removed the item top border in the settings sidebar so adjacent rows no longer render doubled separators.",
+    "notes": "The nav retains a single top border and each item keeps its bottom border.",
+    "createdAt": "2026-05-07T02:54:17.744Z",
+    "updatedAt": "2026-05-07T02:54:17.744Z"
+  },
+  {
+    "id": "449b678f-68e5-4f92-8891-ba687ad4db1f",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "7a6b23df-bf79-46f7-b672-a2e74ad8da70",
+    "sectionKind": "fact",
+    "path": "frontend/src/features/settings/SettingsWorkspace.tsx",
+    "action": "inspected",
+    "reason": "Verified the sidebar structure that the CSS selectors target, ensuring the fix stayed isolated to styling.",
+    "notes": "No markup changes were required.",
+    "createdAt": "2026-05-07T02:54:17.744Z",
+    "updatedAt": "2026-05-07T02:54:17.744Z"
+  },
+  {
+    "id": "7a100b91-89e3-4513-994e-924e17bd34eb",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "547724a8-f7c1-4e11-b7c6-a0cb2a63328a",
+    "sectionKind": "decision",
+    "path": "frontend/src/app/globals.css",
+    "action": "modified",
+    "reason": "Removed the item top border in the settings sidebar so adjacent rows no longer render doubled separators.",
+    "notes": "The nav retains a single top border and each item keeps its bottom border.",
+    "createdAt": "2026-05-07T02:54:17.751Z",
+    "updatedAt": "2026-05-07T02:54:17.751Z"
+  },
+  {
+    "id": "8060db2b-cd47-45a0-9f09-0e872f6b6109",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "547724a8-f7c1-4e11-b7c6-a0cb2a63328a",
+    "sectionKind": "decision",
+    "path": "frontend/src/features/settings/SettingsWorkspace.tsx",
+    "action": "inspected",
+    "reason": "Verified the sidebar structure that the CSS selectors target, ensuring the fix stayed isolated to styling.",
+    "notes": "No markup changes were required.",
+    "createdAt": "2026-05-07T02:54:17.752Z",
+    "updatedAt": "2026-05-07T02:54:17.752Z"
+  },
+  {
+    "id": "e0f60d35-cad5-4ef1-861d-bda35f626468",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "187b00cd-9642-4e1d-a64f-7c56c8555c4a",
+    "sectionKind": "task",
+    "path": "frontend/src/app/globals.css",
+    "action": "modified",
+    "reason": "Removed the item top border in the settings sidebar so adjacent rows no longer render doubled separators.",
+    "notes": "The nav retains a single top border and each item keeps its bottom border.",
+    "createdAt": "2026-05-07T02:54:17.758Z",
+    "updatedAt": "2026-05-07T02:54:17.758Z"
+  },
+  {
+    "id": "1be7a33c-f690-4aa4-a79f-8c48533e68f5",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "187b00cd-9642-4e1d-a64f-7c56c8555c4a",
+    "sectionKind": "task",
+    "path": "frontend/src/features/settings/SettingsWorkspace.tsx",
+    "action": "inspected",
+    "reason": "Verified the sidebar structure that the CSS selectors target, ensuring the fix stayed isolated to styling.",
+    "notes": "No markup changes were required.",
+    "createdAt": "2026-05-07T02:54:17.758Z",
+    "updatedAt": "2026-05-07T02:54:17.758Z"
+  },
+  {
     "id": "46afd1ec-7927-425d-97b9-cf0971cf095a",
     "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
     "memoryId": "3eec47b8-83ce-4de3-ae64-f0865a48ba14",
