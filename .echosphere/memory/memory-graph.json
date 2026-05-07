@@ -1419,6 +1419,112 @@
       ],
       "createdAt": "2026-05-07T03:04:57.366Z",
       "updatedAt": "2026-05-07T03:04:57.366Z"
+    },
+    {
+      "memoryId": "ad0455c7-6a09-467f-845c-e51140d75f43",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "ad0455c7-6a09-467f-845c-e51140d75f43",
+      "rootMemoryId": "8b42a26b-819d-43c7-b234-3a51febc9942",
+      "parentMemoryIds": [
+        "8b42a26b-819d-43c7-b234-3a51febc9942"
+      ],
+      "relatedMemoryIds": [
+        "4d227638-aef0-4cf6-9b9e-c1d6f50cf1a9",
+        "ec54e1f4-a093-4076-a93f-0faebf9cb340",
+        "88706df3-23af-41f2-afc9-a54434ce742f",
+        "b84c9d1a-27ec-4272-94ae-aa6cd659138f"
+      ],
+      "childMemoryIds": [
+        "7df0d3a1-d191-44e9-956f-2a30f0b60f9c"
+      ],
+      "sectionKind": "fact",
+      "summary": "Added a subtitle to the right-panel settings header and fixed the divider to span the full width without inset gaps. The settings shell now uses a dedicated full-width header row with title and subtitle, and the content body is padded separately so the divider aligns edge-to-edge cleanly.",
+      "affectedFiles": [
+        {
+          "path": "frontend/src/features/settings/SettingsWorkspace.tsx",
+          "action": "modified",
+          "reason": "Added subtitle text for the right-panel header and wrapped the active panel content in a separate body container.",
+          "notes": "The shell now owns the single header hierarchy."
+        },
+        {
+          "path": "frontend/src/app/globals.css",
+          "action": "modified",
+          "reason": "Refactored the settings content shell so the header spans full width and the body handles internal padding, eliminating divider gaps.",
+          "notes": "The header now has title and subtitle styles plus a separate body wrapper."
+        }
+      ],
+      "createdAt": "2026-05-07T03:10:14.423Z",
+      "updatedAt": "2026-05-07T03:10:14.423Z"
+    },
+    {
+      "memoryId": "7df0d3a1-d191-44e9-956f-2a30f0b60f9c",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "ad0455c7-6a09-467f-845c-e51140d75f43",
+      "rootMemoryId": "8b42a26b-819d-43c7-b234-3a51febc9942",
+      "parentMemoryIds": [
+        "ad0455c7-6a09-467f-845c-e51140d75f43"
+      ],
+      "relatedMemoryIds": [
+        "4d227638-aef0-4cf6-9b9e-c1d6f50cf1a9",
+        "ec54e1f4-a093-4076-a93f-0faebf9cb340",
+        "88706df3-23af-41f2-afc9-a54434ce742f",
+        "b84c9d1a-27ec-4272-94ae-aa6cd659138f"
+      ],
+      "childMemoryIds": [
+        "ee4dc723-b634-47e0-b4e3-a552d0ee71ec"
+      ],
+      "sectionKind": "decision",
+      "summary": "Added a subtitle to the right-panel settings header and fixed the divider to span the full width without inset gaps. The settings shell now uses a dedicated full-width header row with title and subtitle, and the content body is padded separately so the divider aligns edge-to-edge cleanly.",
+      "affectedFiles": [
+        {
+          "path": "frontend/src/features/settings/SettingsWorkspace.tsx",
+          "action": "modified",
+          "reason": "Added subtitle text for the right-panel header and wrapped the active panel content in a separate body container.",
+          "notes": "The shell now owns the single header hierarchy."
+        },
+        {
+          "path": "frontend/src/app/globals.css",
+          "action": "modified",
+          "reason": "Refactored the settings content shell so the header spans full width and the body handles internal padding, eliminating divider gaps.",
+          "notes": "The header now has title and subtitle styles plus a separate body wrapper."
+        }
+      ],
+      "createdAt": "2026-05-07T03:10:14.448Z",
+      "updatedAt": "2026-05-07T03:10:14.448Z"
+    },
+    {
+      "memoryId": "ee4dc723-b634-47e0-b4e3-a552d0ee71ec",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "graphGroupId": "ad0455c7-6a09-467f-845c-e51140d75f43",
+      "rootMemoryId": "8b42a26b-819d-43c7-b234-3a51febc9942",
+      "parentMemoryIds": [
+        "7df0d3a1-d191-44e9-956f-2a30f0b60f9c"
+      ],
+      "relatedMemoryIds": [
+        "4d227638-aef0-4cf6-9b9e-c1d6f50cf1a9",
+        "ec54e1f4-a093-4076-a93f-0faebf9cb340",
+        "88706df3-23af-41f2-afc9-a54434ce742f",
+        "b84c9d1a-27ec-4272-94ae-aa6cd659138f"
+      ],
+      "childMemoryIds": [],
+      "sectionKind": "task",
+      "summary": "Added a subtitle to the right-panel settings header and fixed the divider to span the full width without inset gaps. The settings shell now uses a dedicated full-width header row with title and subtitle, and the content body is padded separately so the divider aligns edge-to-edge cleanly.",
+      "affectedFiles": [
+        {
+          "path": "frontend/src/features/settings/SettingsWorkspace.tsx",
+          "action": "modified",
+          "reason": "Added subtitle text for the right-panel header and wrapped the active panel content in a separate body container.",
+          "notes": "The shell now owns the single header hierarchy."
+        },
+        {
+          "path": "frontend/src/app/globals.css",
+          "action": "modified",
+          "reason": "Refactored the settings content shell so the header spans full width and the body handles internal padding, eliminating divider gaps.",
+          "notes": "The header now has title and subtitle styles plus a separate body wrapper."
+        }
+      ],
+      "createdAt": "2026-05-07T03:10:14.471Z",
+      "updatedAt": "2026-05-07T03:10:14.471Z"
     }
   ],
   "edges": [
@@ -2989,7 +3095,126 @@
       "relation": "related",
       "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
       "createdAt": "2026-05-07T03:04:57.366Z"
+    },
+    {
+      "fromMemoryId": "ad0455c7-6a09-467f-845c-e51140d75f43",
+      "toMemoryId": "8b42a26b-819d-43c7-b234-3a51febc9942",
+      "relation": "parent",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:10:14.423Z"
+    },
+    {
+      "fromMemoryId": "ad0455c7-6a09-467f-845c-e51140d75f43",
+      "toMemoryId": "4d227638-aef0-4cf6-9b9e-c1d6f50cf1a9",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:10:14.423Z"
+    },
+    {
+      "fromMemoryId": "ad0455c7-6a09-467f-845c-e51140d75f43",
+      "toMemoryId": "ec54e1f4-a093-4076-a93f-0faebf9cb340",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:10:14.423Z"
+    },
+    {
+      "fromMemoryId": "ad0455c7-6a09-467f-845c-e51140d75f43",
+      "toMemoryId": "88706df3-23af-41f2-afc9-a54434ce742f",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:10:14.423Z"
+    },
+    {
+      "fromMemoryId": "ad0455c7-6a09-467f-845c-e51140d75f43",
+      "toMemoryId": "b84c9d1a-27ec-4272-94ae-aa6cd659138f",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:10:14.423Z"
+    },
+    {
+      "fromMemoryId": "ad0455c7-6a09-467f-845c-e51140d75f43",
+      "toMemoryId": "7df0d3a1-d191-44e9-956f-2a30f0b60f9c",
+      "relation": "child",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:10:14.423Z"
+    },
+    {
+      "fromMemoryId": "7df0d3a1-d191-44e9-956f-2a30f0b60f9c",
+      "toMemoryId": "ad0455c7-6a09-467f-845c-e51140d75f43",
+      "relation": "parent",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:10:14.448Z"
+    },
+    {
+      "fromMemoryId": "7df0d3a1-d191-44e9-956f-2a30f0b60f9c",
+      "toMemoryId": "4d227638-aef0-4cf6-9b9e-c1d6f50cf1a9",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:10:14.448Z"
+    },
+    {
+      "fromMemoryId": "7df0d3a1-d191-44e9-956f-2a30f0b60f9c",
+      "toMemoryId": "ec54e1f4-a093-4076-a93f-0faebf9cb340",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:10:14.448Z"
+    },
+    {
+      "fromMemoryId": "7df0d3a1-d191-44e9-956f-2a30f0b60f9c",
+      "toMemoryId": "88706df3-23af-41f2-afc9-a54434ce742f",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:10:14.448Z"
+    },
+    {
+      "fromMemoryId": "7df0d3a1-d191-44e9-956f-2a30f0b60f9c",
+      "toMemoryId": "b84c9d1a-27ec-4272-94ae-aa6cd659138f",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:10:14.448Z"
+    },
+    {
+      "fromMemoryId": "7df0d3a1-d191-44e9-956f-2a30f0b60f9c",
+      "toMemoryId": "ee4dc723-b634-47e0-b4e3-a552d0ee71ec",
+      "relation": "child",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:10:14.448Z"
+    },
+    {
+      "fromMemoryId": "ee4dc723-b634-47e0-b4e3-a552d0ee71ec",
+      "toMemoryId": "7df0d3a1-d191-44e9-956f-2a30f0b60f9c",
+      "relation": "parent",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:10:14.471Z"
+    },
+    {
+      "fromMemoryId": "ee4dc723-b634-47e0-b4e3-a552d0ee71ec",
+      "toMemoryId": "4d227638-aef0-4cf6-9b9e-c1d6f50cf1a9",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:10:14.471Z"
+    },
+    {
+      "fromMemoryId": "ee4dc723-b634-47e0-b4e3-a552d0ee71ec",
+      "toMemoryId": "ec54e1f4-a093-4076-a93f-0faebf9cb340",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:10:14.471Z"
+    },
+    {
+      "fromMemoryId": "ee4dc723-b634-47e0-b4e3-a552d0ee71ec",
+      "toMemoryId": "88706df3-23af-41f2-afc9-a54434ce742f",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:10:14.471Z"
+    },
+    {
+      "fromMemoryId": "ee4dc723-b634-47e0-b4e3-a552d0ee71ec",
+      "toMemoryId": "b84c9d1a-27ec-4272-94ae-aa6cd659138f",
+      "relation": "related",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+      "createdAt": "2026-05-07T03:10:14.471Z"
     }
   ],
-  "updatedAt": "2026-05-07T03:04:57.367Z"
+  "updatedAt": "2026-05-07T03:10:14.472Z"
 }

@@ -23,6 +23,13 @@ function getSectionTitle(section: SettingsSection): string {
   return "General Settings";
 }
 
+function getSectionSubtitle(section: SettingsSection): string {
+  if (section === "terminal") {
+    return "Configure the SSH target used for terminal access.";
+  }
+  return "Update your profile name and sign-in password.";
+}
+
 export function SettingsWorkspace({ auth }: SettingsWorkspaceProps) {
   const pathname = usePathname();
   const router = useRouter();
@@ -68,16 +75,23 @@ export function SettingsWorkspace({ auth }: SettingsWorkspaceProps) {
 
       <div className="settings-content">
         <header className="settings-content__header">
-          <h1 className="settings-content__title">
-            {getSectionTitle(section)}
-          </h1>
+          <div className="settings-content__header-copy">
+            <h1 className="settings-content__title">
+              {getSectionTitle(section)}
+            </h1>
+            <p className="settings-content__subtitle">
+              {getSectionSubtitle(section)}
+            </p>
+          </div>
         </header>
 
-        {section === "general" ? (
-          <GeneralSettingsPanel user={user} onProfileChanged={auth.refresh} />
-        ) : (
-          <TerminalSettingsPanel />
-        )}
+        <div className="settings-content__body">
+          {section === "general" ? (
+            <GeneralSettingsPanel user={user} onProfileChanged={auth.refresh} />
+          ) : (
+            <TerminalSettingsPanel />
+          )}
+        </div>
       </div>
     </section>
   );

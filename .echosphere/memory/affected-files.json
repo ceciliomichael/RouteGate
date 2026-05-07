@@ -1,5 +1,77 @@
 [
   {
+    "id": "afb2f611-ecdc-4a7d-8358-bb4639269341",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "ad0455c7-6a09-467f-845c-e51140d75f43",
+    "sectionKind": "fact",
+    "path": "frontend/src/features/settings/SettingsWorkspace.tsx",
+    "action": "modified",
+    "reason": "Added subtitle text for the right-panel header and wrapped the active panel content in a separate body container.",
+    "notes": "The shell now owns the single header hierarchy.",
+    "createdAt": "2026-05-07T03:10:14.423Z",
+    "updatedAt": "2026-05-07T03:10:14.423Z"
+  },
+  {
+    "id": "18a59401-96b3-43c3-8af1-fc73e6e46824",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "ad0455c7-6a09-467f-845c-e51140d75f43",
+    "sectionKind": "fact",
+    "path": "frontend/src/app/globals.css",
+    "action": "modified",
+    "reason": "Refactored the settings content shell so the header spans full width and the body handles internal padding, eliminating divider gaps.",
+    "notes": "The header now has title and subtitle styles plus a separate body wrapper.",
+    "createdAt": "2026-05-07T03:10:14.423Z",
+    "updatedAt": "2026-05-07T03:10:14.423Z"
+  },
+  {
+    "id": "35761d2c-956a-49ad-a3ed-078db19f294d",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "7df0d3a1-d191-44e9-956f-2a30f0b60f9c",
+    "sectionKind": "decision",
+    "path": "frontend/src/features/settings/SettingsWorkspace.tsx",
+    "action": "modified",
+    "reason": "Added subtitle text for the right-panel header and wrapped the active panel content in a separate body container.",
+    "notes": "The shell now owns the single header hierarchy.",
+    "createdAt": "2026-05-07T03:10:14.448Z",
+    "updatedAt": "2026-05-07T03:10:14.448Z"
+  },
+  {
+    "id": "08cefad7-0061-432a-81d9-1395626f3fdd",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "7df0d3a1-d191-44e9-956f-2a30f0b60f9c",
+    "sectionKind": "decision",
+    "path": "frontend/src/app/globals.css",
+    "action": "modified",
+    "reason": "Refactored the settings content shell so the header spans full width and the body handles internal padding, eliminating divider gaps.",
+    "notes": "The header now has title and subtitle styles plus a separate body wrapper.",
+    "createdAt": "2026-05-07T03:10:14.448Z",
+    "updatedAt": "2026-05-07T03:10:14.448Z"
+  },
+  {
+    "id": "a4e7098a-ed15-491a-a21c-f9f5619cf899",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "ee4dc723-b634-47e0-b4e3-a552d0ee71ec",
+    "sectionKind": "task",
+    "path": "frontend/src/features/settings/SettingsWorkspace.tsx",
+    "action": "modified",
+    "reason": "Added subtitle text for the right-panel header and wrapped the active panel content in a separate body container.",
+    "notes": "The shell now owns the single header hierarchy.",
+    "createdAt": "2026-05-07T03:10:14.471Z",
+    "updatedAt": "2026-05-07T03:10:14.471Z"
+  },
+  {
+    "id": "e5697f86-0bbb-4b3c-8b83-b6420e192540",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "ee4dc723-b634-47e0-b4e3-a552d0ee71ec",
+    "sectionKind": "task",
+    "path": "frontend/src/app/globals.css",
+    "action": "modified",
+    "reason": "Refactored the settings content shell so the header spans full width and the body handles internal padding, eliminating divider gaps.",
+    "notes": "The header now has title and subtitle styles plus a separate body wrapper.",
+    "createdAt": "2026-05-07T03:10:14.472Z",
+    "updatedAt": "2026-05-07T03:10:14.472Z"
+  },
+  {
     "id": "89bc1630-232f-4eae-952b-3f16fc3de049",
     "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
     "memoryId": "4ec531de-2d71-44e6-b68e-98615435acb2",
