@@ -1,5 +1,37 @@
 [
   {
+    "id": "44d53c95-e1e2-42ca-810b-131c982854b9",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "kind": "fact",
+    "content": "Summary: Refined the RouteGate settings shell to keep the panel height stable and the sidebar visually clean. The settings workspace now uses a fixed-height shell with scrollable content, a white sidebar with a full-height right border, and row-separated navigation items with bottom borders and no left active marker.\n\nFacts:\n1. [finished] The user wanted the settings shell to stop resizing when switching between settings sections.\n2. [finished] The settings sidebar is now white, uses a full-height right border as the main separator, and each navigation item keeps a bottom border.\n3. [finished] The active sidebar item no longer uses a left-side marker; it is indicated by weight and border color instead.\n4. [finished] The fixed-height behavior is implemented in `frontend/src/app/globals.css` by constraining `.settings-workspace` and making `.settings-content` scroll internally.\n\nAffected files:\n1. [modified] frontend/src/app/globals.css — Updated the settings shell layout, sidebar border treatment, active state styling, and fixed-height behavior. | Notes: The workspace is fixed-height and the content area scrolls internally.\n2. [inspected] frontend/src/features/settings/SettingsWorkspace.tsx — Confirmed the shell composition still cleanly separates the sidebar from the active settings panel. | Notes: No markup change was required for this pass.\n\nMemory links:\nGraph group: 44d53c95-e1e2-42ca-810b-131c982854b9\nRoot memory: 44d53c95-e1e2-42ca-810b-131c982854b9\nParent memories: none\nRelated memories: 8975e376-4e98-403f-a701-916c692c35f4, 9a211c76-56dd-4247-b79f-8f049a1b0fea, c9389279-1afd-4cd1-a192-ba64cae2c62e, e1b45f70-0d0f-401f-b259-2e4baaf3bc0a, ec696a97-20bc-4bbb-af1c-6117c3af0d77",
+    "createdAt": "2026-05-07T02:39:47.541Z",
+    "updatedAt": "2026-05-07T02:39:47.541Z",
+    "metadata": {
+      "summary": "Refined the RouteGate settings shell to keep the panel height stable and the sidebar visually clean. The settings workspace now uses a fixed-height shell with scrollable content, a white sidebar with a full-height right border, and row-separated navigation items with bottom borders and no left active marker.",
+      "topics": [
+        "summary",
+        "facts",
+        "decisions",
+        "tasks",
+        "modified",
+        "inspected"
+      ],
+      "tags": [
+        "memory-graph",
+        "frontend/src/app/globals.css",
+        "frontend/src/features/settings/SettingsWorkspace.tsx",
+        "finished",
+        "finished",
+        "finished",
+        "finished",
+        "finished",
+        "finished",
+        "ongoing"
+      ],
+      "status": "finished"
+    }
+  },
+  {
     "id": "8975e376-4e98-403f-a701-916c692c35f4",
     "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
     "kind": "fact",
