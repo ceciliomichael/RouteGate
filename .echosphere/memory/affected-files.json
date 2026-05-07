@@ -1,5 +1,77 @@
 [
   {
+    "id": "76c1a804-27d7-438f-978f-c2f8e8f1bf1f",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "8975e376-4e98-403f-a701-916c692c35f4",
+    "sectionKind": "fact",
+    "path": "frontend/src/app/globals.css",
+    "action": "modified",
+    "reason": "Reworked the settings sidebar layout so buttons are flush, full-width rows with no extra gaps and no card styling.",
+    "notes": "Added full-bleed nav rows, removed rounded button cards, and switched the active treatment to an inset accent.",
+    "createdAt": "2026-05-07T02:33:46.120Z",
+    "updatedAt": "2026-05-07T02:33:46.120Z"
+  },
+  {
+    "id": "6c196a46-e7cb-4fbc-b1f9-fde722d8ebde",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "8975e376-4e98-403f-a701-916c692c35f4",
+    "sectionKind": "fact",
+    "path": "frontend/src/features/settings/SettingsWorkspace.tsx",
+    "action": "inspected",
+    "reason": "Verified the shell markup that wraps the sidebar and main content so the CSS change could stay localized.",
+    "notes": "No additional markup change was needed in this pass.",
+    "createdAt": "2026-05-07T02:33:46.120Z",
+    "updatedAt": "2026-05-07T02:33:46.120Z"
+  },
+  {
+    "id": "3b400cfa-77f7-4f0a-a57a-4249c6b68326",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "c9389279-1afd-4cd1-a192-ba64cae2c62e",
+    "sectionKind": "decision",
+    "path": "frontend/src/app/globals.css",
+    "action": "modified",
+    "reason": "Reworked the settings sidebar layout so buttons are flush, full-width rows with no extra gaps and no card styling.",
+    "notes": "Added full-bleed nav rows, removed rounded button cards, and switched the active treatment to an inset accent.",
+    "createdAt": "2026-05-07T02:33:46.124Z",
+    "updatedAt": "2026-05-07T02:33:46.124Z"
+  },
+  {
+    "id": "405241b5-0a95-4905-9174-63927b979160",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "c9389279-1afd-4cd1-a192-ba64cae2c62e",
+    "sectionKind": "decision",
+    "path": "frontend/src/features/settings/SettingsWorkspace.tsx",
+    "action": "inspected",
+    "reason": "Verified the shell markup that wraps the sidebar and main content so the CSS change could stay localized.",
+    "notes": "No additional markup change was needed in this pass.",
+    "createdAt": "2026-05-07T02:33:46.124Z",
+    "updatedAt": "2026-05-07T02:33:46.124Z"
+  },
+  {
+    "id": "81f9b92c-6ea0-4e27-838f-38c80d020553",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "ec696a97-20bc-4bbb-af1c-6117c3af0d77",
+    "sectionKind": "task",
+    "path": "frontend/src/app/globals.css",
+    "action": "modified",
+    "reason": "Reworked the settings sidebar layout so buttons are flush, full-width rows with no extra gaps and no card styling.",
+    "notes": "Added full-bleed nav rows, removed rounded button cards, and switched the active treatment to an inset accent.",
+    "createdAt": "2026-05-07T02:33:46.128Z",
+    "updatedAt": "2026-05-07T02:33:46.128Z"
+  },
+  {
+    "id": "74f22edd-7021-4bfc-a519-7c01a68bd0f1",
+    "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
+    "memoryId": "ec696a97-20bc-4bbb-af1c-6117c3af0d77",
+    "sectionKind": "task",
+    "path": "frontend/src/features/settings/SettingsWorkspace.tsx",
+    "action": "inspected",
+    "reason": "Verified the shell markup that wraps the sidebar and main content so the CSS change could stay localized.",
+    "notes": "No additional markup change was needed in this pass.",
+    "createdAt": "2026-05-07T02:33:46.129Z",
+    "updatedAt": "2026-05-07T02:33:46.129Z"
+  },
+  {
     "id": "c9361fdb-d57b-4cd4-af27-7129f2b5007d",
     "projectPath": "C:\\Users\\Administrator\\Desktop\\RouteGate",
     "memoryId": "637c220d-f4f7-4274-ad70-6ac978154e52",
