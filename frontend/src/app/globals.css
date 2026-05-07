@@ -625,12 +625,14 @@
     display: grid;
     gap: 0;
     margin-top: 0.25rem;
+    border-top: 1px solid var(--color-border);
   }
 
   .settings-sidebar__item {
     width: 100%;
     min-height: 3rem;
     border: 0;
+    border-top: 1px solid var(--color-border);
     border-bottom: 1px solid var(--color-border);
     border-radius: 0;
     background: transparent;
@@ -642,15 +644,17 @@
     cursor: pointer;
     transition:
       background-color 0.15s ease,
-      box-shadow 0.15s ease;
+      color 0.15s ease,
+      border-color 0.15s ease;
   }
 
   .settings-sidebar__item:hover {
-    background: var(--color-surface);
+    background: var(--color-surface-muted);
   }
 
   .settings-sidebar__item.is-active {
-    background: var(--color-surface);
+    background: var(--color-surface-muted);
+    border-top-color: var(--color-brand);
     border-bottom-color: var(--color-brand);
     font-weight: 700;
   }
